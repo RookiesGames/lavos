@@ -9,7 +9,6 @@ namespace Vortico.Core.Scene
 
         private const string SceneRootPath = "/root/Scene";
         private static Node _sceneNode;
-        private static SceneManager _instance;
 
         #endregion
 
@@ -20,7 +19,6 @@ namespace Vortico.Core.Scene
         {
             _sceneNode = GetNode(SceneRootPath);
             Assert.IsFalse(_sceneNode == null, "Missing Scene node");
-            _instance = this;
         }
 
         #endregion
