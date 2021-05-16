@@ -19,7 +19,7 @@ namespace Vortico.Core.Scene
             _currentTime += delta;
             if (_currentTime >= _delay)
             {
-                SceneManager.LoadScene(_nextScene);
+                SceneManager.ChangeScene(_nextScene);
             }
         }
 
