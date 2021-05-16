@@ -25,17 +25,34 @@ namespace Vortico.Core.Scene
 
         #endregion
 
+
         #region LoadScene
+
+        public static void LoadScene(string path, Action<PackedScene> completeAction)
+        {
+            LoadSceneAsync(path, completeAction);
+        }
+
+        private static async void LoadSceneAsync(string path, Action<PackedScene> completeAction)
+        {
+            var task = Task.Factory.StartNew<PackedScene>(() =>
+            {
+                var packedScene = GD.Load<PackedScene>(path);
+                return packedScene;
+            });
+            await task;
+            completeAction?.Invoke(task.Result);
+        }
+
+        #endregion
+
+
+        #region ChangeScene
+
         public static void ChangeScene(PackedScene scene)
         {
             EmptyScene();
             AddPackedSceneToParent(scene, _sceneNode);
-        }
-
-        public static void ChangeScene(string path)
-        {
-            EmptyScene();
-            AddScenePathToParent(path, _sceneNode);
         }
 
         private static void EmptyScene()
@@ -47,51 +64,18 @@ namespace Vortico.Core.Scene
                 child.Dispose();
             }
         }
+
         #endregion
 
-        #region LoadScene
-        public static PackedScene LoadScene(string path)
-        {
-            var packedScene = GD.Load<PackedScene>(path);
-            return packedScene;
-        }
-
-        public static void LoadScene(string path, Action<PackedScene> completeAction)
-        {
-            LoadSceneAsync(path, completeAction);
-        }
-
-        private static async void LoadSceneAsync(string path, Action<PackedScene> completeAction)
-        {
-            var task = Task.Factory.StartNew<PackedScene>(() => LoadScene(path));
-            await task;
-            completeAction?.Invoke(task.Result);
-        }
-        #endregion
 
         #region AddScene
+
         public static void AddPackedSceneToParent(PackedScene scene, Node parent)
         {
-            var node = InstantiateScene(scene);
-            AddNode(node, parent);
-        }
-
-        public static void AddScenePathToParent(string path, Node parent)
-        {
-            var packedScene = LoadScene(path);
-            var node = InstantiateScene(packedScene);
-            AddNode(node, parent);
-        }
-
-        private static Node InstantiateScene(PackedScene scene)
-        {
-            return scene.Instance();
-        }
-
-        private static void AddNode(Node node, Node parent)
-        {
+            var node = scene.Instance();
             parent.AddChild(node, true);
         }
+
         #endregion
     }
 }
