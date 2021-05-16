@@ -1,27 +1,42 @@
+using Godot;
 using Vortico.Core.Debug;
 using System.Collections.Generic;
 
 namespace Vortico.Core.Dependency
 {
-    public sealed class ServiceLocator
+    public sealed class ServiceLocator : Node
     {
-        private readonly DependencyContainer _container;
+        public const string Path = "/root/ServiceLocator";
 
-        private static ServiceLocator Instance;
+        private DependencyContainer _container;
+        private static ServiceLocator _instance;
 
 
-        internal ServiceLocator(DependencyContainer container)
+        #region Constructor
+
+        private ServiceLocator()
         {
-            _container = container;
-            Instance = this;
+            _instance = this;
         }
+
+        #endregion
+
+
+        #region Node
+
+        public override void _Ready()
+        {
+            _container = GetNode<DependencyContainer>(DependencyContainer.Path);
+        }
+
+        #endregion
 
 
         #region Single
 
         public static T Locate<T>()
         {
-            T obj = Instance.LocateInternal<T>();
+            T obj = _instance.LocateInternal<T>();
             Assert.IsTrue(obj != null, $"Could not locate type {typeof(T)}");
             return obj;
         }
@@ -39,7 +54,7 @@ namespace Vortico.Core.Dependency
 
         public static List<T> LocateAsList<T>()
         {
-            List<T> objs = Instance.LocateAsListInternal<T>();
+            List<T> objs = _instance.LocateAsListInternal<T>();
             Assert.IsFalse(objs.Count == 0, $"Could not locate type {typeof(T)}");
             return objs;
         }
@@ -54,5 +69,16 @@ namespace Vortico.Core.Dependency
         }
 
         #endregion
+
+
+        public static void Register<I, C>(C instance) where C : I
+        {
+            _instance.RegisterInternal<I, C>(instance);
+        }
+
+        private void RegisterInternal<I, C>(C instance) where C : I
+        {
+            _container.Instance<I, C>(instance);
+        }
     }
 }

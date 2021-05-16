@@ -1,3 +1,4 @@
+using Godot;
 using Vortico.Core.Debug;
 using Vortico.Utils.Extensions;
 using System;
@@ -6,13 +7,15 @@ using System.Reflection;
 
 namespace Vortico.Core.Dependency
 {
-    internal sealed class DependencyContainer : IDependencyContainer
+    internal sealed class DependencyContainer : Node, IDependencyContainer
     {
+        public const string Path = "/root/DependencyContainer";
+
         #region Members
 
-        private Dictionary<System.Type, System.Type> bindings = new Dictionary<System.Type, System.Type>();
-        private Dictionary<System.Type, List<System.Type>> lookups = new Dictionary<System.Type, List<System.Type>>();
-        private Dictionary<System.Type, object> instances = new Dictionary<System.Type, object>();
+        private readonly Dictionary<System.Type, System.Type> bindings = new Dictionary<System.Type, System.Type>();
+        private readonly Dictionary<System.Type, List<System.Type>> lookups = new Dictionary<System.Type, List<System.Type>>();
+        private readonly Dictionary<System.Type, object> instances = new Dictionary<System.Type, object>();
 
         #endregion
 
@@ -42,6 +45,12 @@ namespace Vortico.Core.Dependency
             lookups[typeof(I1)].Add(typeof(I2));
         }
 
+        public void Instance<I, C>(C instance) where C : I
+        {
+            Bind<I, C>();
+            AddInstance(typeof(C), (object)instance);
+        }
+
         #endregion
 
 
@@ -64,25 +73,39 @@ namespace Vortico.Core.Dependency
         {
             if (instances.DoesNotContainKey(type))
             {
-                CreateInstance(type);
-                InjectDependencies(type);
+                var obj = CreateInstance(type);
+                AddInstance(type, obj);
+                InjectDependencies(obj);
             }
             return instances[type];
         }
 
-        private void CreateInstance(Type type)
+        private object CreateInstance(Type type)
         {
-            instances[type] = Activator.CreateInstance(type);
+            return Activator.CreateInstance(type);
         }
 
-        private void InjectDependencies(Type type)
+        private void AddInstance(Type type, object obj)
         {
-            var obj = instances[type];
+            instances[type] = obj;
+        }
+
+        private void InjectDependencies(object obj)
+        {
             var realType = obj.GetType();
 
             var flags = BindingFlags.Public | BindingFlags.NonPublic;
             flags = flags | BindingFlags.DeclaredOnly | BindingFlags.Instance;
             flags = flags | BindingFlags.SetProperty;
+
+            var fieldInfos = realType.GetFields(flags);
+            foreach (var field in fieldInfos)
+            {
+                if (field.HasCustomAttribute<InjectAttribute>())
+                {
+                    InjectField(field, obj);
+                }
+            }
 
             var propertyInfos = realType.GetProperties(flags);
             foreach (var property in propertyInfos)
@@ -93,12 +116,12 @@ namespace Vortico.Core.Dependency
                 }
             }
 
-            var fieldInfos = realType.GetFields(flags);
-            foreach (var field in fieldInfos)
+            var methods = realType.GetMethods(flags);
+            foreach (var method in methods)
             {
-                if (field.HasCustomAttribute<InjectAttribute>())
+                if (method.HasCustomAttribute<InjectMethodAttribute>())
                 {
-                    InjectField(field, obj);
+                    method.Invoke(obj, null);
                 }
             }
 

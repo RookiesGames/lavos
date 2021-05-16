@@ -1,4 +1,5 @@
 using Godot;
+using Vortico.Core.Debug;
 using Vortico.Utils;
 using Vortico.Utils.Extensions;
 using System;
@@ -7,26 +8,16 @@ using System.Linq;
 
 namespace Vortico.Core.Dependency
 {
-    public sealed class DependencyInjection : Node
+    sealed class DependencyInjection : Node
     {
         #region Members
 
         private readonly Dictionary<Type, object> _installers = new Dictionary<Type, object>();
-        private readonly DependencyContainer _container = new DependencyContainer();
-        private readonly ServiceLocator _locator;
 
         #endregion
 
 
-        #region Constructor
-
-        public DependencyInjection()
-        {
-            _locator = new ServiceLocator(_container);
-        }
-
-        #endregion
-
+        #region Node
 
         public override void _Ready()
         {
@@ -34,6 +25,8 @@ namespace Vortico.Core.Dependency
             Install();
             Initialize();
         }
+
+        #endregion
 
 
         #region Helpers
@@ -51,10 +44,13 @@ namespace Vortico.Core.Dependency
 
         private void Install()
         {
+            var container = GetNode<DependencyContainer>(DependencyContainer.Path);
+            Assert.IsFalse(container == null, $"Failed to find {nameof(DependencyContainer)} node at {DependencyContainer.Path}");
+
             foreach (var kvp in _installers)
             {
                 var installer = (IInstaller)kvp.Value;
-                installer.Install(_container);
+                installer.Install(container);
             }
         }
 
