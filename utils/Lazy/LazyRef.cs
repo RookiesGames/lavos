@@ -1,4 +1,4 @@
-using System;
+using Vortico.Core.Dependency;
 
 namespace Vortico.Utils.Lazy
 {
@@ -6,6 +6,6 @@ namespace Vortico.Utils.Lazy
     {
         T _instance = null;
 
-        public T Get => _instance ?? (_instance = Activator.CreateInstance<T>());
+        public T Get => _instance ?? (_instance = ServiceLocator.Locate<T>());
     }
 }
