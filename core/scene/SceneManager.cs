@@ -61,7 +61,7 @@ namespace Vortico.Core.Scene
             foreach (Node child in children)
             {
                 _sceneNode.RemoveChild(child);
-                child.Dispose();
+                child.QueueFree();
             }
         }
 
