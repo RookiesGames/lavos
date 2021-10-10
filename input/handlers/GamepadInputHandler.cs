@@ -8,7 +8,7 @@ using System;
 
 namespace Vortico.Input.Handlers
 {
-    public sealed class GamepadInputHandler : Node, IGamepadInputHandler
+    sealed class GamepadInputHandler : Node, IGamepadInputHandler
     {
         #region Member
 
@@ -29,17 +29,10 @@ namespace Vortico.Input.Handlers
         public event Action<InputAction> onInputActionPressed;
         public event Action<InputAction> onInputActionReleased;
 
-        public void EnableHandler(IInputConfig config)
+        public void EnableHandler(IGamepadInputConfig config)
         {
             Assert.IsFalse(config == null, $"Passed null config to {nameof(GamepadInputHandler)}");
-            if (config is IGamepadInputConfig gamepadConfig)
-            {
-                _config = gamepadConfig;
-            }
-            else
-            {
-                Log.Error(nameof(GamepadInputHandler), $"{nameof(GamepadInputHandler)} expect config of type {nameof(IGamepadInputHandler)}");
-            }
+            _config = config;
         }
 
         public void DisableHandler()
@@ -55,6 +48,32 @@ namespace Vortico.Input.Handlers
         public override void _Ready()
         {
             ServiceLocator.Register<IGamepadInputHandler, GamepadInputHandler>(this);
+        }
+
+        public override void _Process(float delta)
+        {
+            if (IsEnabled.IsFalse())
+            {
+                return;
+            }
+
+            var controls = _config.Axis;
+            foreach (var control in controls)
+            {
+                var value = Godot.Input.GetJoyAxis(0, (int)control);
+                var ias = _config.GetMotion(control, value);
+                if (ias.Action != InputAction.None)
+                {
+                    if (ias.Pressed)
+                    {
+                        onInputActionPressed?.Invoke(ias.Action);
+                    }
+                    else
+                    {
+                        onInputActionReleased?.Invoke(ias.Action);
+                    }
+                }
+            }
         }
 
         public override void _Input(InputEvent @event)

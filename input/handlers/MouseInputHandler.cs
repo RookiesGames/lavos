@@ -8,7 +8,7 @@ using System;
 
 namespace Vortico.Input.Handlers
 {
-    public sealed class MouseInputHandler : Node, IMouseInputHandler
+    sealed class MouseInputHandler : Node, IMouseInputHandler
     {
         #region Members
 
@@ -30,17 +30,10 @@ namespace Vortico.Input.Handlers
         public event Action<InputAction> onInputActionReleased;
         public event Action<Vector2> onMouseMotion;
 
-        public void EnableHandler(IInputConfig config)
+        public void EnableHandler(IMouseInputConfig config)
         {
             Assert.IsFalse(config == null, $"Passed null config to {nameof(MouseInputHandler)}");
-            if (config is IMouseInputConfig mouseConfig)
-            {
-                _config = mouseConfig;
-            }
-            else
-            {
-                Log.Error(nameof(MouseInputHandler), $"{nameof(MouseInputHandler)} expect config of type {nameof(IMouseInputConfig)}");
-            }
+            _config = config;
         }
 
         public void DisableHandler()

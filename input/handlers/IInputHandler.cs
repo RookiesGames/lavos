@@ -3,12 +3,12 @@ using System;
 
 namespace Vortico.Input.Handlers
 {
-    public interface IInputHandler
+    public interface IInputHandler<C>
     {
         event Action<InputAction> onInputActionPressed;
         event Action<InputAction> onInputActionReleased;
 
-        void EnableHandler(IInputConfig config);
+        void EnableHandler(C config);
         void DisableHandler();
     }
 }

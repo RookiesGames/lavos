@@ -1,5 +1,4 @@
 using Godot;
-using Vortico.Core.Console;
 using Vortico.Core.Debug;
 using Vortico.Core.Dependency;
 using Vortico.Input.Config;
@@ -8,7 +7,7 @@ using System;
 
 namespace Vortico.Input.Handlers
 {
-    public sealed class KeyboardInputHandler : Node, IKeyboardInputHandler
+    sealed class KeyboardInputHandler : Node, IKeyboardInputHandler
     {
         #region Members
 
@@ -29,17 +28,10 @@ namespace Vortico.Input.Handlers
         public event Action<InputAction> onInputActionPressed;
         public event Action<InputAction> onInputActionReleased;
 
-        public void EnableHandler(IInputConfig config)
+        public void EnableHandler(IKeyboardInputConfig config)
         {
             Assert.IsFalse(config == null, $"Passed null config to {nameof(KeyboardInputHandler)}");
-            if (config is IKeyboardInputConfig keyboardConfig)
-            {
-                _config = keyboardConfig;
-            }
-            else
-            {
-                Log.Error(nameof(KeyboardInputHandler), $"{nameof(KeyboardInputHandler)} expect config of type {nameof(IKeyboardInputConfig)}");
-            }
+            _config = config;
         }
 
         public void DisableHandler()
@@ -57,31 +49,26 @@ namespace Vortico.Input.Handlers
             ServiceLocator.Register<IKeyboardInputHandler, KeyboardInputHandler>(this);
         }
 
-        public override void _Input(InputEvent @event)
+        public override void _Process(float delta)
         {
             if (IsEnabled.IsFalse())
             {
                 return;
             }
 
-            if (@event is InputEventKey eventKey)
+            var keys = _config.Keys;
+            foreach (var key in keys)
             {
-                var action = _config.GetAction((KeyList)eventKey.Scancode);
-                if (action != InputAction.None)
+                var pressed = Godot.Input.IsKeyPressed((int)key);
+                var action = _config.GetAction(key);
+                if (pressed)
                 {
-                    if (eventKey.IsPressed())
-                    {
-                        onInputActionPressed?.Invoke(action);
-                    }
-                    else
-                    {
-                        onInputActionReleased?.Invoke(action);
-                    }
+                    onInputActionPressed?.Invoke(action);
                 }
-            }
-
-            if (@event is InputEventGesture gesture)
-            {
+                else
+                {
+                    onInputActionReleased?.Invoke(action);
+                }
             }
         }
 

@@ -3,13 +3,13 @@ namespace Vortico.Input
 {
     public class InputActionState
     {
-        public InputAction Action { get; private set; }
-        public bool Pressed { get; private set; }
+        public InputAction Action { get; set; }
+        public bool Pressed { get; set; }
 
-        public InputActionState(InputAction action, bool pressed)
+        public InputActionState()
         {
-            Action = action;
-            Pressed = pressed;
+            Action = InputAction.None;
+            Pressed = false;
         }
     }
 }
