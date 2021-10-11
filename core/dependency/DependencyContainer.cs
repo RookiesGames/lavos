@@ -1,16 +1,14 @@
-using Godot;
-using Vortico.Core.Debug;
-using Vortico.Utils.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Godot;
+using Vortico.Core.Debug;
+using Vortico.Utils.Extensions;
 
 namespace Vortico.Core.Dependency
 {
-    internal sealed class DependencyContainer : Node, IDependencyContainer
+    sealed class DependencyContainer : Node, IDependencyContainer
     {
-        public const string Path = "/root/DependencyContainer";
-
         #region Members
 
         private readonly Dictionary<System.Type, System.Type> bindings = new Dictionary<System.Type, System.Type>();
@@ -19,6 +17,14 @@ namespace Vortico.Core.Dependency
 
         #endregion
 
+        #region Contructor
+
+        internal DependencyContainer()
+        {
+            Instance<IDependencyContainer, DependencyContainer>(this);
+        }
+
+        #endregion
 
         #region IDependencyContainer
 

@@ -1,8 +1,8 @@
-using Godot;
-using Vortico.Input.Config;
 using System;
+using Godot;
+using Vortico.Input;
 
-namespace Vortico.Input.Handlers
+namespace Vortico.Input
 {
     public interface IMouseInputHandler : IInputHandler<IMouseInputConfig>
     {

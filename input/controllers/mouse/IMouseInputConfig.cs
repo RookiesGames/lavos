@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Vortico.Input.Config
+namespace Vortico.Input
 {
     public interface IMouseInputConfig : IInputConfig
     {

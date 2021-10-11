@@ -1,7 +1,7 @@
-using Godot;
 using System.Collections.Generic;
+using Godot;
 
-namespace Vortico.Input.Config
+namespace Vortico.Input
 {
     public interface IGamepadInputConfig : IInputConfig
     {

@@ -1,6 +1,6 @@
-using Vortico.Input.Config;
+using Vortico.Input;
 
-namespace Vortico.Input.Handlers
+namespace Vortico.Input
 {
     public interface IGamepadInputHandler : IInputHandler<IGamepadInputConfig>
     {

@@ -1,20 +1,40 @@
+using Vortico.Core.Console;
 
 namespace Vortico.Utils.Automation
 {
     public sealed class StateMachine
     {
         private IState _state = null;
+        private IState _pendingState = null;
+        private bool _transitionPending;
 
-        public void ChangeState(IState state)
+        private bool HasPendingState => _transitionPending;
+
+        public void ChangeState(State state)
         {
-            _state?.Clean?.Invoke();
-            _state = state;
-            _state?.Ready?.Invoke();
+            _pendingState = state;
+            _transitionPending = true;
         }
 
         public void Process()
         {
-            _state?.Process.Invoke();
+            _state?.Process?.Invoke();
+            if (HasPendingState)
+            {
+                SwitchState();
+            }
+        }
+
+        private void SwitchState()
+        {
+            _state?.Clean?.Invoke();
+            //
+            _state = _pendingState;
+            _pendingState = null;
+            //
+            _state?.Ready?.Invoke();
+            //
+            _transitionPending = false;
         }
     }
 }

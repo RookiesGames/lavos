@@ -1,5 +1,5 @@
 
-namespace Vortico.Input.Config
+namespace Vortico.Input
 {
     public interface IInputConfig
     {

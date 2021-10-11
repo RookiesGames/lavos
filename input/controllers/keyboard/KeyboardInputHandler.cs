@@ -1,11 +1,11 @@
+using System;
 using Godot;
 using Vortico.Core.Debug;
 using Vortico.Core.Dependency;
-using Vortico.Input.Config;
+using Vortico.Input;
 using Vortico.Utils.Extensions;
-using System;
 
-namespace Vortico.Input.Handlers
+namespace Vortico.Input
 {
     sealed class KeyboardInputHandler : Node, IKeyboardInputHandler
     {
@@ -40,7 +40,6 @@ namespace Vortico.Input.Handlers
         }
 
         #endregion
-
 
         #region Node
 

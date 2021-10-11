@@ -1,12 +1,12 @@
+using System;
 using Godot;
 using Vortico.Core.Console;
 using Vortico.Core.Debug;
 using Vortico.Core.Dependency;
-using Vortico.Input.Config;
+using Vortico.Input;
 using Vortico.Utils.Extensions;
-using System;
 
-namespace Vortico.Input.Handlers
+namespace Vortico.Input
 {
     sealed class MouseInputHandler : Node, IMouseInputHandler
     {
@@ -51,14 +51,14 @@ namespace Vortico.Input.Handlers
             ServiceLocator.Register<IMouseInputHandler, MouseInputHandler>(this);
         }
 
-        public override void _Input(InputEvent @event)
+        public override void _Input(InputEvent inputEvent)
         {
             if (IsEnabled.IsFalse())
             {
                 return;
             }
 
-            if (@event is InputEventMouseButton mouseButton)
+            if (inputEvent is InputEventMouseButton mouseButton)
             {
                 var action = _config.GetAction((ButtonList)mouseButton.ButtonIndex);
                 if (action != InputAction.None)
@@ -73,7 +73,7 @@ namespace Vortico.Input.Handlers
                     }
                 }
             }
-            else if (@event is InputEventMouseMotion mouseMotion)
+            else if (inputEvent is InputEventMouseMotion mouseMotion)
             {
                 onMouseMotion?.Invoke(mouseMotion.Position);
             }

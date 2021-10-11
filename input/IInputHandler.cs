@@ -1,9 +1,9 @@
-using Vortico.Input.Config;
 using System;
+using Vortico.Input;
 
-namespace Vortico.Input.Handlers
+namespace Vortico.Input
 {
-    public interface IInputHandler<C>
+    public interface IInputHandler<C> where C : IInputConfig
     {
         event Action<InputAction> onInputActionPressed;
         event Action<InputAction> onInputActionReleased;

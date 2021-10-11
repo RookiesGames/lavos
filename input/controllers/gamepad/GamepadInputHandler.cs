@@ -1,12 +1,10 @@
+using System;
 using Godot;
-using Vortico.Core.Console;
 using Vortico.Core.Debug;
 using Vortico.Core.Dependency;
-using Vortico.Input.Config;
 using Vortico.Utils.Extensions;
-using System;
 
-namespace Vortico.Input.Handlers
+namespace Vortico.Input
 {
     sealed class GamepadInputHandler : Node, IGamepadInputHandler
     {
@@ -76,14 +74,14 @@ namespace Vortico.Input.Handlers
             }
         }
 
-        public override void _Input(InputEvent @event)
+        public override void _Input(InputEvent inputEvent)
         {
             if (IsEnabled.IsFalse())
             {
                 return;
             }
 
-            if (@event is InputEventJoypadButton joypadButton)
+            if (inputEvent is InputEventJoypadButton joypadButton)
             {
                 var ias = _config.GetAction((JoystickList)joypadButton.ButtonIndex, joypadButton.Pressure);
                 if (ias.Action != InputAction.None)
@@ -98,7 +96,7 @@ namespace Vortico.Input.Handlers
                     }
                 }
             }
-            else if (@event is InputEventJoypadMotion joypadMotion)
+            else if (inputEvent is InputEventJoypadMotion joypadMotion)
             {
                 var ias = _config.GetMotion((JoystickList)joypadMotion.Axis, joypadMotion.AxisValue);
                 if (ias.Action != InputAction.None)

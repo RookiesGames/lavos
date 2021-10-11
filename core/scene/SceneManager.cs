@@ -1,7 +1,7 @@
-using Godot;
-using Vortico.Core.Debug;
 using System;
 using System.Threading.Tasks;
+using Godot;
+using Vortico.Core.Debug;
 
 namespace Vortico.Core.Scene
 {
@@ -9,8 +9,8 @@ namespace Vortico.Core.Scene
     {
         #region Members
 
-        private const string SceneRootPath = "/root/Scene";
-        private static Node _sceneNode;
+        private const string SceneRootPath = "/root/Boot";
+        private static Node _rootNode;
 
         #endregion
 
@@ -19,8 +19,7 @@ namespace Vortico.Core.Scene
 
         public override void _Ready()
         {
-            _sceneNode = GetNode(SceneRootPath);
-            Assert.IsFalse(_sceneNode == null, "Missing Scene node");
+            _rootNode = this;
         }
 
         #endregion
@@ -28,20 +27,16 @@ namespace Vortico.Core.Scene
 
         #region LoadScene
 
-        public static void LoadScene(string path, Action<PackedScene> completeAction)
+        public static async void LoadScene(string path, Action<PackedScene> completeAction)
         {
-            LoadSceneAsync(path, completeAction);
+            var scene = await LoadSceneAsync(path, completeAction);
+            completeAction?.Invoke(scene);
         }
 
-        private static async void LoadSceneAsync(string path, Action<PackedScene> completeAction)
+        private static Task<PackedScene> LoadSceneAsync(string path, Action<PackedScene> completeAction)
         {
-            var task = Task.Factory.StartNew<PackedScene>(() =>
-            {
-                var packedScene = GD.Load<PackedScene>(path);
-                return packedScene;
-            });
-            await task;
-            completeAction?.Invoke(task.Result);
+            var task = Task.Factory.StartNew<PackedScene>(() => GD.Load<PackedScene>(path));
+            return task;
         }
 
         #endregion
@@ -52,28 +47,33 @@ namespace Vortico.Core.Scene
         public static void ChangeScene(PackedScene scene)
         {
             EmptyScene();
-            AddPackedSceneToParent(scene, _sceneNode);
+            AddScene(scene, _rootNode);
         }
 
         private static void EmptyScene()
         {
-            var children = _sceneNode.GetChildren();
+            var children = _rootNode.GetChildren();
             foreach (Node child in children)
             {
-                _sceneNode.RemoveChild(child);
+                _rootNode.RemoveChild(child);
                 child.QueueFree();
             }
         }
 
         #endregion
 
+        #region Add
 
-        #region AddScene
+        public static Node AddScene(PackedScene scene)
+        {
+            return AddScene(scene, _rootNode);
+        }
 
-        public static void AddPackedSceneToParent(PackedScene scene, Node parent)
+        public static Node AddScene(PackedScene scene, Node parent)
         {
             var node = scene.Instance();
             parent.AddChild(node, true);
+            return node;
         }
 
         #endregion
