@@ -46,11 +46,6 @@ namespace Vortico.Input
 
         #region Node
 
-        public override void _Ready()
-        {
-            ServiceLocator.Register<IMouseInputHandler, MouseInputHandler>(this);
-        }
-
         public override void _Input(InputEvent inputEvent)
         {
             if (IsEnabled.IsFalse())

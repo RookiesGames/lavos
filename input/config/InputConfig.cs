@@ -1,5 +1,6 @@
 using Godot;
 using Vortico.Core.Dependency;
+using Vortico.Core.Scene;
 
 namespace Vortico.Input
 {
@@ -11,17 +12,22 @@ namespace Vortico.Input
 
         public override void Configure(IDependencyContainer container)
         {
+            var parent = NodeTree.AddNode("Input", NodeTree.RootNode);
+
             if (EnableKeyboard)
             {
-                container.Bind<IKeyboardInputHandler, KeyboardInputHandler>();
+                var handler = NodeTree.AddNode<KeyboardInputHandler>(parent);
+                container.Instance<IKeyboardInputHandler, KeyboardInputHandler>(handler);
             }
             if (EnableMouse)
             {
-                container.Bind<IMouseInputHandler, MouseInputHandler>();
+                var handler = NodeTree.AddNode<MouseInputHandler>(parent);
+                container.Instance<IMouseInputHandler, MouseInputHandler>(handler);
             }
             if (EnableGamepad)
             {
-                container.Bind<IGamepadInputHandler, GamepadInputHandler>();
+                var handler = NodeTree.AddNode<GamepadInputHandler>(parent);
+                container.Instance<IGamepadInputHandler, GamepadInputHandler>(handler);
             }
         }
     }

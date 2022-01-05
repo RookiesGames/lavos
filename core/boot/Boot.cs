@@ -19,6 +19,7 @@ namespace Vortico.Core.Boot
             var locator = new ServiceLocator(container);
             AddChild(locator);
             //
+            AddChild(new NodeTree());
             AddChild(new SceneManager());
             //
             CreateConfigs(container);
@@ -31,7 +32,7 @@ namespace Vortico.Core.Boot
             foreach (PackedScene ps in _configs)
             {
                 var node = ps.Instance();
-                var config = node.GetNode<Config>();
+                var config = node.GetSelf<Config>();
                 config.Configure(container);
             }
         }

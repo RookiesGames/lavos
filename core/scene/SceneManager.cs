@@ -9,7 +9,6 @@ namespace Vortico.Core.Scene
     {
         #region Members
 
-        private const string SceneRootPath = "/root/Boot";
         private static Node _rootNode;
 
         #endregion
@@ -27,16 +26,10 @@ namespace Vortico.Core.Scene
 
         #region LoadScene
 
-        public static async void LoadScene(string path, Action<PackedScene> completeAction)
+        public static async Task<PackedScene> LoadScene(string path)
         {
-            var scene = await LoadSceneAsync(path, completeAction);
-            completeAction?.Invoke(scene);
-        }
-
-        private static Task<PackedScene> LoadSceneAsync(string path, Action<PackedScene> completeAction)
-        {
-            var task = Task.Factory.StartNew<PackedScene>(() => GD.Load<PackedScene>(path));
-            return task;
+            var scene = await Task.Factory.StartNew<PackedScene>(() => GD.Load<PackedScene>(path));
+            return scene;
         }
 
         #endregion

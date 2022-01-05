@@ -43,11 +43,6 @@ namespace Vortico.Input
 
         #region Node
 
-        public override void _Ready()
-        {
-            ServiceLocator.Register<IGamepadInputHandler, GamepadInputHandler>(this);
-        }
-
         public override void _Process(float delta)
         {
             if (IsEnabled.IsFalse())

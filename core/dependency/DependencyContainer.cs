@@ -80,6 +80,10 @@ namespace Vortico.Core.Dependency
             if (instances.DoesNotContainKey(type))
             {
                 var obj = CreateInstance(type);
+                if (obj is Node)
+                {
+
+                }
                 AddInstance(type, obj);
                 InjectDependencies(obj);
             }
