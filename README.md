@@ -1,2 +1,0 @@
-# vortico
-Godot shared code
