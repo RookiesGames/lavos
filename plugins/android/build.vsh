@@ -51,15 +51,15 @@ chdir(wd) or { panic('Failed to change directory $wd') }
 // Copy output to folders
 for proj in projects {
 	src := 'project/$proj/build/outputs/aar/$proj-release.aar'
-	dst := 'godot/$proj/${proj}.aar'
+	dst := 'godot/${proj}.aar'
 	println('~> Copying output of $proj')
 	cp(src, dst) or { panic('Failed to copy from $src to $dst') }
 	println('\t✅ $src >> $dst')
 	//
-	if is_file('godot/$proj/${proj}.gdap') {
+	if is_file('godot/${proj}.gdap') {
 		print('\t✅ Found')
 	} else {
 		print('\t❌ Missing')
 	}
-	println(' godot/$proj/${proj}.gdap')
+	println(' godot/${proj}.gdap')
 }
