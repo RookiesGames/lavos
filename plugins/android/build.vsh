@@ -21,7 +21,8 @@ print('~> $clean_cmd')
 mut res := execute(clean_cmd)
 if res.exit_code != 0 {
 	println(' ❌')
-	panic('Failed to clean android project\n$res.output')
+	println('Failed to clean android project\n$res.output')
+	return
 } else {
 	println(' ✅')
 }
