@@ -1,4 +1,4 @@
 [config]
 name="LavosTest"
 binary_type="local"
-binary="LavosTest/LavosTest.aar"
+binary="LavosTest.aar"
