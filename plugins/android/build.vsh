@@ -6,6 +6,7 @@ wd := getwd()
 mut projects := []string{}
 // Add the plugin folder HERE
 projects << 'LavosTest'
+projects << 'FirebaseCrashlytics'
 
 // Change directory to Android project root
 dir := 'project'

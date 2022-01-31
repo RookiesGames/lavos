@@ -4,10 +4,8 @@ import androidx.annotation.NonNull
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.UsedByGodot
-import kotlin.reflect.typeOf
 
 class LavosTest(godot: Godot) : GodotPlugin(godot) {
-
     private val mPluginName = "LavosTest"
 
     @Override
