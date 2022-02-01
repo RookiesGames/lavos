@@ -49,34 +49,4 @@ if is_dir('lavos') == false {
 println(' ✅')
 
 //
-println('~> Creating plugin symlinks...')
-
-//
-android_path := '$path/android'
-mkdir_all(android_path) or {
-	println('\t~> Failed to create Android plugin path\n$err')
-	return
-}
-
-//
-println('\t~> Entering directory $android_path')
-chdir(android_path) or {
-	println('Failed to change working directoy to $android_path\n$err')
-	return
-}
-
-//
-print('\t~> Creating symlink to Lavos Androd plugins')
-if is_dir('plugins') == false {
-	res := execute('ln -s $lavoswd/plugins/android/godot plugins')
-	if res.exit_code != 0 {
-		println(' ❌')
-		println('\tFailed to create symlink\n$res.output')
-		return
-	}
-}
-
-println(' ✅')
-
-//
 println('Setup complete!')
