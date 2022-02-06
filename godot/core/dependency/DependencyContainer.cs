@@ -3,25 +3,39 @@ using System.Collections.Generic;
 using System.Reflection;
 using Godot;
 using Lavos.Core.Debug;
+using Lavos.Core.Nodes;
 using Lavos.Utils.Extensions;
 using Lavos.Core.Console;
 
 namespace Lavos.Core.Dependency
 {
-    sealed class DependencyContainer : Node, IDependencyContainer
+    public sealed class DependencyContainer
+        : Node
+        , IDependencyBinder
+        , IDependencyResolver
     {
         #region Members
 
+        private static DependencyContainer _singleton;
         private readonly Dictionary<System.Type, System.Type> bindings = new Dictionary<System.Type, System.Type>();
         private readonly Dictionary<System.Type, List<System.Type>> lookups = new Dictionary<System.Type, List<System.Type>>();
         private readonly Dictionary<System.Type, object> instances = new Dictionary<System.Type, object>();
 
         #endregion
 
+
+        #region Properties
+
+        public static DependencyContainer Singleton => _singleton;
+
+        #endregion
+
+
         #region Contructor
 
         internal DependencyContainer()
         {
+            _singleton = this;
             Log.Debug(nameof(DependencyContainer), "Node built");
         }
 
@@ -59,7 +73,17 @@ namespace Lavos.Core.Dependency
             AddInstance(typeof(C), (object)instance);
         }
 
-        #endregion
+        #endregion IDependencyContainer
+
+
+        #region DependencyResolver
+
+        public bool Resolve<T>()
+        {
+            return FindOrCreateType(typeof(T)) != null;
+        }
+
+        #endregion DependencyResolver
 
 
         #region Single

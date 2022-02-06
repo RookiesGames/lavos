@@ -10,25 +10,29 @@ namespace Lavos.Input
         [Export] bool EnableMouse;
         [Export] bool EnableGamepad;
 
-        public override void Configure()
+        public override void Configure(IDependencyBinder binder)
         {
             var parent = NodeTree.AddNode("Input", NodeTree.RootNode);
 
             if (EnableKeyboard)
             {
                 var handler = NodeTree.AddNode<KeyboardInputHandler>(parent);
-                ServiceLocator.Register<IKeyboardInputHandler, KeyboardInputHandler>(handler);
+                binder.Instance<IKeyboardInputHandler, KeyboardInputHandler>(handler);
             }
             if (EnableMouse)
             {
                 var handler = NodeTree.AddNode<MouseInputHandler>(parent);
-                ServiceLocator.Register<IMouseInputHandler, MouseInputHandler>(handler);
+                binder.Instance<IMouseInputHandler, MouseInputHandler>(handler);
             }
             if (EnableGamepad)
             {
                 var handler = NodeTree.AddNode<GamepadInputHandler>(parent);
-                ServiceLocator.Register<IGamepadInputHandler, GamepadInputHandler>(handler);
+                binder.Instance<IGamepadInputHandler, GamepadInputHandler>(handler);
             }
+        }
+
+        public override void Initialize(IDependencyResolver resolver)
+        {
         }
     }
 }

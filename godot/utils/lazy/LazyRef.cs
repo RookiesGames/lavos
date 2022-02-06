@@ -2,10 +2,10 @@ using Lavos.Core.Dependency;
 
 namespace Lavos.Utils.Lazy
 {
-    public sealed class LazyRef<T> where T : class
+    public sealed class LazyRef<T>
     {
-        T _instance = null;
+        T _instance = default(T);
 
-        public T Get => _instance ?? (_instance = ServiceLocator.Locate<T>());
+        public T Ref => _instance != null ? _instance : (_instance = ServiceLocator.Locate<T>());
     }
 }

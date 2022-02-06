@@ -8,20 +8,35 @@ namespace Lavos.Core.Dependency
 {
     public sealed class ServiceLocator : Node
     {
-        private static ServiceLocator _instance;
+        #region Members
+
         private static DependencyContainer _container;
+
+        #endregion Members
+
+
+        #region Constructor
 
         internal ServiceLocator()
         {
-            _instance = this;
             Log.Debug(nameof(ServiceLocator), "Node built");
         }
 
+        #endregion
+
+
+        #region Node
+
         public override void _Ready()
         {
-            _container = GetNode<DependencyContainer>("/root/DependencyContainer");
+            _container = DependencyContainer.Singleton;
             Assert.IsTrue(_container != null, "Dependency container not found");
         }
+
+        #endregion Node
+
+
+        #region Interface
 
         public static T Locate<T>()
         {
@@ -48,5 +63,7 @@ namespace Lavos.Core.Dependency
         {
             _container.Instance<I, C>(instance);
         }
+
+        #endregion Interface
     }
 }
