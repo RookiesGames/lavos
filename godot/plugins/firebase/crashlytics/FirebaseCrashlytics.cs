@@ -18,6 +18,13 @@ namespace Lavos.Plugins.Firebase.Crashlytics
             Assert.IsTrue(Engine.HasSingleton(PluginName), $"Missing plugins {PluginName}");
             _plugin = new LavosPlugin(Engine.GetSingleton(PluginName));
             _exceptionBuilder = new StringBuilder();
+            //
+            Initialise();
+        }
+
+        void Initialise()
+        {
+            _plugin.CallVoid("init");
         }
 
         #region ICrashService
@@ -29,7 +36,7 @@ namespace Lavos.Plugins.Firebase.Crashlytics
 
         public bool CheckForUnsentReports()
         {
-            return _plugin.Call<bool>("checkForUnsentReports", null);
+            return _plugin.Call<bool>("checkForUnsentReports");
         }
 
         public void SendUnsentReports()
