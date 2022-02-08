@@ -44,13 +44,18 @@ namespace Lavos.Core.Dependency
 
         #region IDependencyContainer
 
-        public void Bind<I, C>() where C : I
+        public void Bind<I, C>() where C : I, new()
         {
             Assert.IsTrue(typeof(I).IsInterface, "Only interfaces can be bound from");
             Assert.IsTrue(typeof(C).IsClass, "Only classes can be bound to");
             Assert.IsTrue(typeof(C).IsAssignableTo(typeof(I)), $"Type mismatch - {typeof(C)} does not inherit from {typeof(I)}");
             Assert.IsFalse(bindings.ContainsKey(typeof(I)), "Binding cannot be duplicated");
 
+            DoBind<I, C>();
+        }
+
+        public void DoBind<I, C>()
+        {
             bindings[typeof(I)] = typeof(C);
         }
 
@@ -69,7 +74,7 @@ namespace Lavos.Core.Dependency
 
         public void Instance<I, C>(C instance) where C : I
         {
-            Bind<I, C>();
+            DoBind<I, C>();
             AddInstance(typeof(C), (object)instance);
         }
 

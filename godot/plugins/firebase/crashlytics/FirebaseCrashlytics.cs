@@ -13,7 +13,7 @@ namespace Lavos.Plugins.Firebase.Crashlytics
         readonly LavosPlugin _plugin;
         readonly StringBuilder _exceptionBuilder;
 
-        FirebaseCrashlytics()
+        public FirebaseCrashlytics()
         {
             Assert.IsTrue(Engine.HasSingleton(PluginName), $"Missing plugins {PluginName}");
             _plugin = (LavosPlugin)Engine.GetSingleton(PluginName);
