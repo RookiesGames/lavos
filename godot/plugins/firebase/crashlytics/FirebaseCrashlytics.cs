@@ -16,7 +16,7 @@ namespace Lavos.Plugins.Firebase.Crashlytics
         public FirebaseCrashlytics()
         {
             Assert.IsTrue(Engine.HasSingleton(PluginName), $"Missing plugins {PluginName}");
-            _plugin = (LavosPlugin)Engine.GetSingleton(PluginName);
+            _plugin = new LavosPlugin(Engine.GetSingleton(PluginName));
             _exceptionBuilder = new StringBuilder();
         }
 

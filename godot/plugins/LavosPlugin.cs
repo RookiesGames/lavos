@@ -1,16 +1,23 @@
 
 namespace Lavos.Plugins
 {
-    public class LavosPlugin : Godot.Object
+    sealed class LavosPlugin
     {
+        readonly Godot.Object _object;
+
+        public LavosPlugin(Godot.Object obj)
+        {
+            _object = obj;
+        }
+
         public void CallVoid(string method, params object[] args)
         {
-            Call(method, args);
+            _object.Call(method, args);
         }
 
         public T Call<T>(string method, params object[] args)
         {
-            return (T)Call(method, args);
+            return (T)_object.Call(method, args);
         }
     }
 }
