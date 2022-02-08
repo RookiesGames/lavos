@@ -27,14 +27,12 @@ namespace Lavos.Services.Crash.Debug
 
         public void OnTaskLog()
         {
-            Task.Run(() => { _crashService.Log("Task"); })
-                .Start();
+            Task.Run(() => { _crashService.Log("Task"); });
         }
 
         public void OnTaskException()
         {
-            Task.Run(() => { _crashService.LogException(new TaskCanceledException("Exception")); })
-                .Start();
+            Task.Run(() => { _crashService.LogException(new TaskCanceledException("Exception")); });
         }
     }
 }
