@@ -1,8 +1,6 @@
 using System;
-using System.Text;
 using Godot;
 using Lavos.Core.Debug;
-using Lavos.Core.Console;
 using Lavos.Services.Crash;
 
 namespace Lavos.Plugins.Firebase.Crashlytics
@@ -11,13 +9,11 @@ namespace Lavos.Plugins.Firebase.Crashlytics
     {
         const string PluginName = "FirebaseCrashlytics";
         readonly LavosPlugin _plugin;
-        readonly StringBuilder _exceptionBuilder;
 
         public FirebaseCrashlytics()
         {
             Assert.IsTrue(Engine.HasSingleton(PluginName), $"Missing plugins {PluginName}");
             _plugin = new LavosPlugin(Engine.GetSingleton(PluginName));
-            _exceptionBuilder = new StringBuilder();
             //
             Initialise();
         }
@@ -61,12 +57,8 @@ namespace Lavos.Plugins.Firebase.Crashlytics
 
         public void LogException(Exception e)
         {
-            var exception = _exceptionBuilder
-                    .Append(e.GetType())
-                    .Append(" | ")
-                    .Append(e.Message);
+            var exception = $"{e.GetType()} | {e.Message}";
             _plugin.CallVoid("recordException", exception);
-            _exceptionBuilder.Clear();
         }
 
         public void SetUserId(string id)
