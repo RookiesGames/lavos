@@ -80,6 +80,13 @@ namespace Lavos.Plugins.Firebase.Crashlytics
             }
         }
 
+        public void NativeCrash()
+        {
+#if DEBUG
+            _plugin.CallVoid("crash");
+#endif
+        }
+
         #endregion ICrashService
     }
 }

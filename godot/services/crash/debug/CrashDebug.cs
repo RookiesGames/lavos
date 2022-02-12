@@ -1,7 +1,7 @@
 using Godot;
 using Lavos.Core.Dependency;
-using Lavos.Utils.Lazy;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Lavos.Services.Crash.Debug
@@ -13,26 +13,47 @@ namespace Lavos.Services.Crash.Debug
         public override void _Ready()
         {
             _crashService = ServiceLocator.Locate<ICrashService>();
+            _crashService.EnableCollection(true);
         }
 
         public void OnLogEvent()
         {
-            _crashService.Log("Log");
+            _crashService.Log($"Log from {nameof(CrashDebug)}");
         }
 
         public void OnLogException()
         {
-            _crashService.LogException(new NullReferenceException("Exception"));
+            _crashService.LogException(new KeyNotFoundException($"Exception from {nameof(CrashDebug)}"));
         }
 
         public void OnTaskLog()
         {
-            Task.Run(() => { _crashService.Log("Task"); });
+            Task.Run(() => { _crashService.Log("Log from Task"); });
         }
 
         public void OnTaskException()
         {
-            Task.Run(() => { _crashService.LogException(new TaskCanceledException("Exception")); });
+            Task.Run(() => { _crashService.LogException(new TaskCanceledException($"Task Exception from {nameof(CrashDebug)}")); });
+        }
+
+        public void OnNativeCrash()
+        {
+            _crashService.NativeCrash();
+        }
+
+        public void OnNullReference()
+        {
+            List<int> list = null;
+            list.Add(0);
+        }
+
+        public void OnMemoryCrash()
+        {
+            var list = new List<byte[]>();
+            while (true)
+            {
+                list.Add(new byte[1024 * 1024 * 1024]);
+            }
         }
     }
 }

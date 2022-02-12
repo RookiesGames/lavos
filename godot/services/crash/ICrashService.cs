@@ -18,5 +18,7 @@ namespace Lavos.Services.Crash
 
         void SetUserId(string id);
         void SetCustomKey<T>(string key, T value);
+
+        void NativeCrash();
     }
 }
