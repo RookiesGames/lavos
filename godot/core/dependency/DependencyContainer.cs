@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using Godot;
 using Lavos.Core.Debug;
-using Lavos.Core.Nodes;
 using Lavos.Utils.Extensions;
 using Lavos.Core.Console;
 
@@ -83,9 +82,9 @@ namespace Lavos.Core.Dependency
 
         #region DependencyResolver
 
-        public bool Resolve<T>()
+        public T Resolve<T>()
         {
-            return FindOrCreateType(typeof(T)) != null;
+            return (T)FindOrCreateType(typeof(T));
         }
 
         #endregion DependencyResolver
