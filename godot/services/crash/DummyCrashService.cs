@@ -5,6 +5,8 @@ namespace Lavos.Services.Crash
 {
     sealed class DummyCrashService : ICrashService
     {
+        public void Initialise() { }
+
         public void EnableCollection(bool enable) { }
 
         public bool CheckForUnsentReports() => false;

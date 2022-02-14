@@ -5,6 +5,8 @@ namespace Lavos.Services.Crash
 {
     public interface ICrashService
     {
+        void Initialise();
+
         void EnableCollection(bool enable);
 
         bool CheckForUnsentReports();

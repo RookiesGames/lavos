@@ -1,10 +1,9 @@
 using Lavos.Core.Debug;
 using Lavos.Core.Dependency;
 using Lavos.Plugins.Firebase.Crashlytics;
-using Lavos.Services.Crash;
 using Lavos.Utils.Platform;
 
-namespace Lavos.Services.Analytics
+namespace Lavos.Services.Crash
 {
     public sealed class CrashConfig : Config
     {
@@ -22,8 +21,9 @@ namespace Lavos.Services.Analytics
 
         public override void Initialize(IDependencyResolver resolver)
         {
-            var resolved = resolver.Resolve<ICrashService>();
-            Assert.IsTrue(resolved, $"Type {nameof(ICrashService)} was not resolved");
+            var service = resolver.Resolve<ICrashService>();
+            Assert.IsTrue(service != null, $"Type {nameof(ICrashService)} was not resolved");
+            service.Initialise();
         }
     }
 }

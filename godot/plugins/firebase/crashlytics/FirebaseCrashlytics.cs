@@ -14,11 +14,9 @@ namespace Lavos.Plugins.Firebase.Crashlytics
         {
             Assert.IsTrue(Engine.HasSingleton(PluginName), $"Missing plugins {PluginName}");
             _plugin = new LavosPlugin(Engine.GetSingleton(PluginName));
-            //
-            Initialise();
         }
 
-        void Initialise()
+        public void Initialise()
         {
             _plugin.CallVoid("init");
         }
@@ -68,15 +66,21 @@ namespace Lavos.Plugins.Firebase.Crashlytics
 
         public void SetCustomKey<T>(string key, T value)
         {
-            var method = "setCustomKey";
+            var method = string.Empty;
             var typeCode = Type.GetTypeCode(typeof(T));
             switch (typeCode)
             {
-                case TypeCode.Boolean: _plugin.CallVoid(method, key, Convert.ToBoolean(value)); return;
-                case TypeCode.Double: _plugin.CallVoid(method, key, Convert.ToDouble(value)); return;
-                case TypeCode.Int64: _plugin.CallVoid(method, key, Convert.ToInt64(value)); return;
-                case TypeCode.String: _plugin.CallVoid(method, key, Convert.ToString(value)); return;
-                default: Core.Console.Log.Error(nameof(FirebaseCrashlytics), "Unhandled custom type"); return;
+                case TypeCode.Int16:
+                case TypeCode.Int32: _plugin.CallVoid("setCustomKeyI", key, value); return;
+                case TypeCode.Single: _plugin.CallVoid("setCustomKeyF", key, value); return;
+                case TypeCode.Boolean: _plugin.CallVoid("setCustomKeyB", key, value); return;
+                case TypeCode.String: _plugin.CallVoid("setCustomKeyS", key, value); return;
+                default:
+                    {
+                        _plugin.CallVoid("setCustomKeyS", key, "TypeNotSupported");
+                        Core.Console.Log.Error(nameof(FirebaseCrashlytics), "Unhandled custom type");
+                        return;
+                    }
             }
         }
 

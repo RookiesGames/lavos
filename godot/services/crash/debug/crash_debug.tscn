@@ -10,21 +10,31 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="Tabs" type="Tabs" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
-margin_left = 446.0
-margin_top = 218.0
-margin_right = 578.0
-margin_bottom = 382.0
-alignment = 1
+[node name="CenterContainer" type="CenterContainer" parent="Tabs"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Log" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="Tabs/CenterContainer"]
+margin_left = 339.0
+margin_top = 266.0
+margin_right = 685.0
+margin_bottom = 334.0
+columns = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Log" type="Button" parent="Tabs/CenterContainer/GridContainer"]
 margin_right = 132.0
 margin_bottom = 20.0
 text = "Log"
@@ -32,52 +42,54 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LogException" type="Button" parent="CenterContainer/VBoxContainer"]
-margin_top = 24.0
-margin_right = 132.0
-margin_bottom = 44.0
+[node name="LogException" type="Button" parent="Tabs/CenterContainer/GridContainer"]
+margin_left = 136.0
+margin_right = 236.0
+margin_bottom = 20.0
 text = "Log Exception"
 
-[node name="TaskLog" type="Button" parent="CenterContainer/VBoxContainer"]
-margin_top = 48.0
-margin_right = 132.0
-margin_bottom = 68.0
+[node name="TaskLog" type="Button" parent="Tabs/CenterContainer/GridContainer"]
+margin_left = 240.0
+margin_right = 346.0
+margin_bottom = 20.0
 text = "Task Log"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TaskLogException" type="Button" parent="CenterContainer/VBoxContainer"]
-margin_top = 72.0
+[node name="TaskLogException" type="Button" parent="Tabs/CenterContainer/GridContainer"]
+margin_top = 24.0
 margin_right = 132.0
-margin_bottom = 92.0
+margin_bottom = 44.0
 text = "Task Log Exception"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NativeCrash" type="Button" parent="CenterContainer/VBoxContainer"]
-margin_top = 96.0
-margin_right = 132.0
-margin_bottom = 116.0
+[node name="NativeCrash" type="Button" parent="Tabs/CenterContainer/GridContainer"]
+margin_left = 136.0
+margin_top = 24.0
+margin_right = 236.0
+margin_bottom = 44.0
 text = "Native crash"
 
-[node name="NullRef" type="Button" parent="CenterContainer/VBoxContainer"]
-margin_top = 120.0
-margin_right = 132.0
-margin_bottom = 140.0
+[node name="NullRef" type="Button" parent="Tabs/CenterContainer/GridContainer"]
+margin_left = 240.0
+margin_top = 24.0
+margin_right = 346.0
+margin_bottom = 44.0
 text = "Null Reference"
 
-[node name="MemCrash" type="Button" parent="CenterContainer/VBoxContainer"]
-margin_top = 144.0
+[node name="MemCrash" type="Button" parent="Tabs/CenterContainer/GridContainer"]
+margin_top = 48.0
 margin_right = 132.0
-margin_bottom = 164.0
+margin_bottom = 68.0
 text = "Memory crash"
 
-[connection signal="pressed" from="CenterContainer/VBoxContainer/Log" to="." method="OnLogEvent"]
-[connection signal="pressed" from="CenterContainer/VBoxContainer/LogException" to="." method="OnLogException"]
-[connection signal="pressed" from="CenterContainer/VBoxContainer/TaskLog" to="." method="OnTaskLog"]
-[connection signal="pressed" from="CenterContainer/VBoxContainer/TaskLogException" to="." method="OnTaskException"]
-[connection signal="pressed" from="CenterContainer/VBoxContainer/NativeCrash" to="." method="OnNativeCrash"]
-[connection signal="pressed" from="CenterContainer/VBoxContainer/NullRef" to="." method="OnNullReference"]
-[connection signal="pressed" from="CenterContainer/VBoxContainer/MemCrash" to="." method="OnMemoryCrash"]
+[connection signal="pressed" from="Tabs/CenterContainer/GridContainer/Log" to="." method="OnLogEvent"]
+[connection signal="pressed" from="Tabs/CenterContainer/GridContainer/LogException" to="." method="OnLogException"]
+[connection signal="pressed" from="Tabs/CenterContainer/GridContainer/TaskLog" to="." method="OnTaskLog"]
+[connection signal="pressed" from="Tabs/CenterContainer/GridContainer/TaskLogException" to="." method="OnTaskException"]
+[connection signal="pressed" from="Tabs/CenterContainer/GridContainer/NativeCrash" to="." method="OnNativeCrash"]
+[connection signal="pressed" from="Tabs/CenterContainer/GridContainer/NullRef" to="." method="OnNullReference"]
+[connection signal="pressed" from="Tabs/CenterContainer/GridContainer/MemCrash" to="." method="OnMemoryCrash"]
