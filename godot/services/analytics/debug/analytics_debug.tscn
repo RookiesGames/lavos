@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://lavos/services/analytics/debug/AnalyticsDebug.cs" type="Script" id=1]
+
+[node name="AnalyticsDebug" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tabs" type="Tabs" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="Tabs"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GridContainer" type="GridContainer" parent="Tabs/CenterContainer"]
+margin_left = 421.0
+margin_top = 290.0
+margin_right = 603.0
+margin_bottom = 310.0
+columns = 2
+
+[node name="LogEvent" type="Button" parent="Tabs/CenterContainer/GridContainer"]
+margin_right = 73.0
+margin_bottom = 20.0
+text = "Log Event"
+
+[node name="TaskLogEvent" type="Button" parent="Tabs/CenterContainer/GridContainer"]
+margin_left = 77.0
+margin_right = 182.0
+margin_bottom = 20.0
+text = "Task Log Event"
+
+[connection signal="pressed" from="Tabs/CenterContainer/GridContainer/LogEvent" to="." method="OnLogEvent"]
+[connection signal="pressed" from="Tabs/CenterContainer/GridContainer/TaskLogEvent" to="." method="OnTaskLogEvent"]
