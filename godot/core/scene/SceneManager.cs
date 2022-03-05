@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Godot;
 using Lavos.Core.Debug;
+using Lavos.Core.Scene;
 
 namespace Lavos.Core.Scene
 {
@@ -24,7 +25,7 @@ namespace Lavos.Core.Scene
         #endregion
 
 
-        #region LoadScene
+        #region Methods
 
         public static async Task<PackedScene> LoadScene(string path)
         {
@@ -32,43 +33,19 @@ namespace Lavos.Core.Scene
             return scene;
         }
 
-        #endregion
-
-
-        #region ChangeScene
-
         public static void ChangeScene(PackedScene scene)
-        {
-            EmptyScene();
-            AddScene(scene, _rootNode);
+        { 
+            NodeTree.Singleton.CleanTree();
+            AddScene(scene);
         }
-
-        private static void EmptyScene()
-        {
-            var children = _rootNode.GetChildren();
-            foreach (Node child in children)
-            {
-                _rootNode.RemoveChild(child);
-                child.QueueFree();
-            }
-        }
-
-        #endregion
-
-        #region Add
 
         public static Node AddScene(PackedScene scene)
         {
-            return AddScene(scene, _rootNode);
-        }
-
-        public static Node AddScene(PackedScene scene, Node parent)
-        {
             var node = scene.Instance();
-            parent.AddChild(node, true);
+            NodeTree.Singleton.AddChild(node);
             return node;
         }
 
-        #endregion
+        #endregion Methods
     }
 }

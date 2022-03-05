@@ -8,17 +8,17 @@ using Lavos.Utils.Extensions;
 
 namespace Lavos.Core.Scene
 {
-    public sealed class NodeTree : Node
+    public sealed class NodeTree : LavosNode
     {
         #region Properties
 
         const string TAG = nameof(NodeTree);
 
-        private static Node _rootNode;
-        public static Node RootNode => _rootNode;
-
         private static Dictionary<string, Node> _pinnedNodes = new Dictionary<string, Node>();
 
+        private static NodeTree _node;
+        public static NodeTree Singleton => _node;
+        
         #endregion
 
 
@@ -26,8 +26,7 @@ namespace Lavos.Core.Scene
 
         public override void _Ready()
         {
-            _rootNode = GetParent();
-            Assert.IsTrue(_rootNode != null, "Root node not found");
+            _node = this;
         }
 
         #endregion
@@ -35,29 +34,18 @@ namespace Lavos.Core.Scene
 
         #region Methods
 
-        #region Add
-
-        public static Node AddNode(string name, Node parent)
+        public void CleanTree()
         {
-            Assert.IsFalse(string.IsNullOrEmpty(name), "Name must be given");
-            return parent.AddNode<PinnedNode>(name);
+            // TODO: Remove all nodes under the tree
+            /*
+                var children = NodeTree.Singleton.GetChildren();
+                foreach (Node child in children)
+                {
+                    _rootNode.RemoveChild(child);
+                    child.QueueFree();
+                }
+            */
         }
-
-        public static T AddNode<T>(Node parent) where T : Node
-        {
-            return parent.AddNode<T>();
-        }
-
-        #endregion Add
-
-        #region Remove
-
-        public static void RemoveNode(Node node)
-        {
-            node.RemoveSelf();
-        }
-
-        #endregion Remove
 
         #region Pin
 
@@ -78,7 +66,7 @@ namespace Lavos.Core.Scene
         }
 
 
-        public static void UnPinNode(string key)
+        public static void UnpinNode(string key)
         {
             if (_pinnedNodes.ContainsKey(key))
             {

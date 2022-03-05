@@ -30,15 +30,15 @@ namespace Lavos.Core.Dependency
         #endregion
 
 
-        #region Contructor
+        #region Node
 
-        internal DependencyContainer()
+        public override void _Ready()
         {
             _singleton = this;
             Log.Debug(nameof(DependencyContainer), "Node built");
         }
 
-        #endregion Constructor
+        #endregion Node
 
 
         #region IDependencyContainer

@@ -1,6 +1,7 @@
 using Godot;
 using Lavos.Core.Dependency;
 using Lavos.Core.Scene;
+using Lavos.Utils.Extensions;
 
 namespace Lavos.Input
 {
@@ -12,21 +13,21 @@ namespace Lavos.Input
 
         public override void Configure(IDependencyBinder binder)
         {
-            var parent = NodeTree.AddNode("Input", NodeTree.RootNode);
+            var parent = NodeTree.Singleton.AddNode("Input");
 
             if (EnableKeyboard)
             {
-                var handler = NodeTree.AddNode<KeyboardInputHandler>(parent);
+                var handler = parent.AddNode<KeyboardInputHandler>();
                 binder.Instance<IKeyboardInputHandler, KeyboardInputHandler>(handler);
             }
             if (EnableMouse)
             {
-                var handler = NodeTree.AddNode<MouseInputHandler>(parent);
+                var handler = parent.AddNode<MouseInputHandler>();
                 binder.Instance<IMouseInputHandler, MouseInputHandler>(handler);
             }
             if (EnableGamepad)
             {
-                var handler = NodeTree.AddNode<GamepadInputHandler>(parent);
+                var handler = parent.AddNode<GamepadInputHandler>();
                 binder.Instance<IGamepadInputHandler, GamepadInputHandler>(handler);
             }
         }

@@ -1,17 +1,68 @@
-
+using System.Collections.Generic;
 using Godot;
+using Lavos.Core.Dependency;
+using Lavos.Core.Nodes;
+using Lavos.Core.Scene;
+using Lavos.Utils.Extensions;
+
 
 namespace Lavos.Core.Nodes
 {
-    public sealed class OmniNode : Node
+    sealed class OmniNode : Node
     {
-        static OmniNode _node;
+		[Export] PackedScene _scene;
+		[Export] List<PackedScene> _configs;
 
-        public static OmniNode Singleton => _node;
 
-        public override void _Ready()
+		public override void _Ready()
+		{
+			this.AddNode<DependencyContainer>();
+			this.AddNode<NodeTree>();
+			this.AddNode<SceneManager>();
+			//
+            HandleConfigs();
+			//
+			SceneManager.ChangeScene(_scene);
+		}
+
+        private void HandleConfigs()
         {
-            _node = this;
+			if (_configs?.Count > 0)
+			{
+		        var configNodes = new List<Config>(_configs.Count);
+				CreateConfigs(configNodes);
+				InitializeConfigs(configNodes);
+				CleanConfigs(configNodes);
+			    configNodes.Clear();
+			}
         }
+
+		private void CreateConfigs(List<Config> nodes)
+		{
+			foreach (var ps in _configs)
+			{
+				var node = ps.Instance();
+				var config = node.GetSelf<Config>();
+				config.Configure(DependencyContainer.Singleton);
+				//
+				nodes.Add(config);
+			}
+		}
+
+		private void InitializeConfigs(List<Config> nodes)
+		{
+			foreach (var config in nodes)
+			{
+				config.Initialize(DependencyContainer.Singleton);
+			}
+		}
+
+		private void CleanConfigs(List<Config> nodes)
+		{
+			foreach (var node in nodes)
+			{
+				node.RemoveSelf();
+			}
+		}
     }
 }

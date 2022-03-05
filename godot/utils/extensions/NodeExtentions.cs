@@ -45,7 +45,15 @@ namespace Lavos.Utils.Extensions
         public static T AddNode<T>(this Node parent, string name = null) where T : Node
         {
             var node = Activator.CreateInstance<T>();
-            node.Name = name.IsNotNullOrEmpty() ? name : typeof(T).ToString();
+            node.Name = name.IsNotNullOrEmpty() ? name : typeof(T).Name;
+            parent.AddChild(node);
+            return node;
+        }
+
+        public static Node AddNode(this Node parent, string name) 
+        {
+            var node = new Node();
+            node.Name = name;
             parent.AddChild(node);
             return node;
         }
