@@ -1,6 +1,6 @@
 using Godot;
 using Lavos.Core.Dependency;
-using Lavos.Core.Scene;
+using Lavos.Core.Nodes;
 using Lavos.Utils.Extensions;
 
 namespace Lavos.Input
@@ -13,27 +13,33 @@ namespace Lavos.Input
 
         public override void Configure(IDependencyBinder binder)
         {
-            var parent = NodeTree.Singleton.AddNode("Input");
+            //var parent = OmniNode..Singleton.AddNode("Input");
 
             if (EnableKeyboard)
             {
-                var handler = parent.AddNode<KeyboardInputHandler>();
-                binder.Instance<IKeyboardInputHandler, KeyboardInputHandler>(handler);
+                //var handler = parent.AddNode<KeyboardInputHandler>();
+                //binder.Instance<IKeyboardInputHandler, KeyboardInputHandler>(handler);
+                binder.Bind<IKeyboardInputHandler, KeyboardInputHandler>();
             }
             if (EnableMouse)
             {
-                var handler = parent.AddNode<MouseInputHandler>();
-                binder.Instance<IMouseInputHandler, MouseInputHandler>(handler);
+                //var handler = parent.AddNode<MouseInputHandler>();
+                //binder.Instance<IMouseInputHandler, MouseInputHandler>(handler);
+                binder.Bind<IMouseInputHandler, MouseInputHandler>();
             }
             if (EnableGamepad)
             {
-                var handler = parent.AddNode<GamepadInputHandler>();
-                binder.Instance<IGamepadInputHandler, GamepadInputHandler>(handler);
+                //var handler = parent.AddNode<GamepadInputHandler>();
+                //binder.Instance<IGamepadInputHandler, GamepadInputHandler>(handler);
+                binder.Bind<IGamepadInputHandler, GamepadInputHandler>();
             }
         }
 
         public override void Initialize(IDependencyResolver resolver)
         {
+            resolver.Resolve<IKeyboardInputHandler>();
+            resolver.Resolve<IMouseInputHandler>();
+            resolver.Resolve<IGamepadInputHandler>();
         }
     }
 }

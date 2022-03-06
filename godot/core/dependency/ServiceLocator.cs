@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Godot;
-using Lavos.Core.Debug;
+using Lavos.Debug;
 using Lavos.Utils.Extensions;
 using Lavos.Core.Console;
 
@@ -15,22 +15,14 @@ namespace Lavos.Core.Dependency
         #endregion Members
 
 
-        #region Constructor
-
-        internal ServiceLocator()
-        {
-            Log.Debug(nameof(ServiceLocator), "Node built");
-        }
-
-        #endregion
-
-
         #region Node
 
         public override void _Ready()
         {
             _container = DependencyContainer.Singleton;
             Assert.IsTrue(_container != null, "Dependency container not found");
+            //
+            Log.Debug(nameof(ServiceLocator), "Node built");
         }
 
         #endregion Node

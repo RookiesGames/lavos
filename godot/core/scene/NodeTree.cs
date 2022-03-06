@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using Lavos.Core.Console;
-using Lavos.Core.Debug;
+using Lavos.Debug;
 using Lavos.Core.Nodes;
 using Lavos.Utils.Extensions;
 
@@ -18,7 +18,7 @@ namespace Lavos.Core.Scene
 
         private static NodeTree _node;
         public static NodeTree Singleton => _node;
-        
+
         #endregion
 
 

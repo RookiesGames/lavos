@@ -1,7 +1,7 @@
 using System;
 using Godot;
 using Lavos.Core.Console;
-using Lavos.Core.Debug;
+using Lavos.Debug;
 using Lavos.Core.Dependency;
 using Lavos.Input;
 using Lavos.Utils.Extensions;
@@ -48,7 +48,7 @@ namespace Lavos.Input
 
         public override void _Input(InputEvent inputEvent)
         {
-            if (IsEnabled.IsFalse())
+            if (IsEnabled == false)
             {
                 return;
             }

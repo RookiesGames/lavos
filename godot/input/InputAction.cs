@@ -15,6 +15,9 @@ namespace Lavos.Input
         West,
         East,
 
+        Accept = South,
+        Cancel = East,
+
         Start,
         Select,
 

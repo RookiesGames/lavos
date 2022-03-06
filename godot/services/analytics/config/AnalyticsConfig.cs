@@ -1,4 +1,4 @@
-using Lavos.Core.Debug;
+using Lavos.Debug;
 using Lavos.Core.Dependency;
 using Lavos.Plugins.Firebase.Analytics;
 using Lavos.Utils.Platform;

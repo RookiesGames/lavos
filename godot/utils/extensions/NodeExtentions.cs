@@ -50,14 +50,6 @@ namespace Lavos.Utils.Extensions
             return node;
         }
 
-        public static Node AddNode(this Node parent, string name) 
-        {
-            var node = new Node();
-            node.Name = name;
-            parent.AddChild(node);
-            return node;
-        }
-
         #endregion Add
 
         #region Remove

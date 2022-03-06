@@ -2,19 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Godot;
-using Lavos.Core.Debug;
+using Lavos.Debug;
+using Lavos.Core.Nodes;
 using Lavos.Utils.Extensions;
 using Lavos.Core.Console;
 
 namespace Lavos.Core.Dependency
 {
     public sealed class DependencyContainer
-        : Node
+        : LavosNode
         , IDependencyBinder
         , IDependencyResolver
     {
         #region Members
 
+        private Node _nodes;
         private static DependencyContainer _singleton;
         private readonly Dictionary<System.Type, System.Type> bindings = new Dictionary<System.Type, System.Type>();
         private readonly Dictionary<System.Type, List<System.Type>> lookups = new Dictionary<System.Type, List<System.Type>>();
@@ -34,8 +36,16 @@ namespace Lavos.Core.Dependency
 
         public override void _Ready()
         {
+            _nodes = AddNode<Node>("Nodes");
             _singleton = this;
             Log.Debug(nameof(DependencyContainer), "Node built");
+        }
+
+        public override void _ExitTree()
+        {
+            bindings.Clear();
+            lookups.Clear();
+            instances.Clear();
         }
 
         #endregion Node
@@ -53,7 +63,7 @@ namespace Lavos.Core.Dependency
             DoBind<I, C>();
         }
 
-        public void DoBind<I, C>()
+        void DoBind<I, C>()
         {
             bindings[typeof(I)] = typeof(C);
         }
@@ -110,9 +120,10 @@ namespace Lavos.Core.Dependency
             if (instances.DoesNotContainKey(type))
             {
                 var obj = CreateInstance(type);
-                if (obj is Node)
+                if (obj is Node node)
                 {
-
+                    node.Name = type.Name;
+                    _nodes.AddChild(node);
                 }
                 AddInstance(type, obj);
                 InjectDependencies(obj);

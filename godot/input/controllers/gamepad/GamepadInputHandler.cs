@@ -1,6 +1,6 @@
 using System;
 using Godot;
-using Lavos.Core.Debug;
+using Lavos.Debug;
 using Lavos.Core.Dependency;
 using Lavos.Utils.Extensions;
 
@@ -45,7 +45,7 @@ namespace Lavos.Input
 
         public override void _Process(float delta)
         {
-            if (IsEnabled.IsFalse())
+            if (IsEnabled == false)
             {
                 return;
             }
@@ -71,7 +71,7 @@ namespace Lavos.Input
 
         public override void _Input(InputEvent inputEvent)
         {
-            if (IsEnabled.IsFalse())
+            if (IsEnabled == false)
             {
                 return;
             }
@@ -85,7 +85,7 @@ namespace Lavos.Input
                     {
                         onInputActionPressed?.Invoke(ias.Action);
                     }
-                    else if (joypadButton.Pressed.IsFalse() && ias.Pressed.IsFalse())
+                    else if (joypadButton.Pressed == false && ias.Pressed == false)
                     {
                         onInputActionReleased?.Invoke(ias.Action);
                     }

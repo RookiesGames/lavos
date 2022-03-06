@@ -1,6 +1,6 @@
 using System;
 using Godot;
-using Lavos.Core.Debug;
+using Lavos.Debug;
 using Lavos.Services.Crash;
 
 namespace Lavos.Plugins.Firebase.Crashlytics

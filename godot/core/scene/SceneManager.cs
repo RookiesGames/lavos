@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Godot;
-using Lavos.Core.Debug;
+using Lavos.Debug;
 using Lavos.Core.Scene;
 
 namespace Lavos.Core.Scene
@@ -34,13 +34,14 @@ namespace Lavos.Core.Scene
         }
 
         public static void ChangeScene(PackedScene scene)
-        { 
+        {
             NodeTree.Singleton.CleanTree();
             AddScene(scene);
         }
 
         public static Node AddScene(PackedScene scene)
         {
+            Assert.IsTrue(scene != null, $"Scene {scene.ResourceName} is nil");
             var node = scene.Instance();
             NodeTree.Singleton.AddChild(node);
             return node;

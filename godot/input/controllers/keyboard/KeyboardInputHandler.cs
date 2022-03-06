@@ -1,32 +1,38 @@
 using System;
+using System.Collections.Generic;
 using Godot;
-using Lavos.Core.Debug;
-using Lavos.Core.Dependency;
-using Lavos.Input;
-using Lavos.Utils.Extensions;
+using Lavos.Debug;
 
 namespace Lavos.Input
 {
-    sealed class KeyboardInputHandler : Node, IKeyboardInputHandler
+    sealed class KeyboardInputHandler
+        : Node
+        , IKeyboardInputHandler
     {
         #region Members
 
         private IKeyboardInputConfig _config;
+        private HashSet<KeyList> _pressedKeys = new HashSet<KeyList>();
 
         #endregion
 
 
         #region Properties
 
-        private bool IsEnabled => _config != null;
+        private bool IsDisabled => _config == null;
+
+        #endregion
+
+
+        #region IKeyboardInputHandler
+
+        public event Action<InputAction> onKeyPressed;
+        public event Action<InputAction> onKeyReleased;
 
         #endregion
 
 
         #region IInputHandler
-
-        public event Action<InputAction> onInputActionPressed;
-        public event Action<InputAction> onInputActionReleased;
 
         public void EnableHandler(IKeyboardInputConfig config)
         {
@@ -39,13 +45,14 @@ namespace Lavos.Input
             _config = null;
         }
 
-        #endregion
+        #endregion IInputHandler
+
 
         #region Node
 
         public override void _Process(float delta)
         {
-            if (IsEnabled.IsFalse())
+            if (IsDisabled)
             {
                 return;
             }
@@ -53,15 +60,26 @@ namespace Lavos.Input
             var keys = _config.Keys;
             foreach (var key in keys)
             {
-                var pressed = Godot.Input.IsKeyPressed((int)key);
                 var action = _config.GetAction(key);
+                var pressed = Godot.Input.IsKeyPressed((int)key);
+                //
                 if (pressed)
                 {
-                    onInputActionPressed?.Invoke(action);
+                    // Cache press to avoid repetition
+                    if (_pressedKeys.Contains(key) == false)
+                    {
+                        _pressedKeys.Add(key);
+                        onKeyPressed?.Invoke(action);
+                    }
                 }
                 else
                 {
-                    onInputActionReleased?.Invoke(action);
+                    // Remove cache to avoid repetition
+                    if (_pressedKeys.Contains(key))
+                    {
+                        _pressedKeys.Remove(key);
+                        onKeyReleased?.Invoke(action);
+                    }
                 }
             }
         }

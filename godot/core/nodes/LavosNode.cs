@@ -8,27 +8,27 @@ namespace Lavos.Core.Nodes
     {
         public T GetSelf<T>() where T : Node
         {
-            return this.GetSelf<T>();
+            return NodeExtensions.GetSelf<T>(this);
         }
 
         public T GetNodeInChildren<T>() where T : Node
         {
-            return this.GetNodeInChildren<T>();
+            return NodeExtensions.GetNodeInChildren<T>(this);
         }
 
         public Node GetNodeInChildren(string name)
         {
-            return this.GetNodeInChildren(name);
+            return NodeExtensions.GetNodeInChildren(this, name);
         }
 
-        public T AddNode<T>(string name) where T : Node
+        public T AddNode<T>(string name = null) where T : Node
         {
-            return this.AddNode<T>(name);
+            return NodeExtensions.AddNode<T>(this, name);
         }
 
         public void RemoveSelf()
         {
-            this.RemoveSelf();
+            NodeExtensions.RemoveSelf(this);
         }
     }
 }
