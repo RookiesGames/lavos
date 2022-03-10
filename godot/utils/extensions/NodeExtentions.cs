@@ -14,11 +14,17 @@ namespace Lavos.Utils.Extensions
 
         public static T GetNodeInChildren<T>(this Node node) where T : Node
         {
+            var childrend = node.GetChildren();
             foreach (Node n in node.GetChildren())
             {
                 if (n.GetType() == typeof(T))
                 {
                     return (T)n;
+                }
+                //
+                if (n.GetChildCount() > 0)
+                {
+                    return n.GetNodeInChildren<T>();
                 }
             }
 
@@ -32,6 +38,11 @@ namespace Lavos.Utils.Extensions
                 if (n.Name == name)
                 {
                     return n;
+                }
+                //
+                if (n.GetChildCount() > 0)
+                {
+                    return n.GetNodeInChildren(name);
                 }
             }
 
