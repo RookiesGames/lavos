@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using Godot;
 using Lavos.Core.Dependency;
-using Lavos.Core.Nodes;
 using Lavos.Core.Scene;
 using Lavos.Utils.Extensions;
 
 
 namespace Lavos.Core.Nodes
 {
-    sealed class OmniNode : LavosNode
+    sealed class OmniNode : Node
     {
         [Export] PackedScene _scene;
         [Export] List<PackedScene> _configs;
@@ -16,10 +15,10 @@ namespace Lavos.Core.Nodes
 
         public override void _Ready()
         {
-            AddNode<DependencyContainer>();
-            AddNode<ServiceLocator>();
-            AddNode<NodeTree>();
-            AddNode<SceneManager>();
+            this.AddNode<DependencyContainer>();
+            this.AddNode<ServiceLocator>();
+            this.AddNode<NodeTree>();
+            this.AddNode<SceneManager>();
             //
             HandleConfigs();
             //

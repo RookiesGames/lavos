@@ -10,7 +10,7 @@ using Lavos.Core.Console;
 namespace Lavos.Core.Dependency
 {
     public sealed class DependencyContainer
-        : LavosNode
+        : Node
         , IDependencyBinder
         , IDependencyResolver
     {
@@ -36,7 +36,7 @@ namespace Lavos.Core.Dependency
 
         public override void _Ready()
         {
-            _nodes = AddNode<Node>("Nodes");
+            _nodes = this.AddNode<Node>("Nodes");
             _singleton = this;
             Log.Debug(nameof(DependencyContainer), "Node built");
         }

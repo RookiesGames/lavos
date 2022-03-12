@@ -1,30 +1,49 @@
-using System;
 using Godot;
+using System;
+using System.Collections.Generic;
 
 namespace Lavos.Utils.Extensions
 {
     public static class NodeExtensions
     {
-        #region Get
-
         public static T GetSelf<T>(this Node node) where T : Node
         {
             return node.GetNode<T>(".");
         }
 
-        public static T GetNodeInChildren<T>(this Node node) where T : Node
+        public static bool HasChildren(this Node node)
         {
-            var childrend = node.GetChildren();
-            foreach (Node n in node.GetChildren())
+            return node.GetChildCount() > 0;
+        }
+
+        public static void GetNodesInChildren<T>(this Node node, List<T> children) where T : Node
+        {
+            foreach (Node child in node.GetChildren())
             {
-                if (n.GetType() == typeof(T))
+                if (child is T newChild)
                 {
-                    return (T)n;
+                    children.Add(newChild);
                 }
                 //
-                if (n.GetChildCount() > 0)
+                if (child.HasChildren())
                 {
-                    return n.GetNodeInChildren<T>();
+                    child.GetNodesInChildren<T>(children);
+                }
+            }
+        }
+
+        public static T GetNodeInChildren<T>(this Node node) where T : Node
+        {
+            foreach (Node child in node.GetChildren())
+            {
+                if (child is T foundChild)
+                {
+                    return foundChild;
+                }
+                //
+                if (child.HasChildren())
+                {
+                    return child.GetNodeInChildren<T>();
                 }
             }
 
@@ -33,25 +52,21 @@ namespace Lavos.Utils.Extensions
 
         public static Node GetNodeInChildren(this Node node, string name)
         {
-            foreach (Node n in node.GetChildren())
+            foreach (Node child in node.GetChildren())
             {
-                if (n.Name == name)
+                if (child.Name == name)
                 {
-                    return n;
+                    return child;
                 }
                 //
-                if (n.GetChildCount() > 0)
+                if (child.HasChildren())
                 {
-                    return n.GetNodeInChildren(name);
+                    return child.GetNodeInChildren(name);
                 }
             }
 
             return null;
         }
-
-        #endregion Get
-
-        #region Add
 
         public static T AddNode<T>(this Node parent, string name = null) where T : Node
         {
@@ -61,17 +76,11 @@ namespace Lavos.Utils.Extensions
             return node;
         }
 
-        #endregion Add
-
-        #region Remove
-
         public static void RemoveSelf(this Node node)
         {
             var parent = node.GetParent();
             parent?.RemoveChild(node);
             node.QueueFree();
         }
-
-        #endregion
     }
 }

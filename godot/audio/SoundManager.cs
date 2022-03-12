@@ -1,6 +1,5 @@
 using Godot;
 using Lavos.Core.Dependency;
-using Lavos.Core.Nodes;
 using Lavos.Core.Console;
 using Lavos.Utils.Extensions;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 namespace Lavos.Audio
 {
     sealed class SoundManager
-        : LavosNode
+        : Node
         , ISoundManager
     {
         const string Tag = nameof(SoundManager);
@@ -74,7 +73,7 @@ namespace Lavos.Audio
         AudioStreamPlayer2D CreateSource()
         {
             _nextAvailable = _sources.Count;
-            var source = AddNode<AudioStreamPlayer2D>($"SoundSource{_sources.Count}");
+            var source = this.AddNode<AudioStreamPlayer2D>($"SoundSource{_sources.Count}");
             _sources.Add(source);
             return source;
         }

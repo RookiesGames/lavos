@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using Lavos.Core.Console;
-using Lavos.Debug;
-using Lavos.Core.Nodes;
 using Lavos.Utils.Extensions;
 
 namespace Lavos.Core.Scene
 {
-    public sealed class NodeTree : LavosNode
+    public sealed class NodeTree : Node
     {
         #region Properties
 
@@ -79,9 +77,14 @@ namespace Lavos.Core.Scene
 
         public static Node GetPinnedNode(string key)
         {
+            return GetPinnedNode<Node>(key);
+        }
+
+        public static T GetPinnedNode<T>(string key) where T : Node
+        {
             if (_pinnedNodes.ContainsKey(key))
             {
-                return _pinnedNodes[key];
+                return (T)_pinnedNodes[key];
             }
 
             Log.Warn(TAG, $"No pinned node found for key {key}");
