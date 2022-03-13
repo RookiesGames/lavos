@@ -6,7 +6,6 @@ namespace Lavos.Utils.Lazy
     {
         T _instance = null;
         Func<T> _constructor;
-        Action _action;
 
         public T Get => _instance ?? (_instance = Build());
 

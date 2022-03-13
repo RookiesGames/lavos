@@ -1,5 +1,5 @@
 using Lavos.Debug;
-using Lavos.Core.Dependency;
+using Lavos.Dependency;
 using Lavos.Plugins.Firebase.Crashlytics;
 using Lavos.Utils.Platform;
 

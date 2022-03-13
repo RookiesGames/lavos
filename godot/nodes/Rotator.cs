@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Lavos.Core.Nodes
+namespace Lavos.Nodes
 {
     public sealed class Rotator : Node2D
     {

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Reflection;
 using Godot;
 using Lavos.Debug;
-using Lavos.Core.Nodes;
+using Lavos.Nodes;
 using Lavos.Utils.Extensions;
-using Lavos.Core.Console;
+using Lavos.Console;
 
-namespace Lavos.Core.Dependency
+namespace Lavos.Dependency
 {
     public sealed class DependencyContainer
         : Node

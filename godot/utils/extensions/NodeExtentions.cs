@@ -50,18 +50,18 @@ namespace Lavos.Utils.Extensions
             return null;
         }
 
-        public static Node GetNodeInChildren(this Node node, string name)
+        public static T GetNodeInChildrenByName<T>(this Node node, string name) where T : Node
         {
             foreach (Node child in node.GetChildren())
             {
                 if (child.Name == name)
                 {
-                    return child;
+                    return (T)child;
                 }
                 //
                 if (child.HasChildren())
                 {
-                    return child.GetNodeInChildren(name);
+                    return child.GetNodeInChildrenByName<T>(name);
                 }
             }
 

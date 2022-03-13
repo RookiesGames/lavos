@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Godot;
-using Lavos.Core.Console;
+using Lavos.Console;
 using Lavos.Utils.Extensions;
 
-namespace Lavos.Core.Scene
+namespace Lavos.Scene
 {
     public sealed class NodeTree : Node
     {
@@ -12,7 +12,8 @@ namespace Lavos.Core.Scene
 
         const string TAG = nameof(NodeTree);
 
-        private static Dictionary<string, Node> _pinnedNodes = new Dictionary<string, Node>();
+        private Dictionary<string, Node> _pinnedNodes = new Dictionary<string, Node>();
+        private static Dictionary<string, Node> PinnedNodes => Singleton._pinnedNodes;
 
         private static NodeTree _node;
         public static NodeTree Singleton => _node;
@@ -34,18 +35,12 @@ namespace Lavos.Core.Scene
 
         public void CleanTree()
         {
-            // TODO: Remove all nodes under the tree
-            /*
-                var children = NodeTree.Singleton.GetChildren();
-                foreach (Node child in children)
-                {
-                    _rootNode.RemoveChild(child);
-                    child.QueueFree();
-                }
-            */
+            var children = NodeTree.Singleton.GetChildren();
+            foreach (Node child in children)
+            {
+                child.QueueFree();
+            }
         }
-
-        #region Pin
 
         public static void PinNode(string key, Node node)
         {
@@ -54,25 +49,37 @@ namespace Lavos.Core.Scene
                 return;
             }
 
-            if (_pinnedNodes.ContainsKey(key))
+            if (PinnedNodes.ContainsKey(key))
             {
                 Log.Warn(TAG, $"A node was already pinned under key {key}");
                 return;
             }
 
-            _pinnedNodes.Add(key, node);
+            PinnedNodes.Add(key, node);
+        }
+
+        public static void PinNode<T>(T node) where T : Node
+        {
+            var key = typeof(T).Name;
+            PinNode(key, node);
         }
 
 
         public static void UnpinNode(string key)
         {
-            if (_pinnedNodes.ContainsKey(key))
+            if (PinnedNodes.ContainsKey(key))
             {
-                _pinnedNodes.Remove(key);
+                PinnedNodes.Remove(key);
                 return;
             }
 
             Log.Warn(TAG, $"No pinned node found for key {key}");
+        }
+
+        public static void UnpinNode<T>()
+        {
+            var key = typeof(T).Name;
+            UnpinNode(key);
         }
 
         public static Node GetPinnedNode(string key)
@@ -82,16 +89,20 @@ namespace Lavos.Core.Scene
 
         public static T GetPinnedNode<T>(string key) where T : Node
         {
-            if (_pinnedNodes.ContainsKey(key))
+            if (PinnedNodes.ContainsKey(key))
             {
-                return (T)_pinnedNodes[key];
+                return (T)PinnedNodes[key];
             }
 
             Log.Warn(TAG, $"No pinned node found for key {key}");
             return null;
         }
 
-        #endregion Pin
+        public static T GetPinnedNode<T>() where T : Node
+        {
+            var key = typeof(T).Name;
+            return GetPinnedNode<T>(key);
+        }
 
         #endregion Methods
     }

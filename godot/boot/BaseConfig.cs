@@ -1,4 +1,4 @@
-using Lavos.Core.Dependency;
+using Lavos.Dependency;
 using Lavos.Audio;
 
 namespace Lavos.Boot

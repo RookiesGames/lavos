@@ -1,7 +1,7 @@
 using Godot;
 using System.Diagnostics;
 
-namespace Lavos.Core.Console
+namespace Lavos.Console
 {
     public static class Log
     {

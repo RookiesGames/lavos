@@ -1,6 +1,6 @@
 using Godot;
-using Lavos.Core.Dependency;
-using Lavos.Core.Console;
+using Lavos.Dependency;
+using Lavos.Console;
 using Lavos.Utils.Extensions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,7 +13,7 @@ namespace Lavos.Audio
     {
         const string Tag = nameof(SoundManager);
         int _simultaniousSounds = 32;
-        List<AudioStreamPlayer2D> _sources = new List<AudioStreamPlayer2D>();
+        List<AudioStreamPlayer> _sources = new List<AudioStreamPlayer>();
         int _nextAvailable = 0;
 
         public override void _Ready()
@@ -41,15 +41,14 @@ namespace Lavos.Audio
             }
         }
 
-        public async Task PlayStream(AudioStreamOGGVorbis stream)
+        public void PlayStream(AudioStreamOGGVorbis stream)
         {
             var source = FindSource();
             source.Stream = stream;
             source.Play();
-            await Task.Delay(System.TimeSpan.FromSeconds(stream.GetLength()));
         }
 
-        AudioStreamPlayer2D FindSource()
+        AudioStreamPlayer FindSource()
         {
             for (var idx = 0; idx < _sources.Count; ++idx)
             {
@@ -70,12 +69,33 @@ namespace Lavos.Audio
             return null;
         }
 
-        AudioStreamPlayer2D CreateSource()
+        AudioStreamPlayer CreateSource()
         {
             _nextAvailable = _sources.Count;
-            var source = this.AddNode<AudioStreamPlayer2D>($"SoundSource{_sources.Count}");
+            var source = this.AddNode<AudioStreamPlayer>($"SoundSource{_sources.Count}");
             _sources.Add(source);
             return source;
+        }
+
+        public void PlayStreamOnce(AudioStreamOGGVorbis stream)
+        {
+            if (IsStreamPlaying(stream) == false)
+            {
+                PlayStream(stream);
+            }
+        }
+
+        bool IsStreamPlaying(AudioStreamOGGVorbis stream)
+        {
+            foreach (var source in _sources)
+            {
+                if (source.Playing && source.Stream == stream)
+                {
+                    return true;
+                }
+            }
+            //
+            return false;
         }
 
         #endregion

@@ -1,8 +1,8 @@
 using System;
 using Godot;
-using Lavos.Core.Scene;
+using Lavos.Scene;
 
-namespace Lavos.Core.Nodes
+namespace Lavos.Nodes
 {
     public class PinnedNode : Node
     {

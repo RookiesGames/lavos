@@ -2,12 +2,12 @@ using Godot;
 using System;
 
 
-namespace Lavos.Core.Scene
+namespace Lavos.Scene
 {
     public class SceneLoader : Node
     {
-        [Export] PackedScene _nextScene;
-        [Export] float _delay;
+        [Export] PackedScene _nextScene = null;
+        [Export] float _delay = 0f;
 
         private float _currentTime;
 

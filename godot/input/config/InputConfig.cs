@@ -1,15 +1,15 @@
 using Godot;
-using Lavos.Core.Dependency;
-using Lavos.Core.Nodes;
+using Lavos.Dependency;
+using Lavos.Nodes;
 using Lavos.Utils.Extensions;
 
 namespace Lavos.Input
 {
     public sealed class InputConfig : Config
     {
-        [Export] bool EnableKeyboard;
-        [Export] bool EnableMouse;
-        [Export] bool EnableGamepad;
+        [Export] bool EnableKeyboard = false;
+        [Export] bool EnableMouse = false;
+        [Export] bool EnableGamepad = false;
 
         public override void Configure(IDependencyBinder binder)
         {

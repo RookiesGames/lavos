@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using Godot;
 using Lavos.Debug;
 using Lavos.Utils.Extensions;
-using Lavos.Core.Console;
+using Lavos.Console;
 
-namespace Lavos.Core.Dependency
+namespace Lavos.Dependency
 {
     public sealed class ServiceLocator : Node
     {

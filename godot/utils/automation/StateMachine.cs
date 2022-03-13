@@ -1,24 +1,25 @@
-using Lavos.Core.Console;
+using Lavos.Console;
 
 namespace Lavos.Utils.Automation
 {
     public sealed class StateMachine
     {
-        private IState _state = null;
-        private IState _pendingState = null;
-        private bool _transitionPending;
+        IState _state = null;
+        IState _pendingState = null;
 
-        private bool HasPendingState => _transitionPending;
+        bool _pendingTransition = false;
+        bool HasPendingState => _pendingTransition;
 
-        public void ChangeState(State state)
+
+        public void ChangeState(IState state)
         {
             _pendingState = state;
-            _transitionPending = true;
+            _pendingTransition = true;
         }
 
-        public void Process()
+        public void Process(float dt)
         {
-            _state?.Process?.Invoke();
+            _state?.Process?.Invoke(dt);
             if (HasPendingState)
             {
                 SwitchState();
@@ -27,14 +28,13 @@ namespace Lavos.Utils.Automation
 
         private void SwitchState()
         {
-            _state?.Clean?.Invoke();
+            _state?.Exit?.Invoke();
             //
             _state = _pendingState;
             _pendingState = null;
+            _pendingTransition = false;
             //
-            _state?.Ready?.Invoke();
-            //
-            _transitionPending = false;
+            _state?.Enter?.Invoke();
         }
     }
 }

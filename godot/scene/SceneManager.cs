@@ -2,9 +2,9 @@ using System;
 using System.Threading.Tasks;
 using Godot;
 using Lavos.Debug;
-using Lavos.Core.Scene;
+using Lavos.Scene;
 
-namespace Lavos.Core.Scene
+namespace Lavos.Scene
 {
     public sealed class SceneManager : Node
     {

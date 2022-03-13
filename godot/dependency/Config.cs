@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Lavos.Core.Dependency
+namespace Lavos.Dependency
 {
     public abstract class Config : Node
     {

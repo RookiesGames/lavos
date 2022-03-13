@@ -1,7 +1,7 @@
 using System;
 using Godot;
 using Lavos.Debug;
-using Lavos.Core.Dependency;
+using Lavos.Dependency;
 using Lavos.Utils.Extensions;
 
 namespace Lavos.Input

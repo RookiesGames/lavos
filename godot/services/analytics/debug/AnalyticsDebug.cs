@@ -1,6 +1,6 @@
 using Godot;
 using Godot.Collections;
-using Lavos.Core.Dependency;
+using Lavos.Dependency;
 using System.Threading.Tasks;
 
 namespace Lavos.Services.Analytics.Debug
@@ -27,7 +27,7 @@ namespace Lavos.Services.Analytics.Debug
 
         public void OnLogEvent()
         {
-            Lavos.Core.Console.Log.Debug("fsd", "fsdaf");
+            Lavos.Console.Log.Debug("fsd", "fsdaf");
             _service.LogEvent("debug");
             _service.LogEvent("debug params", new Dictionary<string, object>() { { "key1", "value1" }, { "key2", "value2" } });
         }

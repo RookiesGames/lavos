@@ -1,5 +1,5 @@
 using Godot;
-using Lavos.Core.Dependency;
+using Lavos.Dependency;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

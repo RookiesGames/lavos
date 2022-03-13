@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Lavos.Core.Dependency
+namespace Lavos.Dependency
 {
     public interface IDependencyResolver
     {

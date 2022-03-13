@@ -4,8 +4,8 @@ namespace Lavos.Utils.Automation
 {
     public interface IState
     {
-        Action Ready { get; set; }
-        Action Process { get; set; }
-        Action Clean { get; set; }
+        Action Enter { get; set; }
+        Action<float> Process { get; set; }
+        Action Exit { get; set; }
     }
 }

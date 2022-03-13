@@ -78,7 +78,7 @@ namespace Lavos.Plugins.Firebase.Crashlytics
                 default:
                     {
                         _plugin.CallVoid("setCustomKeyS", key, "TypeNotSupported");
-                        Core.Console.Log.Error(nameof(FirebaseCrashlytics), "Unhandled custom type");
+                        Lavos.Console.Log.Error(nameof(FirebaseCrashlytics), "Unhandled custom type");
                         return;
                     }
             }

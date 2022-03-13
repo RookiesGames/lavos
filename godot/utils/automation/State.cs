@@ -4,8 +4,8 @@ namespace Lavos.Utils.Automation
 {
     public sealed class State : IState
     {
-        public Action Ready { get; set; }
-        public Action Process { get; set; }
-        public Action Clean { get; set; }
+        public Action Enter { get; set; }
+        public Action<float> Process { get; set; }
+        public Action Exit { get; set; }
     }
 }

@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using Godot;
-using Lavos.Core.Dependency;
-using Lavos.Core.Scene;
+using Lavos.Dependency;
+using Lavos.Scene;
 using Lavos.Utils.Extensions;
 
 
-namespace Lavos.Core.Nodes
+namespace Lavos.Nodes
 {
     sealed class OmniNode : Node
     {
-        [Export] PackedScene _scene;
-        [Export] List<PackedScene> _configs;
+        [Export] PackedScene _scene = null;
+        [Export] List<PackedScene> _configs = new List<PackedScene>();
 
 
         public override void _Ready()

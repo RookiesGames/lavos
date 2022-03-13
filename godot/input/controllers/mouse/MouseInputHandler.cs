@@ -1,8 +1,8 @@
 using System;
 using Godot;
-using Lavos.Core.Console;
+using Lavos.Console;
 using Lavos.Debug;
-using Lavos.Core.Dependency;
+using Lavos.Dependency;
 using Lavos.Input;
 using Lavos.Utils.Extensions;
 
