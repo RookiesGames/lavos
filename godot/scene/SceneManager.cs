@@ -8,23 +8,6 @@ namespace Lavos.Scene
 {
     public sealed class SceneManager : Node
     {
-        #region Members
-
-        private static Node _rootNode;
-
-        #endregion
-
-
-        #region Node
-
-        public override void _Ready()
-        {
-            _rootNode = this;
-        }
-
-        #endregion
-
-
         #region Methods
 
         public static async Task<PackedScene> LoadScene(string path)
@@ -41,9 +24,14 @@ namespace Lavos.Scene
 
         public static Node AddScene(PackedScene scene)
         {
+            return AddSceneToParent(scene, NodeTree.Singleton);
+        }
+
+        public static Node AddSceneToParent(PackedScene scene, Node parent)
+        {
             Assert.IsTrue(scene != null, $"Scene {scene.ResourceName} is nil");
             var node = scene.Instance();
-            NodeTree.Singleton.AddChild(node);
+            parent.AddChild(node);
             return node;
         }
 

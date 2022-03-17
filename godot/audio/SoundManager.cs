@@ -16,9 +16,13 @@ namespace Lavos.Audio
         List<AudioStreamPlayer> _sources = new List<AudioStreamPlayer>();
         int _nextAvailable = 0;
 
-        public override void _Ready()
+        public override void _EnterTree()
         {
             ServiceLocator.Register<ISoundManager, SoundManager>(this);
+        }
+
+        public override void _Ready()
+        {
             CreateSource();
         }
 

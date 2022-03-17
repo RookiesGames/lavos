@@ -6,7 +6,7 @@ namespace Lavos.Nodes
 {
     public class PinnedNode : Node
     {
-        public override void _Ready()
+        public override void _EnterTree()
         {
             NodeTree.PinNode(this.Name, this);
         }

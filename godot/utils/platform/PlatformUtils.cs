@@ -16,5 +16,33 @@ namespace Lavos.Utils.Platform
 #else
             false;
 #endif
+
+        public static bool IsDesktop =>
+#if GODOT_PC
+                true;
+#else
+                false;
+#endif
+
+        public static bool IsLinux =>
+#if GODOT_X11
+            true;
+#else
+            false;
+#endif
+
+        public static bool IsMacOS =>
+#if GODOT_OSX
+            true;
+#else
+            false;
+#endif
+
+        public static bool IsWindows =>
+#if GODOT_UWP
+            true;
+#else
+            false;
+#endif
     }
 }

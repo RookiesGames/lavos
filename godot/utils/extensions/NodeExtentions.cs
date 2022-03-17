@@ -1,4 +1,5 @@
 using Godot;
+using Lavos.Debug;
 using System;
 using System.Collections.Generic;
 
@@ -47,6 +48,7 @@ namespace Lavos.Utils.Extensions
                 }
             }
 
+            Assert.Fail($"Node of type {typeof(T)} was not found");
             return null;
         }
 
@@ -65,6 +67,7 @@ namespace Lavos.Utils.Extensions
                 }
             }
 
+            Assert.Fail($"Node \"{name}\" was not found");
             return null;
         }
 

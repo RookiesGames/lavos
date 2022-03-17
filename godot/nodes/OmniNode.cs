@@ -7,14 +7,23 @@ using Lavos.Utils.Extensions;
 
 namespace Lavos.Nodes
 {
-    sealed class OmniNode : Node
+    public sealed class OmniNode : Node
     {
         [Export] PackedScene _scene = null;
         [Export] List<PackedScene> _configs = new List<PackedScene>();
 
+        static OmniNode _singleton = null;
+        public static OmniNode Singleton => _singleton;
+
+
+        public override void _EnterTree()
+        {
+            _singleton = this;
+        }
 
         public override void _Ready()
         {
+
             this.AddNode<DependencyContainer>();
             this.AddNode<ServiceLocator>();
             this.AddNode<NodeTree>();
@@ -63,6 +72,11 @@ namespace Lavos.Nodes
             {
                 node.RemoveSelf();
             }
+        }
+
+        public void RequestQuit()
+        {
+            GetTree().Notification(MainLoop.NotificationWmQuitRequest);
         }
     }
 }
