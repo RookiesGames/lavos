@@ -1,34 +1,19 @@
 using System.Collections.Generic;
 using Godot;
 using Lavos.Debug;
-using Lavos.Utils.Extensions;
-using Lavos.Console;
 
 namespace Lavos.Dependency
 {
     public sealed class ServiceLocator : Node
     {
-        #region Members
-
-        private static DependencyContainer _container;
-
-        #endregion Members
+        private static DependencyContainer _container = null;
 
 
-        #region Node
-
-        public override void _Ready()
+        public ServiceLocator(DependencyContainer container) 
         {
-            _container = DependencyContainer.Singleton;
-            Assert.IsTrue(_container != null, "Dependency container not found");
-            //
-            Log.Debug(nameof(ServiceLocator), "Node built");
+            Assert.IsTrue(_container == null, "Service Locator already built!");
+            _container = container;
         }
-
-        #endregion Node
-
-
-        #region Interface
 
         public static T Locate<T>()
         {
@@ -55,7 +40,5 @@ namespace Lavos.Dependency
         {
             _container.Instance<I, C>(instance);
         }
-
-        #endregion Interface
     }
 }

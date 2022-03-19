@@ -108,3 +108,6 @@ margin_bottom = 24.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Decline"
+
+[connection signal="pressed" from="Panel/Body/Buttons/HBoxContainer/AcceptButton" to="." method="OnPopupAccepted"]
+[connection signal="pressed" from="Panel/Body/Buttons/HBoxContainer/DeclineButton" to="." method="OnPopupDeclied"]

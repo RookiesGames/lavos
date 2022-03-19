@@ -1,5 +1,6 @@
 using Godot;
 using Lavos.Debug;
+using Lavos.Console;
 using System;
 using System.Collections.Generic;
 
@@ -35,6 +36,13 @@ namespace Lavos.Utils.Extensions
 
         public static T GetNodeInChildren<T>(this Node node) where T : Node
         {
+            var value = node.DoGetNodeInChildren<T>();
+            Assert.IsTrue(value != null, $"Node of type {typeof(T)} was not found");
+            return value;
+        }
+
+        static T DoGetNodeInChildren<T>(this Node node) where T : Node
+        {
             foreach (Node child in node.GetChildren())
             {
                 if (child is T foundChild)
@@ -44,15 +52,25 @@ namespace Lavos.Utils.Extensions
                 //
                 if (child.HasChildren())
                 {
-                    return child.GetNodeInChildren<T>();
+                    var value = child.DoGetNodeInChildren<T>();
+                    if (value != null)
+                    {
+                        return value;
+                    }
                 }
             }
 
-            Assert.Fail($"Node of type {typeof(T)} was not found");
             return null;
         }
 
         public static T GetNodeInChildrenByName<T>(this Node node, string name) where T : Node
+        {
+            var value = node.DoGetNodeInChildrenByName<T>(name);
+            Assert.IsTrue(value != null, $"Node \"{name}\" was not found");
+            return value;
+        }
+
+        static T DoGetNodeInChildrenByName<T>(this Node node, string name) where T : Node
         {
             foreach (Node child in node.GetChildren())
             {
@@ -63,11 +81,14 @@ namespace Lavos.Utils.Extensions
                 //
                 if (child.HasChildren())
                 {
-                    return child.GetNodeInChildrenByName<T>(name);
+                    var value = child.DoGetNodeInChildrenByName<T>(name);
+                    if (value != null)
+                    {
+                        return value;
+                    }
                 }
             }
 
-            Assert.Fail($"Node \"{name}\" was not found");
             return null;
         }
 
@@ -75,6 +96,14 @@ namespace Lavos.Utils.Extensions
         {
             var node = Activator.CreateInstance<T>();
             node.Name = name.IsNotNullOrEmpty() ? name : typeof(T).Name;
+            parent.AddChild(node);
+            return node;
+        }
+
+        public static T AddNode<T>(this Node parent, params object[] args) where T : Node
+        {
+            var node = (T)Activator.CreateInstance(typeof(T), args);
+            node.Name = typeof(T).Name;
             parent.AddChild(node);
             return node;
         }

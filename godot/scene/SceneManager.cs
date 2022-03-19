@@ -18,13 +18,13 @@ namespace Lavos.Scene
 
         public static void ChangeScene(PackedScene scene)
         {
-            NodeTree.Singleton.CleanTree();
+            NodeTree.CleanTree();
             AddScene(scene);
         }
 
         public static Node AddScene(PackedScene scene)
         {
-            return AddSceneToParent(scene, NodeTree.Singleton);
+            return AddSceneToParent(scene, NodeTree.Instance);
         }
 
         public static Node AddSceneToParent(PackedScene scene, Node parent)
@@ -33,6 +33,11 @@ namespace Lavos.Scene
             var node = scene.Instance();
             parent.AddChild(node);
             return node;
+        }
+
+        public static T AddSceneToParent<T>(PackedScene scene, Node parent) where T : Node
+        {
+            return (T)AddSceneToParent(scene, parent);
         }
 
         #endregion Methods

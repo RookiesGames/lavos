@@ -12,18 +12,18 @@ namespace Lavos.Scene
 
         const string TAG = nameof(NodeTree);
 
-        private Dictionary<string, Node> _pinnedNodes = new Dictionary<string, Node>();
-        private static Dictionary<string, Node> PinnedNodes => Singleton._pinnedNodes;
+        private static Dictionary<string, Node> _pinnedNodes = new Dictionary<string, Node>();
+        private static Dictionary<string, Node> PinnedNodes => _pinnedNodes;
 
         private static NodeTree _node;
-        public static NodeTree Singleton => _node;
+        public static NodeTree Instance => _node;
 
         #endregion
 
 
         #region Node
 
-        public override void _Ready()
+        public override void _EnterTree()
         {
             _node = this;
         }
@@ -33,9 +33,9 @@ namespace Lavos.Scene
 
         #region Methods
 
-        public void CleanTree()
+        public static void CleanTree()
         {
-            var children = NodeTree.Singleton.GetChildren();
+            var children = _node.GetChildren();
             foreach (Node child in children)
             {
                 child.QueueFree();

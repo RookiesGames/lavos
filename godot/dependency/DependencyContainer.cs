@@ -14,31 +14,15 @@ namespace Lavos.Dependency
         , IDependencyBinder
         , IDependencyResolver
     {
-        #region Members
-
         private Node _nodes;
-        private static DependencyContainer _singleton;
         private readonly Dictionary<System.Type, System.Type> bindings = new Dictionary<System.Type, System.Type>();
         private readonly Dictionary<System.Type, List<System.Type>> lookups = new Dictionary<System.Type, List<System.Type>>();
         private readonly Dictionary<System.Type, object> instances = new Dictionary<System.Type, object>();
 
-        #endregion
-
-
-        #region Properties
-
-        public static DependencyContainer Singleton => _singleton;
-
-        #endregion
-
-
-        #region Node
 
         public override void _Ready()
         {
             _nodes = this.AddNode<Node>("Nodes");
-            _singleton = this;
-            Log.Debug(nameof(DependencyContainer), "Node built");
         }
 
         public override void _ExitTree()
@@ -47,11 +31,6 @@ namespace Lavos.Dependency
             lookups.Clear();
             instances.Clear();
         }
-
-        #endregion Node
-
-
-        #region IDependencyContainer
 
         public void Bind<I, C>() where C : I, new()
         {
@@ -87,20 +66,10 @@ namespace Lavos.Dependency
             AddInstance(typeof(C), (object)instance);
         }
 
-        #endregion IDependencyContainer
-
-
-        #region DependencyResolver
-
         public T Resolve<T>()
         {
             return (T)FindOrCreateType(typeof(T));
         }
-
-        #endregion DependencyResolver
-
-
-        #region Single
 
         public object FindOrCreateType(Type type)
         {
@@ -208,11 +177,6 @@ namespace Lavos.Dependency
             return null;
         }
 
-        #endregion
-
-
-        #region List
-
         internal List<object> FindList(Type type)
         {
             Assert.IsTrue(type.IsInterface, "Only interfaces can be searched for");
@@ -236,7 +200,5 @@ namespace Lavos.Dependency
 
             return null;
         }
-
-        #endregion
     }
 }

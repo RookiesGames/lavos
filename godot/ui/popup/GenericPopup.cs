@@ -1,6 +1,7 @@
 using Godot;
 using Lavos.Debug;
 using Lavos.Utils.Extensions;
+using System;
 
 namespace Lavos.UI
 {
@@ -13,6 +14,9 @@ namespace Lavos.UI
 
         Button _acceptBtn = null;
         Button _declineBtn = null;
+
+        Action<PopupResult> _popupResult = null;
+
 
         #region IPopup
 
@@ -40,6 +44,12 @@ namespace Lavos.UI
             set => _declineBtn.Text = value;
         }
 
+        public Action<PopupResult> PopupResult
+        {
+            get => _popupResult;
+            set => _popupResult = value;
+        }
+
         #endregion
 
 
@@ -49,11 +59,11 @@ namespace Lavos.UI
             _descriptionLabel = this.GetNodeInChildrenByName<Label>("DescriptionLabel");
             _acceptBtn = this.GetNodeInChildrenByName<Button>("AcceptButton");
             _declineBtn = this.GetNodeInChildrenByName<Button>("DeclineButton");
-            //
-            Assert.IsTrue(_titleLabel != null, "Failed to find title label");
-            Assert.IsTrue(_descriptionLabel != null, "Failed to find description label");
-            Assert.IsTrue(_acceptBtn != null, "Failed to find accept button");
-            Assert.IsTrue(_declineBtn != null, "Failed to find decline button");
+        }
+
+        public override void _ExitTree()
+        {
+            _popupResult = null;
         }
 
         #region IPopup
@@ -62,5 +72,15 @@ namespace Lavos.UI
         public void HidePopup() { }
 
         #endregion IPopup
+
+        public void OnPopupAccepted()
+        {
+            PopupResult?.Invoke(UI.PopupResult.Accepted);
+        }
+
+        public void OnPopupDeclied()
+        {
+            PopupResult?.Invoke(UI.PopupResult.Declined);
+        }
     }
 }

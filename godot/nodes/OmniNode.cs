@@ -12,57 +12,56 @@ namespace Lavos.Nodes
         [Export] PackedScene _scene = null;
         [Export] List<PackedScene> _configs = new List<PackedScene>();
 
-        static OmniNode _singleton = null;
-        public static OmniNode Singleton => _singleton;
+        static OmniNode _instance = null;
+        public static OmniNode Instance => _instance;
 
 
         public override void _EnterTree()
         {
-            _singleton = this;
+            _instance = this;
         }
 
         public override void _Ready()
         {
-
-            this.AddNode<DependencyContainer>();
-            this.AddNode<ServiceLocator>();
+            var container = this.AddNode<DependencyContainer>();
+            this.AddNode<ServiceLocator>(container);
             this.AddNode<NodeTree>();
             this.AddNode<SceneManager>();
             //
-            HandleConfigs();
+            HandleConfigs(container);
             //
             SceneManager.ChangeScene(_scene);
         }
 
-        private void HandleConfigs()
+        private void HandleConfigs(DependencyContainer container)
         {
             if (_configs?.Count > 0)
             {
                 var configNodes = new List<Config>(_configs.Count);
-                CreateConfigs(configNodes);
-                InitializeConfigs(configNodes);
+                CreateConfigs(configNodes, container);
+                InitializeConfigs(configNodes, container);
                 CleanConfigs(configNodes);
                 configNodes.Clear();
             }
         }
 
-        private void CreateConfigs(List<Config> nodes)
+        private void CreateConfigs(List<Config> nodes, DependencyContainer container)
         {
             foreach (var ps in _configs)
             {
                 var node = ps.Instance();
                 var config = node.GetSelf<Config>();
-                config.Configure(DependencyContainer.Singleton);
+                config.Configure(container);
                 //
                 nodes.Add(config);
             }
         }
 
-        private void InitializeConfigs(List<Config> nodes)
+        private void InitializeConfigs(List<Config> nodes, DependencyContainer container)
         {
             foreach (var config in nodes)
             {
-                config.Initialize(DependencyContainer.Singleton);
+                config.Initialize(container);
             }
         }
 
@@ -74,9 +73,9 @@ namespace Lavos.Nodes
             }
         }
 
-        public void RequestQuit()
+        public static void RequestQuit()
         {
-            GetTree().Notification(MainLoop.NotificationWmQuitRequest);
+            Instance.GetTree().Notification(MainLoop.NotificationWmQuitRequest);
         }
     }
 }
