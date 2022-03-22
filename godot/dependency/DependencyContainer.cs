@@ -66,6 +66,12 @@ namespace Lavos.Dependency
             AddInstance(typeof(C), (object)instance);
         }
 
+        public void Instance<C>(C instance)
+        {
+            DoBind<C, C>();
+            AddInstance(typeof(C), (object)instance);
+        }
+
         public T Resolve<T>()
         {
             return (T)FindOrCreateType(typeof(T));
@@ -73,8 +79,6 @@ namespace Lavos.Dependency
 
         public object FindOrCreateType(Type type)
         {
-            Assert.IsTrue(type.IsInterface, "Only interfaces can be searched for");
-
             if (bindings.ContainsKey(type))
             {
                 var realType = bindings[type];

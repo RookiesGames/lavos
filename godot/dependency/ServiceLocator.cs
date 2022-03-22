@@ -9,7 +9,7 @@ namespace Lavos.Dependency
         private static DependencyContainer _container = null;
 
 
-        public ServiceLocator(DependencyContainer container) 
+        public ServiceLocator(DependencyContainer container)
         {
             Assert.IsTrue(_container == null, "Service Locator already built!");
             _container = container;
@@ -39,6 +39,11 @@ namespace Lavos.Dependency
         public static void Register<I, C>(C instance) where C : I
         {
             _container.Instance<I, C>(instance);
+        }
+
+        public static void Register<C>(C instance)
+        {
+            _container.Instance<C>(instance);
         }
     }
 }

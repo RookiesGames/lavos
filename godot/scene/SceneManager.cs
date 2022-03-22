@@ -12,8 +12,14 @@ namespace Lavos.Scene
 
         public static async Task<PackedScene> LoadScene(string path)
         {
-            var scene = await Task.Factory.StartNew<PackedScene>(() => GD.Load<PackedScene>(path));
+            var scene = await Task.Run<PackedScene>(() => GD.Load<PackedScene>(path));
             return scene;
+        }
+
+        public static async Task ChangeSceneAsync(string path)
+        {
+            var scene = await LoadScene(path);
+            ChangeScene(scene);
         }
 
         public static void ChangeScene(PackedScene scene)

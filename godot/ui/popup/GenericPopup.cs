@@ -15,6 +15,8 @@ namespace Lavos.UI
         Button _acceptBtn = null;
         Button _declineBtn = null;
 
+        ColorRect _background;
+
         Action<PopupResult> _popupResult = null;
 
 
@@ -68,8 +70,17 @@ namespace Lavos.UI
 
         #region IPopup
 
-        public void ShowPopup() { }
-        public void HidePopup() { }
+        public void ShowPopup()
+        {
+            this.MouseFilter = MouseFilterEnum.Stop;
+            this.Visible = true;
+        }
+
+        public void HidePopup()
+        {
+            this.Visible = false;
+            this.MouseFilter = MouseFilterEnum.Ignore;
+        }
 
         #endregion IPopup
 
