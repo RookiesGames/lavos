@@ -5,8 +5,6 @@ namespace Lavos.Utils.Extensions
 {
     public static class GodotFileExtensions
     {
-        static readonly string Tag = nameof(Godot.File);
-
         public static string GetFilename(this Godot.File file)
         {
             var path = file.GetPath();
