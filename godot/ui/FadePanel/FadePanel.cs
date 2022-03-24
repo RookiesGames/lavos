@@ -1,10 +1,11 @@
 using Godot;
 using Lavos.Utils.Automation;
 using Lavos.Utils.Extensions;
+using System.Threading.Tasks;
 
 namespace Lavos.UI
 {
-    public sealed class FadePanel : Sprite
+    public class FadePanel : Sprite
     {
         public enum PanelState
         {
@@ -27,6 +28,7 @@ namespace Lavos.UI
 
         PanelState _currentState;
         public PanelState State => _currentState;
+
 
         public override void _Ready()
         {
@@ -88,14 +90,32 @@ namespace Lavos.UI
             _stateMachine.Process(delta);
         }
 
-        public void FadeIn()
+        public Task FadeIn()
         {
             _stateMachine.ChangeState(_fadeInState);
+            return Task.Run(async () =>
+            {
+                System.TimeSpan timeSpan = System.TimeSpan.FromMilliseconds(60);
+                while (State != PanelState.FadedIn)
+                {
+                    await Task.Delay(timeSpan);
+                }
+                return Task.CompletedTask;
+            });
         }
 
-        public void FadeOut()
+        public Task FadeOut()
         {
             _stateMachine.ChangeState(_fadeOutState);
+            return Task.Run(async () =>
+            {
+                System.TimeSpan timeSpan = System.TimeSpan.FromMilliseconds(60);
+                while (State != PanelState.FadedOut)
+                {
+                    await Task.Delay(timeSpan);
+                }
+                return Task.CompletedTask;
+            });
         }
     }
 }
