@@ -16,10 +16,6 @@ namespace Lavos.Audio
         List<AudioStreamPlayer> _sources = new List<AudioStreamPlayer>();
         int _nextAvailable = 0;
 
-        public override void _EnterTree()
-        {
-            ServiceLocator.Register<ISoundManager, SoundManager>(this);
-        }
 
         public override void _Ready()
         {
@@ -81,7 +77,7 @@ namespace Lavos.Audio
             return source;
         }
 
-        public void PlayStreamOnce(AudioStreamOGGVorbis stream)
+        public void PlayStreamUnique(AudioStreamOGGVorbis stream)
         {
             if (IsStreamPlaying(stream) == false)
             {

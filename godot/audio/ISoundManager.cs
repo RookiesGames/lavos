@@ -11,6 +11,6 @@ namespace Lavos.Audio
         /// <param name="max">Numberof sources allowed.</param>
         void SetMaximumSources(int max);
         void PlayStream(AudioStreamOGGVorbis stream);
-        void PlayStreamOnce(AudioStreamOGGVorbis stream);
+        void PlayStreamUnique(AudioStreamOGGVorbis stream);
     }
 }
