@@ -38,7 +38,7 @@ namespace Lavos.Scene
             var children = _node.GetChildren();
             foreach (Node child in children)
             {
-                child.QueueFree();
+                child.RemoveSelf();
             }
         }
 

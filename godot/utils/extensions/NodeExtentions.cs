@@ -1,8 +1,8 @@
 using Godot;
 using Lavos.Debug;
-using Lavos.Console;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Lavos.Utils.Extensions
 {
@@ -11,6 +11,23 @@ namespace Lavos.Utils.Extensions
         public static T GetSelf<T>(this Node node) where T : Node
         {
             return node.GetNode<T>(".");
+        }
+
+        public static T GetNodeInParent<T>(this Node node) where T : Node
+        {
+            var parent = node.GetParent();
+            if (parent == null)
+            {
+                Assert.Fail($"Parent of type {typeof(T)} was not found");
+                return null;
+            }
+            //
+            if (parent is T t)
+            {
+                return t;
+            }
+
+            return parent.GetNodeInParent<T>();
         }
 
         public static bool HasChildren(this Node node)
@@ -113,6 +130,24 @@ namespace Lavos.Utils.Extensions
             var parent = node.GetParent();
             parent?.RemoveChild(node);
             node.QueueFree();
+        }
+
+        public static async Task RemoveSelfAsync(this Node node, int delay)
+        {
+            await Task.Delay(delay);
+            node.RemoveSelf();
+        }
+
+        public static async Task RemoveSelfAsync(this Node node, Func<bool> fn)
+        {
+            await Task.Run(async () =>
+            {
+                while (!fn())
+                {
+                    await Task.Delay(60);
+                }
+            });
+            node.RemoveSelf();
         }
     }
 }
