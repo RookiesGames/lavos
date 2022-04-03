@@ -15,8 +15,6 @@ namespace Lavos.UI
         Button _acceptBtn = null;
         Button _declineBtn = null;
 
-        ColorRect _background = null;
-
         Action<PopupResult> _popupResult = null;
 
 
