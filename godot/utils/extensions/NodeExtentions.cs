@@ -149,5 +149,14 @@ namespace Lavos.Utils.Extensions
             });
             node.RemoveSelf();
         }
+
+        public static void RemoveChildren(this Node node)
+        {
+            var children = node.GetChildren();
+            foreach (Node child in children)
+            {
+                child.RemoveSelf();
+            }
+        }
     }
 }
