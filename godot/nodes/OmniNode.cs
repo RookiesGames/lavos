@@ -1,8 +1,9 @@
-using System.Collections.Generic;
 using Godot;
+using Lavos.Audio;
 using Lavos.Dependency;
 using Lavos.Scene;
 using Lavos.Utils.Extensions;
+using System.Collections.Generic;
 
 
 namespace Lavos.Nodes
@@ -27,6 +28,9 @@ namespace Lavos.Nodes
             this.AddNode<ServiceLocator>(container);
             this.AddNode<NodeTree>();
             this.AddNode<SceneManager>();
+            this.AddNode<MasterAudio>();
+            this.AddNode<MusicManager>();
+            this.AddNode<SoundManager>();
             //
             HandleConfigs(container);
             //
