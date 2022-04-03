@@ -19,11 +19,11 @@ namespace Lavos.Utils.Automation
 
         public void Process(float dt)
         {
-            _state?.Process?.Invoke(dt);
             if (HasPendingState)
             {
                 SwitchState();
             }
+            _state?.Process?.Invoke(dt);
         }
 
         private void SwitchState()
