@@ -4,7 +4,7 @@ namespace Lavos.Input
 {
     public interface IKeyboardInputHandler : IInputHandler<IKeyboardInputConfig>
     {
-        event Action<InputAction> onKeyPressed;
-        event Action<InputAction> onKeyReleased;
+        event Action<InputAction> KeyPressed;
+        event Action<InputAction> KeyReleased;
     }
 }

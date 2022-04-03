@@ -26,8 +26,8 @@ namespace Lavos.Input
 
         #region IKeyboardInputHandler
 
-        public event Action<InputAction> onKeyPressed;
-        public event Action<InputAction> onKeyReleased;
+        public event Action<InputAction> KeyPressed;
+        public event Action<InputAction> KeyReleased;
 
         #endregion
 
@@ -69,7 +69,7 @@ namespace Lavos.Input
                     if (_pressedKeys.Contains(key) == false)
                     {
                         _pressedKeys.Add(key);
-                        onKeyPressed?.Invoke(action);
+                        KeyPressed?.Invoke(action);
                     }
                 }
                 else
@@ -78,7 +78,7 @@ namespace Lavos.Input
                     if (_pressedKeys.Contains(key))
                     {
                         _pressedKeys.Remove(key);
-                        onKeyReleased?.Invoke(action);
+                        KeyReleased?.Invoke(action);
                     }
                 }
             }
