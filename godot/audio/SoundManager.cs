@@ -1,21 +1,23 @@
 using Godot;
-using Lavos.Dependency;
 using Lavos.Console;
+using Lavos.Scene;
 using Lavos.Utils.Extensions;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Lavos.Audio
 {
-    sealed class SoundManager
-        : Node
-        , ISoundManager
+    sealed class SoundManager : Node
     {
         const string Tag = nameof(SoundManager);
         int _simultaniousSounds = 32;
         List<AudioStreamPlayer> _sources = new List<AudioStreamPlayer>();
         int _nextAvailable = 0;
 
+
+        public override void _EnterTree()
+        {
+            NodeTree.PinNode<SoundManager>(this);
+        }
 
         public override void _Ready()
         {
@@ -29,9 +31,9 @@ namespace Lavos.Audio
                 source.RemoveSelf();
             }
             _sources.Clear();
+            //
+            NodeTree.UnpinNode<SoundManager>();
         }
-
-        #region ISoundManager
 
         public void SetMaximumSources(int max)
         {
@@ -97,7 +99,5 @@ namespace Lavos.Audio
             //
             return false;
         }
-
-        #endregion
     }
 }
