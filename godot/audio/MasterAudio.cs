@@ -8,7 +8,7 @@ namespace Lavos.Audio
         public delegate void VolumeChangedDelegate();
         public static VolumeChangedDelegate VolumeChanged;
 
-        Math.Range _masterVolume = new Math.Range(1f, 0f, 1f);
+        Math.Range _masterVolume = new Math.Range(0.8f, 0f, 1f);
         public float MasterVolume
         {
             get => _masterVolume.Value;
