@@ -7,6 +7,13 @@ namespace Lavos.Audio
 {
     public sealed class MusicManager : Node
     {
+        public enum Effect
+        {
+            Instant,
+            FadeIn,
+            FadeOut,
+        }
+
         AudioStreamPlayer _source = null;
         MasterAudio _masterAudio = null;
 
@@ -41,6 +48,8 @@ namespace Lavos.Audio
             _fadeInState.Enter += () =>
             {
                 _source.SetVolume(0);
+                _source.Play();
+                //
                 _target = _masterAudio.MusicVolume;
                 _timer = 0f;
             };
@@ -75,6 +84,7 @@ namespace Lavos.Audio
             _fadeOutState.Exit += () =>
             {
                 _source.SetVolume(0);
+                _source.Stop();
             };
             //
             _stateMachine.ChangeState(_idleState);
@@ -85,10 +95,17 @@ namespace Lavos.Audio
             _stateMachine.Process(delta);
         }
 
-        public void PlayStream(AudioStreamOGGVorbis stream)
+        public void PlayStream(AudioStreamOGGVorbis stream, Effect effect = Effect.Instant)
         {
             _source.Stream = stream;
-            _source.Play();
+            //
+            switch (effect)
+            {
+                case Effect.Instant: _source.Play(); return;
+                case Effect.FadeIn: FadeIn(); return;
+                case Effect.FadeOut: FadeOut(); return;
+                default: return;
+            }
         }
 
         public void FadeIn()
