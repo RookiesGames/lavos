@@ -99,5 +99,13 @@ namespace Lavos.Audio
             //
             return false;
         }
+
+        public void StopAll()
+        {
+            foreach (var source in _sources)
+            {
+                source.Stop();
+            }
+        }
     }
 }
