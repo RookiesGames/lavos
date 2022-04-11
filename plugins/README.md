@@ -1,2 +1,2 @@
-# lavos-mobile-plugins
+# plugins
 Mobile plugins used by Lavos
