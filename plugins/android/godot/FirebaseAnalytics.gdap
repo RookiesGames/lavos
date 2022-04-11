@@ -1,0 +1,7 @@
+[config]
+name="FirebaseAnalytics"
+binary_type="local"
+binary="FirebaseAnalytics.aar"
+
+[dependencies]
+remote=["com.google.firebase:firebase-analytics-ktx:20.0.2"]
