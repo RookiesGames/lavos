@@ -30,7 +30,7 @@ android {
 }
 
 dependencies {
-    compileOnly files("../libs/godot-lib.3.4.2.stable.mono.release.aar")
+    compileOnly files("../libs/godot-lib.3.4.4.stable.mono.release.aar")
     implementation 'com.google.firebase:firebase-analytics-ktx:20.0.2'
 
     implementation 'androidx.core:core-ktx:1.7.0'
