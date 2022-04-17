@@ -4,6 +4,16 @@ namespace Lavos.Utils.Extensions
 {
     public static class ListExtensions
     {
+        public static bool IsEmpty<T>(this List<T> list)
+        {
+            return list.Count == 0;
+        }
+
+        public static bool IsNotEmpty<T>(this List<T> list)
+        {
+            return list.Count > 0;
+        }
+
         public static T First<T>(this List<T> list)
         {
             return (list.Count == 0) ? default(T) : list[0];
