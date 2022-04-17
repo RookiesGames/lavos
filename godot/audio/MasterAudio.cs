@@ -1,12 +1,12 @@
 using Godot;
 using Lavos.Scene;
+using System;
 
 namespace Lavos.Audio
 {
     public class MasterAudio : Node
     {
-        public delegate void VolumeChangedDelegate();
-        public static VolumeChangedDelegate VolumeChanged;
+        public static event Action VolumeChanged;
 
         Math.Range _masterVolume = new Math.Range(1f, 0f, 1f);
         public float MasterVolume

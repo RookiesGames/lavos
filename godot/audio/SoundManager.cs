@@ -9,30 +9,56 @@ namespace Lavos.Audio
     sealed class SoundManager : Node
     {
         const string Tag = nameof(SoundManager);
-        int _simultaniousSounds = 32;
+
+        MasterAudio _masterAudio = null;
         List<AudioStreamPlayer> _sources = new List<AudioStreamPlayer>();
+        int _simultaniousSounds = 32;
         int _nextAvailable = 0;
 
 
         public override void _EnterTree()
         {
             NodeTree.PinNode<SoundManager>(this);
-        }
-
-        public override void _Ready()
-        {
-            CreateSource();
+            MasterAudio.VolumeChanged += OnVolumeChanged;
         }
 
         public override void _ExitTree()
         {
+            MasterAudio.VolumeChanged -= OnVolumeChanged;
+            ClearSources();
+            NodeTree.UnpinNode<SoundManager>();
+        }
+
+        void OnVolumeChanged()
+        {
             foreach (var source in _sources)
             {
+                source.SetVolume(_masterAudio.SoundVolume);
+            }
+        }
+
+        public override void _Ready()
+        {
+            _masterAudio = NodeTree.GetPinnedNode<MasterAudio>();
+            CreateSource();
+        }
+
+        AudioStreamPlayer CreateSource()
+        {
+            _nextAvailable = _sources.Count;
+            var source = this.AddNode<AudioStreamPlayer>($"SoundSource{_sources.Count}");
+            _sources.Add(source);
+            return source;
+        }
+
+        void ClearSources()
+        {
+            foreach (var source in _sources)
+            {
+                source.Stop();
                 source.RemoveSelf();
             }
             _sources.Clear();
-            //
-            NodeTree.UnpinNode<SoundManager>();
         }
 
         public void SetMaximumSources(int max)
@@ -69,14 +95,6 @@ namespace Lavos.Audio
 
             Log.Error(Tag, "All sound sources were used up");
             return null;
-        }
-
-        AudioStreamPlayer CreateSource()
-        {
-            _nextAvailable = _sources.Count;
-            var source = this.AddNode<AudioStreamPlayer>($"SoundSource{_sources.Count}");
-            _sources.Add(source);
-            return source;
         }
 
         public void PlayStreamUnique(AudioStreamOGGVorbis stream)

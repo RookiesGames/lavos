@@ -29,11 +29,18 @@ namespace Lavos.Audio
         public override void _EnterTree()
         {
             NodeTree.PinNode<MusicManager>(this);
+            MasterAudio.VolumeChanged += OnVolumeChanged;
         }
 
         public override void _ExitTree()
         {
+            MasterAudio.VolumeChanged -= OnVolumeChanged;
             NodeTree.UnpinNode<MusicManager>();
+        }
+
+        void OnVolumeChanged()
+        {
+            _source.SetVolume(_masterAudio.MusicVolume);
         }
 
         public override void _Ready()
