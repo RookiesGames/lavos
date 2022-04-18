@@ -1,7 +1,8 @@
-using System;
-using System.Collections.Generic;
 using Godot;
 using Lavos.Debug;
+using Lavos.Utils.Extensions;
+using System.Collections.Generic;
+using System;
 
 namespace Lavos.Input
 {
@@ -11,23 +12,31 @@ namespace Lavos.Input
     {
         #region Members
 
-        private IKeyboardInputConfig _config;
-        private HashSet<KeyList> _pressedKeys = new HashSet<KeyList>();
+        IKeyboardInputConfig _config;
+        readonly HashSet<KeyList> _pressedKeys = new HashSet<KeyList>();
+        readonly List<IKeyboardInputListener> _listeners = new List<IKeyboardInputListener>();
 
         #endregion
 
 
         #region Properties
 
-        private bool IsDisabled => _config == null;
+        bool IsDisabled => _config == null;
 
         #endregion
 
 
         #region IKeyboardInputHandler
 
-        public event Action<InputAction> KeyPressed;
-        public event Action<InputAction> KeyReleased;
+        public void RegisterListener(IKeyboardInputListener listener)
+        {
+            _listeners.InsertUnique(listener.Priority, listener);
+        }
+
+        public void UnregisterListener(IKeyboardInputListener listener)
+        {
+            _listeners.Remove(listener);
+        }
 
         #endregion
 
@@ -69,7 +78,7 @@ namespace Lavos.Input
                     if (_pressedKeys.Contains(key) == false)
                     {
                         _pressedKeys.Add(key);
-                        KeyPressed?.Invoke(action);
+                        OnKeyPressed(action);
                     }
                 }
                 else
@@ -78,8 +87,32 @@ namespace Lavos.Input
                     if (_pressedKeys.Contains(key))
                     {
                         _pressedKeys.Remove(key);
-                        KeyReleased?.Invoke(action);
+                        OnKeyReleased(action);
                     }
+                }
+            }
+        }
+
+        void OnKeyPressed(InputAction action)
+        {
+            foreach (var l in _listeners)
+            {
+                var handled = l.OnKeyPressed(action);
+                if (handled)
+                {
+                    return;
+                }
+            }
+        }
+
+        void OnKeyReleased(InputAction action)
+        {
+            foreach (var l in _listeners)
+            {
+                var handled = l.OnKeyReleased(action);
+                if (handled)
+                {
+                    return;
                 }
             }
         }
