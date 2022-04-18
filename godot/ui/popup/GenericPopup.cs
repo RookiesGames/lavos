@@ -44,11 +44,7 @@ namespace Lavos.UI
             set => _declineBtn.Text = value;
         }
 
-        public Action<PopupResult> PopupResult
-        {
-            get => _popupResult;
-            set => _popupResult = value;
-        }
+        public event Action<PopupResult> PopupResult;
 
         #endregion
 
@@ -82,12 +78,12 @@ namespace Lavos.UI
 
         #endregion IPopup
 
-        public void OnPopupAccepted()
+        public void OnAccepted()
         {
             PopupResult?.Invoke(UI.PopupResult.Accepted);
         }
 
-        public void OnPopupDeclied()
+        public void OnDeclined()
         {
             PopupResult?.Invoke(UI.PopupResult.Declined);
         }

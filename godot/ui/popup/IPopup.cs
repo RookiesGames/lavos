@@ -9,7 +9,7 @@ namespace Lavos.UI
         string AcceptText { get; set; }
         string DeclineText { get; set; }
 
-        Action<PopupResult> PopupResult { get; set;}
+        event Action<PopupResult> PopupResult;
 
         void ShowPopup();
         void HidePopup();
