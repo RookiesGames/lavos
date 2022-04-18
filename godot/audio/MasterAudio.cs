@@ -8,7 +8,7 @@ namespace Lavos.Audio
     {
         public static event Action VolumeChanged;
 
-        Math.Range _masterVolume = new Math.Range(1f, 0f, 1f);
+        Math.Range _masterVolume = new Math.Range(value: 1f, min: 0f, max: 1f);
         public float MasterVolume
         {
             get => _masterVolume.Value;
@@ -19,10 +19,11 @@ namespace Lavos.Audio
             }
         }
 
-        Math.Range _musicVolume = new Math.Range(1f, 0f, 1f);
+        Math.Range _musicVolume = new Math.Range(value: 1f, min: 0f, max: 1f);
+        public float MasterMusicVolume => _musicVolume.Value * _masterVolume.Value;
         public float MusicVolume
         {
-            get => _musicVolume.Value * _masterVolume.Value;
+            get => _musicVolume.Value;
             set
             {
                 _musicVolume.Value = value;
@@ -30,10 +31,11 @@ namespace Lavos.Audio
             }
         }
 
-        Math.Range _soundVolume = new Math.Range(1f, 0f, 1f);
+        Math.Range _soundVolume = new Math.Range(value: 1f, min: 0f, max: 1f);
+        public float MasterSoundVolume => _soundVolume.Value * _masterVolume.Value;
         public float SoundVolume
         {
-            get => _soundVolume.Value * _masterVolume.Value;
+            get => _soundVolume.Value;
             set
             {
                 _soundVolume.Value = value;

@@ -40,7 +40,7 @@ namespace Lavos.Audio
 
         void OnVolumeChanged()
         {
-            _source.SetVolume(_masterAudio.MusicVolume);
+            _source.SetVolume(_masterAudio.MasterMusicVolume);
         }
 
         public override void _Ready()
@@ -57,7 +57,7 @@ namespace Lavos.Audio
                 _source.SetVolume(0);
                 _source.Play();
                 //
-                _target = _masterAudio.MusicVolume;
+                _target = _masterAudio.MasterMusicVolume;
                 _timer = 0f;
             };
             _fadeInState.Process += (delta) =>
@@ -76,7 +76,7 @@ namespace Lavos.Audio
             //
             _fadeOutState.Enter += () =>
             {
-                _target = _masterAudio.MusicVolume;
+                _target = _masterAudio.MasterMusicVolume;
                 _timer = 0f;
             };
             _fadeOutState.Process += (delta) =>
@@ -113,6 +113,11 @@ namespace Lavos.Audio
                 case Effect.FadeOut: FadeOut(); return;
                 default: return;
             }
+        }
+
+        public void StopStream()
+        {
+            _source?.Stop();
         }
 
         public void FadeIn()

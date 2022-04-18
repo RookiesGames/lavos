@@ -33,7 +33,7 @@ namespace Lavos.Audio
         {
             foreach (var source in _sources)
             {
-                source.SetVolume(_masterAudio.SoundVolume);
+                source.SetVolume(_masterAudio.MasterSoundVolume);
             }
         }
 
@@ -47,6 +47,7 @@ namespace Lavos.Audio
         {
             _nextAvailable = _sources.Count;
             var source = this.AddNode<AudioStreamPlayer>($"SoundSource{_sources.Count}");
+            source.SetVolume(_masterAudio.MasterSoundVolume);
             _sources.Add(source);
             return source;
         }
