@@ -1,3 +1,4 @@
+using Godot;
 using System.Collections.Generic;
 
 namespace Lavos.Utils.Extensions
@@ -19,12 +20,27 @@ namespace Lavos.Utils.Extensions
             return (list.Count == 0) ? default(T) : list[0];
         }
 
-        public static void PushUnique<T>(this List<T> list, T item)
+        public static bool PushUnique<T>(this List<T> list, T item)
         {
-            if (list.Contains(item) == false)
+            if (list.Contains(item))
             {
-                list.Add(item);
+                return false;
             }
+            //
+            list.Add(item);
+            return true;
+        }
+
+        public static bool InsertUnique<T>(this List<T> list, int index, T item)
+        {
+            if (list.Contains(item))
+            {
+                return false;
+            }
+            //
+            index = Mathf.Clamp(index, 0, list.Count);
+            list.Insert(index, item);
+            return true;
         }
     }
 }
