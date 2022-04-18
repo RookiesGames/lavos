@@ -15,8 +15,6 @@ namespace Lavos.UI
         Button _acceptBtn = null;
         Button _declineBtn = null;
 
-        Action<PopupResult> _popupResult = null;
-
 
         #region IPopup
 
@@ -59,7 +57,7 @@ namespace Lavos.UI
 
         public override void _ExitTree()
         {
-            _popupResult = null;
+            PopupResult = null;
         }
 
         #region IPopup
