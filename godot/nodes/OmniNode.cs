@@ -28,9 +28,11 @@ namespace Lavos.Nodes
             this.AddNode<ServiceLocator>(container);
             this.AddNode<NodeTree>();
             this.AddNode<SceneManager>();
-            this.AddNode<MasterAudio>();
-            this.AddNode<MusicManager>();
-            this.AddNode<SoundManager>();
+            //
+            var audio = this.AddNode<Node>("Audio");
+            audio.AddNode<MasterAudio>();
+            audio.AddNode<MusicManager>();
+            audio.AddNode<SoundManager>();
             //
             HandleConfigs(container);
             //
