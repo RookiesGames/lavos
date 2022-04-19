@@ -49,4 +49,21 @@ if is_dir('lavos') == false {
 println(' ✅')
 
 //
+print('~> Creating symlink to Lavos addons ')
+if is_dir('addons') == false {
+	mkdir('addons') or {
+		println('Failed to change working directory to $path\n$err')
+		return
+	}
+}
+
+res := execute('ln -s $lavoswd/addons addons/lavos')
+if res.exit_code != 0 {
+	println(' ❌')
+	println('\t~> Failed to create symlink\n$res.output')
+	return
+}
+println(' ✅')
+
+//
 println('Setup complete!')
