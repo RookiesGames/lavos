@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://lavos/ui/popup/GenericPopup.cs" type="Script" id=1]
 [ext_resource path="res://assets/ui/themes/menu_theme.tres" type="Theme" id=2]
 [ext_resource path="res://assets/ui/fonts/title_small_dynamicfont.tres" type="DynamicFont" id=3]
+[ext_resource path="res://addons/lavos/CustomUI/ui/ClickButton.cs" type="Script" id=4]
 
 [node name="GenericPopupSmall" type="Panel"]
 anchor_right = 1.0
@@ -87,6 +88,8 @@ margin_bottom = 36.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Accept"
+script = ExtResource( 4 )
+ButtonType = 1
 
 [node name="VSeparator" type="VSeparator" parent="Buttons/HBoxContainer"]
 margin_left = 142.0
@@ -100,6 +103,5 @@ margin_bottom = 36.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Decline"
-
-[connection signal="pressed" from="Buttons/HBoxContainer/AcceptButton" to="." method="OnAccepted"]
-[connection signal="pressed" from="Buttons/HBoxContainer/DeclineButton" to="." method="OnDeclined"]
+script = ExtResource( 4 )
+ButtonType = 2

@@ -12,8 +12,10 @@ namespace Lavos.UI
         Label _titleLabel = null;
         Label _descriptionLabel = null;
 
-        Button _acceptBtn = null;
-        Button _declineBtn = null;
+        ClickButton _acceptBtn = null;
+        public ClickButton AcceptButton => _acceptBtn;
+        ClickButton _declineBtn = null;
+        public ClickButton DeclineButton => _declineBtn;
 
 
         #region IPopup
@@ -51,12 +53,21 @@ namespace Lavos.UI
         {
             _titleLabel = this.GetNodeInChildrenByName<Label>("TitleLabel");
             _descriptionLabel = this.GetNodeInChildrenByName<Label>("DescriptionLabel");
-            _acceptBtn = this.GetNodeInChildrenByName<Button>("AcceptButton");
-            _declineBtn = this.GetNodeInChildrenByName<Button>("DeclineButton");
+            _acceptBtn = this.GetNodeInChildrenByName<ClickButton>("AcceptButton");
+            _declineBtn = this.GetNodeInChildrenByName<ClickButton>("DeclineButton");
+        }
+
+        public override void _Ready()
+        {
+            _acceptBtn.ButtonPressed += OnAccepted;
+            _declineBtn.ButtonPressed += OnDeclined;
         }
 
         public override void _ExitTree()
         {
+            _acceptBtn.ButtonPressed -= OnAccepted;
+            _declineBtn.ButtonPressed -= OnDeclined;
+            //
             PopupResult = null;
         }
 
@@ -65,23 +76,23 @@ namespace Lavos.UI
         public void ShowPopup()
         {
             this.MouseFilter = MouseFilterEnum.Stop;
-            this.Visible = true;
+            Show();
         }
 
         public void HidePopup()
         {
-            this.Visible = false;
+            Hide();
             this.MouseFilter = MouseFilterEnum.Ignore;
         }
 
         #endregion IPopup
 
-        public void OnAccepted()
+        void OnAccepted()
         {
             PopupResult?.Invoke(UI.PopupResult.Accepted);
         }
 
-        public void OnDeclined()
+        void OnDeclined()
         {
             PopupResult?.Invoke(UI.PopupResult.Declined);
         }
