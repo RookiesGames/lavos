@@ -18,12 +18,14 @@ namespace Lavos.Audio
         MasterAudio _masterAudio = null;
 
         readonly StateMachine _stateMachine = new StateMachine();
-        readonly State _idleState = new State();
         readonly State _fadeInState = new State();
         readonly State _fadeOutState = new State();
         float _target = 0;
         float _timer = 0;
         const float Duration = 0.5f;
+
+        public float FadeInSpeed = 1f;
+        public float FadeOutSpeed = 1f;
 
 
         public override void _EnterTree()
@@ -62,11 +64,11 @@ namespace Lavos.Audio
             };
             _fadeInState.Process += (delta) =>
             {
-                _timer += delta;
+                _timer += (delta * FadeInSpeed);
                 _source.SetVolume(Mathf.Lerp(0, _target, _timer / Duration));
                 if (_source.GetVolume() >= _target)
                 {
-                    _stateMachine.ChangeState(_idleState);
+                    _stateMachine.ChangeState(null);
                 }
             };
             _fadeInState.Exit += () =>
@@ -81,11 +83,11 @@ namespace Lavos.Audio
             };
             _fadeOutState.Process += (delta) =>
             {
-                _timer += delta;
+                _timer += (delta * FadeOutSpeed);
                 _source.SetVolume(Mathf.Lerp(0, _target, 1 - (_timer / Duration)));
                 if (_source.GetVolume() == 0)
                 {
-                    _stateMachine.ChangeState(_idleState);
+                    _stateMachine.ChangeState(null);
                 }
             };
             _fadeOutState.Exit += () =>
@@ -94,7 +96,7 @@ namespace Lavos.Audio
                 _source.Stop();
             };
             //
-            _stateMachine.ChangeState(_idleState);
+            _stateMachine.ChangeState(null);
         }
 
         public override void _Process(float delta)
@@ -108,16 +110,22 @@ namespace Lavos.Audio
             //
             switch (effect)
             {
-                case Effect.Instant: _source.Play(); return;
+                case Effect.Instant: PlayStream(); return;
                 case Effect.FadeIn: FadeIn(); return;
                 case Effect.FadeOut: FadeOut(); return;
                 default: return;
             }
         }
 
+        public void PlayStream()
+        {
+            _source.SetVolume(_masterAudio.MasterMusicVolume);
+            _source.Play();
+        }
+
         public void StopStream()
         {
-            _source?.Stop();
+            _source.Stop();
         }
 
         public void FadeIn()
