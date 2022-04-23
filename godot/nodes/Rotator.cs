@@ -6,15 +6,16 @@ namespace Lavos.Nodes
     {
         [Export] double RotationSpeed = 5;
 
-        double _rotation = 0;
-        const double TwoPI = System.Math.PI * 2;
+        float _rotationFactor = 1f;
+        public bool Paused
+        {
+            get => _rotationFactor == 0f;
+            set => _rotationFactor = value ? 0f : 1f;
+        }
 
         public override void _Process(float delta)
         {
-            // Rotation
-            _rotation += (delta * RotationSpeed);
-            _rotation %= TwoPI;
-            Rotate((float)(delta * RotationSpeed));
+            Rotate((float)(delta * RotationSpeed * _rotationFactor));
         }
     }
 }
