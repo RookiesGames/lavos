@@ -24,8 +24,8 @@ namespace Lavos.Audio
         float _timer = 0;
         const float Duration = 0.5f;
 
-        public float FadeInSpeed = 1f;
-        public float FadeOutSpeed = 1f;
+        public float FadeInSpeed = 0.25f;
+        public float FadeOutSpeed = 0.25f;
 
 
         public override void _EnterTree()
