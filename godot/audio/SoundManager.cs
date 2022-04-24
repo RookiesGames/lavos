@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Lavos.Audio
 {
-    sealed class SoundManager : Node
+    public sealed class SoundManager : Node
     {
         const string Tag = nameof(SoundManager);
 
