@@ -5,7 +5,7 @@ using System;
 
 namespace Lavos.UI
 {
-    public class GenericPopup
+    public sealed class GenericPopup
         : Control
         , IPopup
     {

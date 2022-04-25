@@ -2,7 +2,7 @@ using Godot;
 
 namespace Lavos.Math
 {
-    public class MathHelper
+    public sealed class MathHelper
     {
         public struct RangeDef
         {

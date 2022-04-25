@@ -1,7 +1,7 @@
 
 namespace Lavos.Input
 {
-    public class InputActionState
+    public sealed class InputActionState
     {
         public InputAction Action { get; set; }
         public bool Pressed { get; set; }

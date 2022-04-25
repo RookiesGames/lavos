@@ -6,7 +6,7 @@ using System;
 
 namespace Lavos.UI
 {
-    public class ClickButton : Button
+    public sealed class ClickButton : Button
     {
         public enum Type
         {

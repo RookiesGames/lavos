@@ -4,7 +4,7 @@ using Lavos.Utils.Threading;
 
 namespace Lavos.Boot
 {
-    public class BaseConfig : Config
+    public sealed class BaseConfig : Config
     {
         public override void Configure(IDependencyBinder binder)
         {

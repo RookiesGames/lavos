@@ -6,7 +6,7 @@ using System;
 namespace Lavos.UI
 {
     [Tool]
-    public class CustomUI : EditorPlugin
+    public sealed class CustomUI : EditorPlugin
     {
         const string Path = "res://addons/lavos/CustomUI";
         public override void _EnterTree()

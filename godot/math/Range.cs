@@ -2,7 +2,7 @@ using Godot;
 
 namespace Lavos.Math
 {
-    public class Range
+    public sealed class Range
     {
         float _value = 0f;
         public float Value

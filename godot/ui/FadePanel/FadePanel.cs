@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Lavos.UI
 {
-    public class FadePanel : Sprite
+    public sealed class FadePanel : Sprite
     {
         public enum PanelState
         {

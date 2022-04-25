@@ -4,7 +4,7 @@ using System;
 
 namespace Lavos.Scene
 {
-    public class SceneLoader : Node
+    public sealed class SceneLoader : Node
     {
         [Export] PackedScene _nextScene = null;
         [Export] float _delay = 0f;
