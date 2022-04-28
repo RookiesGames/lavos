@@ -132,6 +132,13 @@ namespace Lavos.Utils.Extensions
             node.QueueFree();
         }
 
+        public static void RemoveSelfDeferred(this Node node)
+        {
+            var parent = node.GetParent();
+            parent?.CallDeferred("remove_child", node);
+            node.QueueFree();
+        }
+
         public static async Task RemoveSelfAsync(this Node node, int delay)
         {
             await Task.Delay(delay);
