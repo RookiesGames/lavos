@@ -1,12 +1,13 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://lavos/nodes/OmniNode.cs" type="Script" id=1]
 [ext_resource path="res://scenes/screens/startup.tscn" type="PackedScene" id=2]
 [ext_resource path="res://lavos/input/config/input_config.tscn" type="PackedScene" id=3]
 [ext_resource path="res://lavos/boot/base_config.tscn" type="PackedScene" id=4]
 [ext_resource path="res://addons/lavos/CustomUI/config/custom_ui_config.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/levels/worlds_config.tscn" type="PackedScene" id=6]
 
 [node name="OmniNode" type="Node"]
 script = ExtResource( 1 )
 _scene = ExtResource( 2 )
-_configs = [ ExtResource( 4 ), ExtResource( 3 ), ExtResource( 5 ) ]
+_configs = [ ExtResource( 4 ), ExtResource( 3 ), ExtResource( 5 ), ExtResource( 6 ) ]
