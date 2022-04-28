@@ -6,7 +6,7 @@ using System;
 
 namespace Lavos.UI
 {
-    public sealed class ClickButton : Button
+    public class ClickButton : Button
     {
         public enum Type
         {
@@ -16,6 +16,7 @@ namespace Lavos.UI
         };
 
         public event Action ButtonPressed = null;
+        public event Action<bool> ButtonToggled = null;
 
         [Export] Type ButtonType = Type.None;
 
@@ -30,13 +31,13 @@ namespace Lavos.UI
         public override void _EnterTree()
         {
             base._EnterTree();
-            ButtonPressed = null;
         }
 
         public override void _ExitTree()
         {
             base._ExitTree();
             ButtonPressed = null;
+            ButtonToggled = null;
         }
 
         public override void _Pressed()
@@ -59,6 +60,12 @@ namespace Lavos.UI
                 case Type.Back: SoundManagerRef.Get.PlayStream(CancelSound); break;
                 default: break;
             }
+        }
+
+        public override void _Toggled(bool buttonPressed)
+        {
+            base._Toggled(buttonPressed);
+            ButtonToggled?.Invoke(buttonPressed);
         }
     }
 }
