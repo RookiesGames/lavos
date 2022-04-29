@@ -34,7 +34,6 @@ namespace Lavos.Services.Data
 
         public void CleanData()
         {
-            // delete SavePath/*
             var dir = new Godot.Directory();
             var ok = dir.Open(SavePath);
             if (ok != Error.Ok)
@@ -43,30 +42,7 @@ namespace Lavos.Services.Data
                 return;
             }
 
-            ok = dir.ListDirBegin();
-            if (ok != Error.Ok)
-            {
-                Log.Error(Tag, $"Failed to list directory {SavePath}");
-                return;
-            }
-
-            var wd = dir.GetCurrentDir();
-            while (true)
-            {
-                var file = dir.GetNext();
-                if (string.IsNullOrEmpty(file))
-                {
-                    break;
-                }
-
-                var fullpath = "";
-                ok = dir.Remove(fullpath);
-                if (ok != Error.Ok)
-                {
-                    Log.Error(Tag, $"Failed to remove file {fullpath}");
-                    return;
-                }
-            }
+            dir.RemoveDirectory(SavePath);
         }
 
         public void Load()
@@ -90,7 +66,10 @@ namespace Lavos.Services.Data
 
             var content = file.GetAsText();
             var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(content);
-            if (data != null) { saver.LoadData(data); }
+            if (data != null)
+            {
+                saver.LoadData(data);
+            }
             file.Close();
         }
 
@@ -118,9 +97,9 @@ namespace Lavos.Services.Data
                 return;
             }
             //
-            saver.WriteData();
-            var json = JsonConvert.SerializeObject(saver.Data);
-            file.StoreString(json);
+            var data = new Dictionary<string, string>();
+            saver.WriteData(data);
+            file.StoreString(JsonConvert.SerializeObject(data));
             file.Close();
         }
 

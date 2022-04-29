@@ -6,9 +6,8 @@ namespace Lavos.Services.Data
     {
         bool IsDirty { get; }
         string DataFile { get; }
-        Dictionary<string, string> Data { get; }
 
         void LoadData(Dictionary<string, string> data);
-        void WriteData();
+        void WriteData(Dictionary<string, string> data);
     }
 }
