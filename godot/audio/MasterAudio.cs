@@ -88,22 +88,28 @@ namespace Lavos.Audio
         const string dataFile = "masteraudio.dat";
         public string DataFile => dataFile;
 
-        Dictionary<string, string> _data = new Dictionary<string, string>();
-        public Dictionary<string, string> Data => _data;
 
         public void LoadData(Dictionary<string, string> data)
         {
-            _data = new Dictionary<string, string>(data);
-            if (_data.ContainsKey(MasterKey)) { MasterVolume = float.Parse(_data[MasterKey]); }
-            if (_data.ContainsKey(MusicKey)) { MusicVolume = float.Parse(_data[MusicKey]); }
-            if (_data.ContainsKey(SoundKey)) { SoundVolume = float.Parse(_data[SoundKey]); }
+            if (data.ContainsKey(MasterKey))
+            {
+                MasterVolume = float.Parse(data[MasterKey]);
+            }
+            if (data.ContainsKey(MusicKey))
+            {
+                MusicVolume = float.Parse(data[MusicKey]);
+            }
+            if (data.ContainsKey(SoundKey))
+            {
+                SoundVolume = float.Parse(data[SoundKey]);
+            }
         }
 
-        public void WriteData()
+        public void WriteData(Dictionary<string, string> data)
         {
-            _data["master"] = $"{_masterVolume.Value}";
-            _data["music"] = $"{_musicVolume.Value}";
-            _data["sound"] = $"{_soundVolume.Value}";
+            data["master"] = $"{_masterVolume.Value}";
+            data["music"] = $"{_musicVolume.Value}";
+            data["sound"] = $"{_soundVolume.Value}";
             //
             _isDirty = false;
         }
