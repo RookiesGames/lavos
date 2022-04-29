@@ -1,10 +1,15 @@
 using Godot;
 using Lavos.Scene;
+using Lavos.Services.Data;
+using Lavos.Utils.Extensions;
 using System;
+using System.Collections.Generic;
 
 namespace Lavos.Audio
 {
-    public sealed class MasterAudio : Node
+    public sealed class MasterAudio
+        : Node
+        , IDataSaver
     {
         public static event Action VolumeChanged;
 
@@ -52,5 +57,23 @@ namespace Lavos.Audio
         {
             NodeTree.UnpinNode<MasterAudio>();
         }
+
+
+        #region IDataSaver
+
+        bool _isDirty = false;
+        public bool IsDirty => _isDirty;
+
+        const string dataFile = "masteraudio.dat";
+        public string DataFile => dataFile;
+
+        public void WriteData(Dictionary<string, object> data)
+        {
+            data.SetEntry("master", _masterVolume.Value);
+            data.SetEntry("music", _musicVolume.Value);
+            data.SetEntry("sound", _soundVolume.Value);
+        }
+
+        #endregion
     }
 }

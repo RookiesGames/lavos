@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://lavos/services/data/config/DataSaverConfig.cs" type="Script" id=1]
+
+[node name="DataSaverConfig" type="Node"]
+script = ExtResource( 1 )
