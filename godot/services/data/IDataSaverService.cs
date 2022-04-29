@@ -7,5 +7,11 @@ namespace Lavos.Services.Data
         void Unregister(IDataSaver saver);
 
         void CleanData();
+
+        void Load();
+        void Load(IDataSaver saver);
+
+        void Save();
+        void Save(IDataSaver saver);
     }
 }

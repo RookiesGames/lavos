@@ -1,4 +1,5 @@
 using Godot;
+using Lavos.Debug;
 
 namespace Lavos.Math
 {
@@ -37,6 +38,15 @@ namespace Lavos.Math
         public static Color Lerp(Color from, Color to, float weight)
         {
             return from.LinearInterpolate(to, weight);
+        }
+
+        public static double Clamp(double value, double min, double max)
+        {
+            Assert.IsTrue(min <= max, "Wrong clamp parameters");
+            //
+            if (value <= min) { return min; }
+            else if (value >= max) { return max; }
+            else { return value; }
         }
     }
 }

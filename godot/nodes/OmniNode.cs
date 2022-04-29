@@ -27,11 +27,6 @@ namespace Lavos.Nodes
             this.AddNode<NodeTree>();
             this.AddNode<SceneManager>();
             //
-            var audio = this.AddNode<Node>("Audio");
-            audio.AddNode<MasterAudio>();
-            audio.AddNode<MusicManager>();
-            audio.AddNode<SoundManager>();
-            //
             HandleConfigs(container);
             //
             SceneManager.ChangeScene(_scene);

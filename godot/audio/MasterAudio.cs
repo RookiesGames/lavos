@@ -1,7 +1,7 @@
 using Godot;
+using Lavos.Dependency;
 using Lavos.Scene;
 using Lavos.Services.Data;
-using Lavos.Utils.Extensions;
 using System;
 using System.Collections.Generic;
 
@@ -19,7 +19,11 @@ namespace Lavos.Audio
             get => _masterVolume.Value;
             set
             {
+                if (_masterVolume.Value == value) { return; }
+                //
                 _masterVolume.Value = value;
+                _isDirty = true;
+                //
                 VolumeChanged?.Invoke();
             }
         }
@@ -31,7 +35,11 @@ namespace Lavos.Audio
             get => _musicVolume.Value;
             set
             {
+                if (_musicVolume.Value == value) { return; }
+                //
                 _musicVolume.Value = value;
+                _isDirty = true;
+                //
                 VolumeChanged?.Invoke();
             }
         }
@@ -43,7 +51,11 @@ namespace Lavos.Audio
             get => _soundVolume.Value;
             set
             {
+                if (_soundVolume.Value == value) { return; }
+                //
                 _soundVolume.Value = value;
+                _isDirty = true;
+                //
                 VolumeChanged?.Invoke();
             }
         }
@@ -51,15 +63,24 @@ namespace Lavos.Audio
         public override void _EnterTree()
         {
             NodeTree.PinNode<MasterAudio>(this);
+            ServiceLocator
+                .Locate<IDataSaverService>()
+                .Register(this);
         }
 
         public override void _ExitTree()
         {
+            ServiceLocator
+                .Locate<IDataSaverService>()
+                .Unregister(this);
             NodeTree.UnpinNode<MasterAudio>();
         }
 
-
         #region IDataSaver
+
+        const string MasterKey = "master";
+        const string MusicKey = "music";
+        const string SoundKey = "sound";
 
         bool _isDirty = false;
         public bool IsDirty => _isDirty;
@@ -67,11 +88,24 @@ namespace Lavos.Audio
         const string dataFile = "masteraudio.dat";
         public string DataFile => dataFile;
 
-        public void WriteData(Dictionary<string, object> data)
+        Dictionary<string, string> _data = new Dictionary<string, string>();
+        public Dictionary<string, string> Data => _data;
+
+        public void LoadData(Dictionary<string, string> data)
         {
-            data.SetEntry("master", _masterVolume.Value);
-            data.SetEntry("music", _musicVolume.Value);
-            data.SetEntry("sound", _soundVolume.Value);
+            _data = new Dictionary<string, string>(data);
+            if (_data.ContainsKey(MasterKey)) { MasterVolume = float.Parse(_data[MasterKey]); }
+            if (_data.ContainsKey(MusicKey)) { MusicVolume = float.Parse(_data[MusicKey]); }
+            if (_data.ContainsKey(SoundKey)) { SoundVolume = float.Parse(_data[SoundKey]); }
+        }
+
+        public void WriteData()
+        {
+            _data["master"] = $"{_masterVolume.Value}";
+            _data["music"] = $"{_musicVolume.Value}";
+            _data["sound"] = $"{_soundVolume.Value}";
+            //
+            _isDirty = false;
         }
 
         #endregion

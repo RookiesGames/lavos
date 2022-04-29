@@ -37,9 +37,9 @@ namespace Lavos.Input
 
         public override void Initialize(IDependencyResolver resolver)
         {
-            resolver.Resolve<IKeyboardInputHandler>();
-            resolver.Resolve<IMouseInputHandler>();
-            resolver.Resolve<IGamepadInputHandler>();
+            if (EnableKeyboard) { resolver.Resolve<IKeyboardInputHandler>(); }
+            if (EnableMouse) { resolver.Resolve<IMouseInputHandler>(); }
+            if (EnableGamepad) { resolver.Resolve<IGamepadInputHandler>(); }
         }
     }
 }
