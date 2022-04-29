@@ -13,5 +13,17 @@ namespace Lavos.Utils.Extensions
         {
             return dic.ContainsValue(value) == false;
         }
+
+        public static void SetEntry<T, U>(this Dictionary<T, U> dic, T key, U value)
+        {
+            if (dic.DoesNotContainKey(key))
+            {
+                dic.Add(key, value);
+            }
+            else
+            {
+                dic[key] = value;
+            }
+        }
     }
 }
