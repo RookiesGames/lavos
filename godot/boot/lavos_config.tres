@@ -1,0 +1,12 @@
+[gd_resource type="Resource" load_steps=7 format=2]
+
+[ext_resource path="res://lavos/boot/LavosConfig.cs" type="Script" id=1]
+[ext_resource path="res://lavos/services/analytics/config/analytics_config.tres" type="Resource" id=2]
+[ext_resource path="res://lavos/services/data/config/data_saver_config.tres" type="Resource" id=3]
+[ext_resource path="res://lavos/input/config/input_config.tres" type="Resource" id=4]
+[ext_resource path="res://lavos/services/crash/config/crash_config.tres" type="Resource" id=5]
+[ext_resource path="res://addons/lavos/addons_config.tres" type="Resource" id=6]
+
+[resource]
+script = ExtResource( 1 )
+Configs = [ ExtResource( 6 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 2 ), ExtResource( 3 ) ]

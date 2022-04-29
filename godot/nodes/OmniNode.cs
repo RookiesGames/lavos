@@ -2,19 +2,17 @@ using Godot;
 using Lavos.Audio;
 using Lavos.Dependency;
 using Lavos.Scene;
+using Lavos.Utils;
 using Lavos.Utils.Extensions;
 using System.Collections.Generic;
 
 
 namespace Lavos.Nodes
 {
-    public sealed class OmniNode : Node
+    public sealed class OmniNode : NodeSingleton<OmniNode>
     {
         [Export] PackedScene _scene = null;
-        [Export] List<PackedScene> _configs = new List<PackedScene>();
-
-        static OmniNode _instance = null;
-        public static OmniNode Instance => _instance;
+        [Export] List<Config> _configs = new List<Config>();
 
 
         public override void _EnterTree()
@@ -43,39 +41,24 @@ namespace Lavos.Nodes
         {
             if (_configs?.Count > 0)
             {
-                var configNodes = new List<Config>(_configs.Count);
-                CreateConfigs(configNodes, container);
-                InitializeConfigs(configNodes, container);
-                CleanConfigs(configNodes);
-                configNodes.Clear();
+                CreateConfigs(container);
+                InitializeConfigs(container);
             }
         }
 
-        private void CreateConfigs(List<Config> nodes, DependencyContainer container)
+        private void CreateConfigs(DependencyContainer container)
         {
-            foreach (var ps in _configs)
+            foreach (var config in _configs)
             {
-                var node = ps.Instance();
-                var config = node.GetSelf<Config>();
                 config.Configure(container);
-                //
-                nodes.Add(config);
             }
         }
 
-        private void InitializeConfigs(List<Config> nodes, DependencyContainer container)
+        private void InitializeConfigs(DependencyContainer container)
         {
-            foreach (var config in nodes)
+            foreach (var config in _configs)
             {
                 config.Initialize(container);
-            }
-        }
-
-        private void CleanConfigs(List<Config> nodes)
-        {
-            foreach (var node in nodes)
-            {
-                node.RemoveSelf();
             }
         }
 

@@ -23,7 +23,7 @@ namespace Lavos.UI
         public static AudioStreamOGGVorbis AcceptSound = null;
         public static AudioStreamOGGVorbis CancelSound = null;
 
-        static LazyBuilder<SoundManager> SoundManagerRef = new LazyBuilder<SoundManager>(
+        static LazyBuilder<SoundManager> SoundManagerLazy = new LazyBuilder<SoundManager>(
             () => NodeTree.GetPinnedNode<SoundManager>()
         );
 
@@ -56,8 +56,8 @@ namespace Lavos.UI
         {
             switch (ButtonType)
             {
-                case Type.Forward: SoundManagerRef.Get.PlayStream(AcceptSound); break;
-                case Type.Back: SoundManagerRef.Get.PlayStream(CancelSound); break;
+                case Type.Forward: SoundManagerLazy.Instance.PlayStream(AcceptSound); break;
+                case Type.Back: SoundManagerLazy.Instance.PlayStream(CancelSound); break;
                 default: break;
             }
         }
