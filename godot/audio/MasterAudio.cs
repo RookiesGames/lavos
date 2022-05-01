@@ -91,6 +91,11 @@ namespace Lavos.Audio
 
         public void LoadData(Dictionary<string, string> data)
         {
+            if (data == null)
+            {
+                return;
+            }
+            //
             if (data.ContainsKey(MasterKey))
             {
                 MasterVolume = float.Parse(data[MasterKey]);
