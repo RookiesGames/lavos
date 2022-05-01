@@ -57,19 +57,22 @@ namespace Lavos.Services.Data
         {
             var path = $"{SavePath}/{saver.DataFile}";
             var file = new Godot.File();
-            var ok = file.Open(path, Godot.File.ModeFlags.Read);
-            if (ok != Error.Ok)
+            var error = file.Open(path, Godot.File.ModeFlags.Read);
+            if (error == Error.FileNotFound)
             {
+                error = file.Open(path, Godot.File.ModeFlags.WriteRead);
+            }
+            //
+            if (error != Error.Ok)
+            {
+
                 Log.Error(Tag, $"Failed to open file {path}");
                 return;
             }
-
+            //
             var content = file.GetAsText();
             var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(content);
-            if (data != null)
-            {
-                saver.LoadData(data);
-            }
+            saver.LoadData(data);
             file.Close();
         }
 
@@ -90,8 +93,8 @@ namespace Lavos.Services.Data
         {
             var path = $"{SavePath}/{saver.DataFile}";
             var file = new Godot.File();
-            var ok = file.Open(path, Godot.File.ModeFlags.Write);
-            if (ok != Error.Ok)
+            var error = file.Open(path, Godot.File.ModeFlags.Write);
+            if (error != Error.Ok)
             {
                 Log.Error(Tag, $"Failed to open file {path}");
                 return;
@@ -99,7 +102,7 @@ namespace Lavos.Services.Data
             //
             var data = new Dictionary<string, string>();
             saver.WriteData(data);
-            file.StoreString(JsonConvert.SerializeObject(data));
+            file.StoreString(JsonConvert.SerializeObject(data, Formatting.Indented));
             file.Close();
         }
 
