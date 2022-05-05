@@ -52,17 +52,42 @@ println(' ✅')
 print('~> Creating symlink to Lavos addons ')
 if is_dir('addons') == false {
 	mkdir('addons') or {
-		println('Failed to change working directory to $path\n$err')
+		println('Failed to create directory\n$err')
 		return
 	}
 }
 
-res := execute('ln -s $lavoswd/addons addons/lavos')
-if res.exit_code != 0 {
-	println(' ❌')
-	println('\t~> Failed to create symlink\n$res.output')
-	return
+chdir('addons') or { 
+	println('Failed to change working directory to $path\n$err')
+	return 
 }
+
+if is_dir('lavos') == false {
+	res := execute('ln -s $lavoswd/addons lavos')
+	if res.exit_code != 0 {
+		println(' ❌')
+		println('\t~> Failed to create symlink\n$res.output')
+		return
+}
+}
+println(' ✅')
+
+chdir(path) or { 
+	println('Failed to change working directory to $path\n$err')
+	return 
+}
+
+//
+print('~> Creating symlink to script templates ')
+if is_dir('script_templates') == false {
+	res := execute('ln -s $lavoswd/script_templates script_templates')
+	if res.exit_code != 0 {
+		println(' ❌')
+		println('\t~> Failed to create symlink\n$res.output')
+		return
+	}
+}
+
 println(' ✅')
 
 //
