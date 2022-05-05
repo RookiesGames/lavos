@@ -1,11 +1,47 @@
 using Godot;
 using Lavos.Console;
+using System.Collections.Generic;
 
 namespace Lavos.Utils.Extensions
 {
     public static class DirectoryExtensions
     {
         const string Tag = nameof(Directory);
+
+        public static List<string> GetFilesInDirectory(this Directory dir)
+        {
+            var error = dir.ListDirBegin();
+            if (error != Error.Ok)
+            {
+                return null;
+            }
+            //
+            var list = new List<string>();
+            var wd = dir.GetCurrentDir();
+            while (true)
+            {
+                var filename = dir.GetNext();
+                if (string.IsNullOrEmpty(filename))
+                {
+                    break;
+                }
+                //
+                if (filename == "." || filename == "..")
+                {
+                    continue;
+                }
+#if GODOT_MACOS
+                if (filename == ".DS_Store")
+                {
+                    continue;
+                }
+#endif
+                list.Add(System.IO.Path.Combine(wd, filename));
+            }
+            //
+            list.Sort();
+            return list;
+        }
 
         public static void RemoveDirectory(this Directory dir, string path)
         {
