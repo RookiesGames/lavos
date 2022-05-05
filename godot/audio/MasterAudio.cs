@@ -98,16 +98,18 @@ namespace Lavos.Audio
             //
             if (data.ContainsKey(MasterKey))
             {
-                MasterVolume = float.Parse(data[MasterKey]);
+                _masterVolume.Value = float.Parse(data[MasterKey]);
             }
             if (data.ContainsKey(MusicKey))
             {
-                MusicVolume = float.Parse(data[MusicKey]);
+                _musicVolume.Value = float.Parse(data[MusicKey]);
             }
             if (data.ContainsKey(SoundKey))
             {
-                SoundVolume = float.Parse(data[SoundKey]);
+                _soundVolume.Value = float.Parse(data[SoundKey]);
             }
+            //
+            VolumeChanged?.Invoke();
         }
 
         public void WriteData(Dictionary<string, string> data)
