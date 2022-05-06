@@ -13,7 +13,7 @@ namespace Lavos.Services.Data
     {
         const string Tag = nameof(CommonDataSaverService);
         const string SavePath = "user://saves";
-        const float SaveTimer = 1f;
+        const float SaveTimer = 0.25f;
 
         float _timer = 0f;
         List<IDataSaver> _dataSavers = new List<IDataSaver>();
