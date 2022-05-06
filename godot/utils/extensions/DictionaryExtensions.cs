@@ -23,5 +23,16 @@ namespace Lavos.Utils.Extensions
             //
             return dic[key];
         }
+
+        public static void SetOrAdd<T, U>(this Dictionary<T, U> dic, T key, U value)
+        {
+            if (dic.ContainsKey(key))
+            {
+                dic[key] = value;
+                return;
+            }
+            //
+            dic.Add(key, value);
+        }
     }
 }
