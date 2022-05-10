@@ -137,10 +137,5 @@ namespace Lavos.Audio
         {
             _stateMachine.ChangeState(_fadeOutState);
         }
-
-        public void SetVolume(float volume)
-        {
-            _source.SetVolume(volume);
-        }
     }
 }
