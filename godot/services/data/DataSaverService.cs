@@ -2,16 +2,15 @@ using Godot;
 using Lavos.Console;
 using Lavos.Utils.Extensions;
 using System.Collections.Generic;
-using System.IO;
 using Newtonsoft.Json;
 
 namespace Lavos.Services.Data
 {
-    sealed class CommonDataSaverService
+    sealed class DataSaverService
         : Node
         , IDataSaverService
     {
-        const string Tag = nameof(CommonDataSaverService);
+        const string Tag = nameof(DataSaverService);
         const string SavePath = "user://saves";
         const float SaveTimer = 0.25f;
 

@@ -6,7 +6,7 @@ namespace Lavos.Services.Data
     {
         public override void Configure(IDependencyBinder binder)
         {
-            binder.Bind<IDataSaverService, CommonDataSaverService>();
+            binder.Bind<IDataSaverService, DataSaverService>();
         }
 
         public override void Initialize(IDependencyResolver resolver)
