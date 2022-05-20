@@ -56,8 +56,22 @@ namespace Lavos.UI
         {
             switch (ButtonType)
             {
-                case Type.Forward: SoundManagerLazy.Instance.PlayStream(AcceptSound); break;
-                case Type.Back: SoundManagerLazy.Instance.PlayStream(CancelSound); break;
+                case Type.Forward:
+                    {
+                        if (AcceptSound != null)
+                        {
+                            SoundManagerLazy.Instance.PlayStream(AcceptSound);
+                        }
+                        break;
+                    }
+                case Type.Back:
+                    {
+                        if (CancelSound != null)
+                        {
+                            SoundManagerLazy.Instance.PlayStream(CancelSound);
+                        }
+                        break;
+                    }
                 default: break;
             }
         }
