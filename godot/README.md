@@ -3,7 +3,15 @@ Godot shared code
 
 # Index
 
+1. [Requirements](#requirements)
 1. [Installation](#install)
+
+---
+
+# Requirements
+
+* Godot 3.4.4 or earlier
+* V compiler, [link](vlang.io)
 
 # Install
 
