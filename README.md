@@ -7,7 +7,7 @@ Godot shared code
 
 # Boot
 
-The starting point of the game should be `boot` scene.
+The starting point of the game should be the `boot` scene.
 Add a single `Node` and attach the `OmniNode` script to it. The `OmniNode` component will be our root node where everything will be attached to.
 
 `OmniNode` has a couple of properties to be filled in:
