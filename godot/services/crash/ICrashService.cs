@@ -1,8 +1,9 @@
+using Lavos.Dependency;
 using System;
 
 namespace Lavos.Services.Crash
 {
-    public interface ICrashService
+    public interface ICrashService : IService
     {
         void Initialise();
 

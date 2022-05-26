@@ -15,7 +15,7 @@ namespace Lavos.Dependency
             _container = container;
         }
 
-        public static T Locate<T>()
+        public static T Locate<T>() where T : IService
         {
             var type = typeof(T);
             var obj = (T)_container.FindOrCreateType(type);
@@ -23,7 +23,7 @@ namespace Lavos.Dependency
             return obj;
         }
 
-        public static List<T> LocateAsList<T>()
+        public static List<T> LocateAsList<T>() where T : IService
         {
             var type = typeof(T);
             //

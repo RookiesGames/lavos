@@ -1,8 +1,9 @@
+using Lavos.Dependency;
 using Godot.Collections;
 
 namespace Lavos.Services.Analytics
 {
-    public interface IAnalyticsService
+    public interface IAnalyticsService : IService
     {
         void Initialise();
 

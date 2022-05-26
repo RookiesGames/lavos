@@ -2,7 +2,7 @@ using Lavos.Dependency;
 
 namespace Lavos.Utils.Lazy
 {
-    public struct LazyRef<T>
+    public struct LazyRef<T> where T : IService
     {
         LazyRef(T instance = default(T))
         {
