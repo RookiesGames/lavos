@@ -1,11 +1,11 @@
-using System;
-using Lavos.Input;
+using Lavos.Dependency;
 
 namespace Lavos.Input
 {
-    public interface IInputHandler<C> where C : IInputConfig
+    public interface IInputHandler<C>
+        : IService
+        where C : IInputConfig
     {
         void EnableHandler(C config);
-        void DisableHandler();
     }
 }

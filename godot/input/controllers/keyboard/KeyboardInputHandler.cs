@@ -2,7 +2,6 @@ using Godot;
 using Lavos.Debug;
 using Lavos.Utils.Extensions;
 using System.Collections.Generic;
-using System;
 
 namespace Lavos.Input
 {
@@ -45,13 +44,7 @@ namespace Lavos.Input
 
         public void EnableHandler(IKeyboardInputConfig config)
         {
-            Assert.IsFalse(config == null, $"Passed null config to {nameof(KeyboardInputHandler)}");
             _config = config;
-        }
-
-        public void DisableHandler()
-        {
-            _config = null;
         }
 
         #endregion IInputHandler
@@ -59,20 +52,24 @@ namespace Lavos.Input
 
         #region Node
 
-        public override void _Process(float delta)
+        public override void _Input(InputEvent @event)
         {
             if (IsDisabled)
             {
                 return;
             }
-
-            var keys = _config.Keys;
-            foreach (var key in keys)
+            //
+            if (@event is InputEventKey eventKey)
             {
+                var key = (KeyList)eventKey.Scancode;
                 var action = _config.GetAction(key);
-                var pressed = Godot.Input.IsKeyPressed((int)key);
                 //
-                if (pressed)
+                if (action == InputAction.None)
+                {
+                    return;
+                }
+                //
+                if (eventKey.Pressed)
                 {
                     // Cache press to avoid repetition
                     if (_pressedKeys.Contains(key) == false)

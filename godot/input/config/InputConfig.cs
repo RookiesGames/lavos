@@ -13,26 +13,20 @@ namespace Lavos.Input
 
         public override void Configure(IDependencyBinder binder)
         {
-            //var parent = OmniNode..Singleton.AddNode("Input");
-
             if (EnableKeyboard)
-            {
-                //var handler = parent.AddNode<KeyboardInputHandler>();
-                //binder.Instance<IKeyboardInputHandler, KeyboardInputHandler>(handler);
-                binder.Bind<IKeyboardInputHandler, KeyboardInputHandler>();
-            }
+            { binder.Bind<IKeyboardInputHandler, KeyboardInputHandler>(); }
+            else
+            { binder.Bind<IKeyboardInputHandler, DummyKeyboardInputHandler>(); }
+            //
             if (EnableMouse)
-            {
-                //var handler = parent.AddNode<MouseInputHandler>();
-                //binder.Instance<IMouseInputHandler, MouseInputHandler>(handler);
-                binder.Bind<IMouseInputHandler, MouseInputHandler>();
-            }
+            { binder.Bind<IMouseInputHandler, MouseInputHandler>(); }
+            else
+            { binder.Bind<IMouseInputHandler, DummyMouseInputHandler>(); }
+            //
             if (EnableGamepad)
-            {
-                //var handler = parent.AddNode<GamepadInputHandler>();
-                //binder.Instance<IGamepadInputHandler, GamepadInputHandler>(handler);
-                binder.Bind<IGamepadInputHandler, GamepadInputHandler>();
-            }
+            { binder.Bind<IGamepadInputHandler, GamepadInputHandler>(); }
+            else
+            { binder.Bind<IGamepadInputHandler, DummyGamepadInputHandler>(); }
         }
 
         public override void Initialize(IDependencyResolver resolver)

@@ -1,113 +1,110 @@
-using System;
+
 using Godot;
 using Lavos.Debug;
-using Lavos.Dependency;
 using Lavos.Utils.Extensions;
+using System.Collections.Generic;
 
 namespace Lavos.Input
 {
-    sealed class GamepadInputHandler : Node, IGamepadInputHandler
+    sealed class GamepadInputHandler
+        : Node
+        , IGamepadInputHandler
     {
-        #region Member
-
-        private IGamepadInputConfig _config;
-
-        #endregion
+        Dictionary<GamepadDevice, GamepadDeviceInputHandler> _deviceHandlers = new Dictionary<GamepadDevice, GamepadDeviceInputHandler>();
+        Dictionary<GamepadDevice, IGamepadInputConfig> _configs = new Dictionary<GamepadDevice, IGamepadInputConfig>();
+        readonly List<IGamepadInputListener> _listeners = new List<IGamepadInputListener>();
 
 
-        #region Properties
+        #region IGamepadInputHandler
 
-        private bool IsEnabled => _config != null;
+        public void RegisterListener(IGamepadInputListener listener)
+        {
+            _listeners.PushUnique(listener);
+        }
+
+        public void UnregisterListener(IGamepadInputListener listener)
+        {
+            _listeners.Remove(listener);
+        }
 
         #endregion
 
 
         #region IInputHandler
 
-        public event Action<InputAction> onInputActionPressed;
-        public event Action<InputAction> onInputActionReleased;
-
-        public void EnableHandler(IGamepadInputConfig config)
+        void IInputHandler<IGamepadInputConfig>.EnableHandler(IGamepadInputConfig config)
         {
-            Assert.IsFalse(config == null, $"Passed null config to {nameof(GamepadInputHandler)}");
-            _config = config;
+            // Disabled
         }
 
-        public void DisableHandler()
+        public void EnableHandler(GamepadDevice device, IGamepadInputConfig config)
         {
-            _config = null;
-        }
-
-        #endregion
-
-
-        #region Node
-
-        public override void _Process(float delta)
-        {
-            if (IsEnabled == false)
+            _configs.SetOrAdd(device, config);
+            //
+            if (_deviceHandlers.ContainsKey(device) == false)
             {
-                return;
+                var handler = this.AddNode<GamepadDeviceInputHandler>();
+                handler.Gamepad = device;
+                _deviceHandlers.SetOrAdd(device, handler);
             }
-
-            var controls = _config.Axis;
-            foreach (var control in controls)
-            {
-                var value = Godot.Input.GetJoyAxis(0, (int)control);
-                var ias = _config.GetMotion(control, value);
-                if (ias.Action != InputAction.None)
-                {
-                    if (ias.Pressed)
-                    {
-                        onInputActionPressed?.Invoke(ias.Action);
-                    }
-                    else
-                    {
-                        onInputActionReleased?.Invoke(ias.Action);
-                    }
-                }
-            }
-        }
-
-        public override void _Input(InputEvent inputEvent)
-        {
-            if (IsEnabled == false)
-            {
-                return;
-            }
-
-            if (inputEvent is InputEventJoypadButton joypadButton)
-            {
-                var ias = _config.GetAction((JoystickList)joypadButton.ButtonIndex, joypadButton.Pressure);
-                if (ias.Action != InputAction.None)
-                {
-                    if (joypadButton.Pressed && ias.Pressed)
-                    {
-                        onInputActionPressed?.Invoke(ias.Action);
-                    }
-                    else if (joypadButton.Pressed == false && ias.Pressed == false)
-                    {
-                        onInputActionReleased?.Invoke(ias.Action);
-                    }
-                }
-            }
-            else if (inputEvent is InputEventJoypadMotion joypadMotion)
-            {
-                var ias = _config.GetMotion((JoystickList)joypadMotion.Axis, joypadMotion.AxisValue);
-                if (ias.Action != InputAction.None)
-                {
-                    if (ias.Pressed)
-                    {
-                        onInputActionPressed?.Invoke(ias.Action);
-                    }
-                    else
-                    {
-                        onInputActionReleased?.Invoke(ias.Action);
-                    }
-                }
-            }
+            _deviceHandlers[device].Config = config;
         }
 
         #endregion
+
+
+        public void OnGamepadButtonPressed(GamepadDevice device, InputAction action)
+        {
+            foreach (var listener in _listeners)
+            {
+                var flag = (int)(listener.Gamepad & device);
+                if (flag == 0)
+                {
+                    continue;
+                }
+                //
+                var handled = listener.OnGamepadButtonPressed(device, action);
+                if (handled)
+                {
+                    return;
+                }
+            }
+        }
+
+        public void OnGamepadButtonReleased(GamepadDevice device, InputAction action)
+        {
+            foreach (var listener in _listeners)
+            {
+                var flag = (int)(listener.Gamepad & device);
+                if (flag == 0)
+                {
+                    continue;
+                }
+                //
+                var handled = listener.OnGamepadButtonReleased(device, action);
+                if (handled)
+                {
+                    return;
+                }
+            }
+        }
+
+        public void OnAxisValueChanged(GamepadDevice device, InputAction action, float value)
+        {
+            foreach (var listener in _listeners)
+            {
+                var flag = (int)(listener.Gamepad & device);
+                if (flag == 0)
+                {
+                    continue;
+                }
+                //
+                var handled = listener.OnAxisValueChanged(device, action, value);
+                if (handled)
+                {
+                    return;
+                }
+            }
+        }
     }
 }

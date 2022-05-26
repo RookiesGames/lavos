@@ -5,9 +5,12 @@ namespace Lavos.Input
 {
     public interface IGamepadInputConfig : IInputConfig
     {
-        IReadOnlyList<JoystickList> Axis { get; }
+        GamepadDevice Device { get; }
 
-        InputActionState GetAction(JoystickList button, float pressure);
-        InputActionState GetMotion(JoystickList motion, float value);
+        IReadOnlyCollection<GamepadList> Buttons { get; }
+        IReadOnlyCollection<JoystickList> Axis { get; }
+
+        InputActionState GetActionState(GamepadList button, float pressure);
+        InputActionState GetMotionState(JoystickList motion, float value);
     }
 }

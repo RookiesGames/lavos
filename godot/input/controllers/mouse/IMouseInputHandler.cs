@@ -4,8 +4,10 @@ using Lavos.Input;
 
 namespace Lavos.Input
 {
-    public interface IMouseInputHandler : IInputHandler<IMouseInputConfig>
+    public interface IMouseInputHandler
+        : IInputHandler<IMouseInputConfig>
     {
-        event Action<Vector2> onMouseMotion;
+        void RegisterListener(IMouseInputListener listener);
+        void UnregisterListener(IMouseInputListener listener);
     }
 }
