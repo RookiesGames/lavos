@@ -7,7 +7,8 @@ namespace Lavos.Input
     sealed class GamepadDeviceInputHandler
         : Node
     {
-        readonly HashSet<GamepadList> _pressedButtons = new HashSet<GamepadList>();
+        readonly Dictionary<int, float> _joystickValues = new Dictionary<int, float>();
+        readonly HashSet<GamepadButtons> _pressedButtons = new HashSet<GamepadButtons>();
 
         int DeviceId = -1;
         GamepadDevice _gamepad = GamepadDevice.GamepadNone;
@@ -38,28 +39,70 @@ namespace Lavos.Input
                 return;
             }
 
-            if (inputEvent is InputEventJoypadButton joypadButton)
+            if (inputEvent is InputEventJoypadMotion joypadMotion)
+            {
+                if (joypadMotion.Device != DeviceId)
+                {
+                    return;
+                }
+                //
+                var axis = GamepadAxisHelper.FromJoystickList(joypadMotion.Axis);
+                //
+                if (axis == GamepadAxis.LeftTrigger || axis == GamepadAxis.RightTrigger)
+                {
+                    var action = Config.GetTriggerState(axis, joypadMotion.AxisValue);
+                    if (action == InputAction.None)
+                    {
+                        return;
+                    }
+                    //
+                    _parent.OnTriggerValueChanged(Gamepad, action, joypadMotion.AxisValue);
+                }
+                else
+                {
+                    _joystickValues.SetOrAdd(joypadMotion.Axis, joypadMotion.AxisValue);
+                    //
+                    var action = Config.GetAxisState(axis, joypadMotion.AxisValue);
+                    if (action == InputAction.None)
+                    {
+                        return;
+                    }
+                    //
+                    var haxis = (axis == GamepadAxis.LeftStick)
+                                            ? ((int)JoystickList.Axis0)
+                                            : ((int)JoystickList.Axis2);
+                    var vaxis = (axis == GamepadAxis.LeftStick)
+                                            ? ((int)JoystickList.Axis1)
+                                            : ((int)JoystickList.Axis3);
+                    //
+                    var value = Vector2.Zero;
+                    value.x = _joystickValues.GetOrDefault(haxis, 0f);
+                    value.y = _joystickValues.GetOrDefault(vaxis, 0f);
+                    //
+                    _parent.OnAxisValueChanged(Gamepad, action, value);
+                }
+            }
+            else if (inputEvent is InputEventJoypadButton joypadButton)
             {
                 if (joypadButton.Device != DeviceId)
                 {
                     return;
                 }
                 //
-                var button = GamepadListHelper.FromJoystickList(joypadButton.ButtonIndex);
-                var actionState = Config.GetActionState(button, joypadButton.Pressure);
+                var button = GamepadButtonsHelper.FromJoystickList(joypadButton.ButtonIndex);
+                var action = Config.GetActionState(button);
                 //
-                if (actionState.Action == InputAction.None)
+                if (action == InputAction.None)
                 {
                     return;
                 }
                 //
-                var pressed = joypadButton.Pressed && actionState.Pressed;
-                if (pressed)
+                if (joypadButton.Pressed)
                 {
                     if (_pressedButtons.Contains(button) == false)
                     {
                         _pressedButtons.Add(button);
-                        _parent.OnGamepadButtonPressed(Gamepad, actionState.Action);
+                        _parent.OnGamepadButtonPressed(Gamepad, action);
                     }
                 }
                 else
@@ -67,26 +110,9 @@ namespace Lavos.Input
                     if (_pressedButtons.Contains(button))
                     {
                         _pressedButtons.Remove(button);
-                        _parent.OnGamepadButtonReleased(Gamepad, actionState.Action);
+                        _parent.OnGamepadButtonReleased(Gamepad, action);
                     }
                 }
-            }
-            else if (inputEvent is InputEventJoypadMotion joypadMotion)
-            {
-                if (joypadMotion.Device != DeviceId)
-                {
-                    return;
-                }
-                //
-                var axis = (JoystickList)joypadMotion.Axis;
-                var actionState = Config.GetMotionState(axis, joypadMotion.AxisValue);
-                //
-                if (actionState.Action == InputAction.None)
-                {
-                    return;
-                }
-                //
-                _parent.OnAxisValueChanged(Gamepad, actionState.Action, joypadMotion.AxisValue);
             }
         }
     }

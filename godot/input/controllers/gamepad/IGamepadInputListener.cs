@@ -1,3 +1,4 @@
+using Godot;
 
 namespace Lavos.Input
 {
@@ -10,6 +11,7 @@ namespace Lavos.Input
         bool OnGamepadButtonPressed(GamepadDevice device, InputAction action);
         bool OnGamepadButtonReleased(GamepadDevice device, InputAction action);
 
-        bool OnAxisValueChanged(GamepadDevice device, InputAction action, float value);
+        bool OnTriggerValueChanged(GamepadDevice device, InputAction action, float value);
+        bool OnAxisValueChanged(GamepadDevice device, InputAction action, Vector2 value);
     }
 }

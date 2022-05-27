@@ -1,6 +1,6 @@
 
 using Godot;
-using Lavos.Debug;
+using Lavos.Console;
 using Lavos.Utils.Extensions;
 using System.Collections.Generic;
 
@@ -34,7 +34,9 @@ namespace Lavos.Input
 
         void IInputHandler<IGamepadInputConfig>.EnableHandler(IGamepadInputConfig config)
         {
-            // Disabled
+            Log.Error(nameof(GamepadInputHandler),
+                        "Use EnableHandler(GamepadDevice device, IGamepadInputConfig config) instead. " +
+                        "Ignoring call...");
         }
 
         public void EnableHandler(GamepadDevice device, IGamepadInputConfig config)
@@ -58,16 +60,10 @@ namespace Lavos.Input
             foreach (var listener in _listeners)
             {
                 var flag = (int)(listener.Gamepad & device);
-                if (flag == 0)
-                {
-                    continue;
-                }
+                if (flag == 0) continue;
                 //
                 var handled = listener.OnGamepadButtonPressed(device, action);
-                if (handled)
-                {
-                    return;
-                }
+                if (handled) return;
             }
         }
 
@@ -76,34 +72,34 @@ namespace Lavos.Input
             foreach (var listener in _listeners)
             {
                 var flag = (int)(listener.Gamepad & device);
-                if (flag == 0)
-                {
-                    continue;
-                }
+                if (flag == 0) continue;
                 //
                 var handled = listener.OnGamepadButtonReleased(device, action);
-                if (handled)
-                {
-                    return;
-                }
+                if (handled) return;
             }
         }
 
-        public void OnAxisValueChanged(GamepadDevice device, InputAction action, float value)
+        public void OnTriggerValueChanged(GamepadDevice device, InputAction action, float value)
         {
             foreach (var listener in _listeners)
             {
                 var flag = (int)(listener.Gamepad & device);
-                if (flag == 0)
-                {
-                    continue;
-                }
+                if (flag == 0) continue;
+                //
+                var handled = listener.OnTriggerValueChanged(device, action, value);
+                if (handled) return;
+            }
+        }
+
+        public void OnAxisValueChanged(GamepadDevice device, InputAction action, Vector2 value)
+        {
+            foreach (var listener in _listeners)
+            {
+                var flag = (int)(listener.Gamepad & device);
+                if (flag == 0) continue;
                 //
                 var handled = listener.OnAxisValueChanged(device, action, value);
-                if (handled)
-                {
-                    return;
-                }
+                if (handled) return;
             }
         }
     }
