@@ -14,7 +14,7 @@ namespace Lavos.Input
         float _timer = 0f;
 
         readonly List<GamepadDevice> _connectedDevices = new List<GamepadDevice>();
-        readonly Dictionary<GamepadDevice, bool> _gamepadsState = new Dictionary<GamepadDevice, bool>()
+        readonly Dictionary<GamepadDevice, bool> _devicesState = new Dictionary<GamepadDevice, bool>()
         {
             { GamepadDevice.Gamepad1, false},
             { GamepadDevice.Gamepad2, false},
@@ -61,16 +61,16 @@ namespace Lavos.Input
                 _connectedDevices.Add(GamepadDeviceHelper.FromId(id));
             }
             //
-            var keys = new List<GamepadDevice>(_gamepadsState.Keys);
+            var keys = new List<GamepadDevice>(_devicesState.Keys);
             foreach (var device in keys)
             {
-                var connected = _gamepadsState[device];
+                var connected = _devicesState[device];
                 //
                 if (_connectedDevices.Contains(device))
                 {
                     if (connected == false)
                     {
-                        _gamepadsState[device] = true;
+                        _devicesState[device] = true;
                         OnGamepadConnected(device);
                     }
                 }
@@ -78,7 +78,7 @@ namespace Lavos.Input
                 {
                     if (connected)
                     {
-                        _gamepadsState[device] = false;
+                        _devicesState[device] = false;
                         OnGamepadDisconnected(device);
                     }
                 }
