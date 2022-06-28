@@ -6,5 +6,7 @@ namespace Lavos.Input
     {
         void RegisterListener(IGamepadListener listener);
         void UnregisterListener(IGamepadListener listener);
+
+        bool IsGamepadConnected(GamepadDevice device);
     }
 }

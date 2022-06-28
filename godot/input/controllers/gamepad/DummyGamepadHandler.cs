@@ -14,6 +14,8 @@ namespace Lavos.Input
 
         void IGamepadHandler.UnregisterListener(IGamepadListener listener) { }
 
+        bool IGamepadHandler.IsGamepadConnected(Lavos.Input.GamepadDevice device) { return false; }
+
         #endregion IGamepadHandler
     }
 }

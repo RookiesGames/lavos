@@ -11,7 +11,7 @@ namespace Lavos.Input
         readonly List<IGamepadListener> _listeners = new List<IGamepadListener>();
 
         const float WAIT_TIME = 0.25f;
-        float _timer = 0f;
+        float _timer = WAIT_TIME;
 
         readonly List<GamepadDevice> _connectedDevices = new List<GamepadDevice>();
         readonly Dictionary<GamepadDevice, bool> _devicesState = new Dictionary<GamepadDevice, bool>()
@@ -33,9 +33,14 @@ namespace Lavos.Input
             _listeners.PushUnique(listener);
         }
 
-        void IGamepadHandler.UnregisterListener(Lavos.Input.IGamepadListener listener)
+        void IGamepadHandler.UnregisterListener(IGamepadListener listener)
         {
             _listeners.Remove(listener);
+        }
+
+        bool IGamepadHandler.IsGamepadConnected(GamepadDevice device)
+        {
+            return _devicesState[device];
         }
 
         #endregion IGamepadHandler
