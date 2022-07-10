@@ -3,7 +3,7 @@
 [ext_resource path="res://lavos/dependency/ConfigList.cs" type="Script" id=1]
 [ext_resource path="res://lavos/services/data/config/data_saver_config.tres" type="Resource" id=3]
 [ext_resource path="res://addons/lavos/addons_config.tres" type="Resource" id=6]
-[ext_resource path="res://lavos/audio/config/audio_config.tres" type="Resource" id=7]
+[ext_resource path="res://lavos/audio/config/lavos_audio_config.tres" type="Resource" id=7]
 
 [resource]
 script = ExtResource( 1 )
