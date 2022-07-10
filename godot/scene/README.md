@@ -22,6 +22,8 @@ The `OmniNode` node exposes two properties:
 * The following scene
 * A list of configurations. Read mode about it [here](../dependency/README.md)s
 
+Lavos comes with its own configuration resource that you should add to the list as a first requirement. It is then suggested that you create your own [ConfigList](../dependency/ConfigList.cs) with game specific [Config](../dependency/README.md).
+
 # Node Tree
 
 The [NodeTree](./NodeTree.cs) will automatically be available to you if you
