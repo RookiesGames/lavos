@@ -36,12 +36,12 @@ namespace Lavos.Dependency
             return list;
         }
 
-        public static void Register<I, C>(C instance) where C : I
+        public static void Register<I, C>(C instance) where C : I, IService
         {
             _container.Instance<I, C>(instance);
         }
 
-        public static void Register<C>(C instance)
+        public static void Register<C>(C instance) where C : IService
         {
             _container.Instance<C>(instance);
         }

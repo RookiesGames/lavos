@@ -32,7 +32,7 @@ namespace Lavos.Dependency
             instances.Clear();
         }
 
-        public void Bind<I, C>() where C : I, new()
+        public void Bind<I, C>() where C : I, IService, new()
         {
             Assert.IsTrue(typeof(I).IsInterface, "Only interfaces can be bound from");
             Assert.IsTrue(typeof(C).IsClass, "Only classes can be bound to");
@@ -47,7 +47,7 @@ namespace Lavos.Dependency
             bindings[typeof(I)] = typeof(C);
         }
 
-        public void Lookup<I1, I2>() where I2 : I1
+        public void Lookup<I1, I2>() where I2 : I1, IService
         {
             Assert.IsTrue(typeof(I1).IsInterface, "Only interfaces can be lookup from");
             Assert.IsTrue(typeof(I2).IsInterface, "Only interfaces can be lookup to");
@@ -60,7 +60,7 @@ namespace Lavos.Dependency
             lookups[typeof(I1)].Add(typeof(I2));
         }
 
-        public void Instance<I, C>(C instance) where C : I
+        public void Instance<I, C>(C instance) where C : I, IService
         {
             DoBind<I, C>();
             AddInstance(typeof(C), (object)instance);

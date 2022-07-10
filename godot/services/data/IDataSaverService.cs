@@ -1,7 +1,8 @@
+using Lavos.Dependency;
 
 namespace Lavos.Services.Data
 {
-    public interface IDataSaverService
+    public interface IDataSaverService : IService
     {
         void Register(IDataSaver saver);
         void Unregister(IDataSaver saver);
