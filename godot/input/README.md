@@ -16,14 +16,17 @@ Input module
         * [Mouse Handler](#mouse-handler)
         * [Mouse Listener](#mouse-listener)
     * [Gamepad](#gamepad)
-        * []
+        * [Gamepad Configuration](#gamepad-configuration)
+        * [Gamepad Input Handler](#gamepad-input-handler)
+        * [Gamepad Input Listener](#gamepad-input-listener)
+        * [Gamepad Status Changes](#gamepad-status-changes)
 
 
 # Config
 
 The input module must be initialized as part of the boot process. 
 
-The easiest way is to create a resource and attached the [InputConfig](./config/InputConfig.cs) script to it. Add your input resource to your game config list so that it is configured on startup.
+The easiest way is to create a resource and attached the [InputConfig](./config/InputConfig.cs) script to it. Add your input resource to your [game config](../dependency/README.md) list so that it is configured on startup.
 
 Three option are available:
 1. `Enable Keyboard` - Allow keyboard input
@@ -35,18 +38,18 @@ Three option are available:
 The input system will notify listeners according to configurations that are passed down to it. These configurations can be changed at runtime to adapt to the current gameplay or screen. This way certain input events can be ignored without adding extra complexity to the gameplay logic.
 
 There are three configurations that you can implement; one for each support. 
-See [IKeyboardInputConfig](./controllers/keyboard/IKeyboardInputConfig.cs), [IMouseInputConfig](./controllers/mouse/IMouseInputConfig.cs) & [IGamepadInputConfig](./controllers/gamepad/IGamepadInputConfig.cs)
+Each configuration type will be described below.
 
-Each support will have its own API that matches the support.
+Each support will have its own API that matches its functionality.
 
 ## Keyboard
 
-The keyboard handler will notify any key available on a standard keyboard.
+The [IKeyboardInputHandler](./controllers/keyboard/IKeyboardInputHandler.cs) will notify any key input from a standard keyboard.
 Depending on the manufacturer, some keys might not be supported as they require special software/firmware to be detected by the OS.
 
 ### Keyboard Configuration
 
-The keyboard input configuration defines a set of keys it will listen to and a `GetAction` method that converts the input key into an [InputAction](./InputAction.cs)
+The [IKeyboardInputConfig](./controllers/keyboard/IKeyboardInputConfig.cs) defines a set of keys to be listen to and a `GetAction` method that converts the input key into an [InputAction](./InputAction.cs)
 
 ```cs
 using Godot;
@@ -61,42 +64,44 @@ public sealed class KeyboardConfig
     {
         KeyList.Up,
         KeyList.Down,
-        KeyList.Space
+        KeyList.Space,
+        KeyList.Enter
     };
 
     public InputAction GetAction(KeyList key)
     {
-        if (_acceptedInput.Contains(key))
+        if (!_acceptedInput.Contains(key))
         {
-            switch (key)
-            {
-                case KeyList.Up: return InputAction.Up; // Move forward
-                case KeyList.Down: return InputAction.Down; // Move backwards
-                case KeyList.Space: return InputAction.South; // Jump
-                default: return InputAction.Unknown;
-            }
+            return InputAction.None; // Ignore input not in list
         }
 
-        return InputAction.None;
+        switch (key)
+        {
+            case KeyList.Up: return InputAction.Up; // Move forward
+            case KeyList.Down: return InputAction.Down; // Move backwards
+            case KeyList.Space: return InputAction.South; // Jump
+            //
+            default: return InputAction.Unknown; // KeyList.Enter not handled
+        }
     }
 }
 ```
 
 ### Keyboard Handler
 
-We can enable the keyboard handler passing to it a keyboard configuration.
+We can enable the [IKeyboardInputHandler](./controllers/keyboard/IKeyboardInputHandler.cs) passing to it a [IKeyboardInputConfig](./controllers/keyboard/IKeyboardInputConfig.cs).
 The [IKeyboardInputHandler](./controllers/keyboard/IKeyboardInputHandler.cs) is a service that needs to be located.
 
 ```cs
 using Godot;
-using Lavos.Input; // Needed for the input classes
-using Lavos.Dependency; // Needed for locating services
+using Lavos.Input;
+using Lavos.Dependency;
 
 public class PlayerController
     : Node
 {
     IKeyboardInputHandler _keyboardHandler = null;
-    KeyboardConfig _config = new KeyboardConfig();
+    IKeyboardInputConfig _config = new KeyboardConfig();
 
     public override void _EnterTree()
     {
@@ -115,11 +120,11 @@ Only one keyboard configuration can be active at a time.
 
 ### Keyboard Listener
 
-Implement the [IKeyboardInputListener](./controllers/keyboard/IKeyboardInputListener.cs) interface to later register for keyboard events
+Implement the [IKeyboardInputListener](./controllers/keyboard/IKeyboardInputListener.cs) interface register for keyboard events.
 
 ```cs
 using Godot;
-using Lavos.Console; // Needed for logging
+using Lavos.Console;
 using Lavos.Input;
 using Lavos.Dependency;
 
@@ -145,7 +150,7 @@ public class PlayerController
         return true;
     }
 
-    #endregion
+    #endregion IKeyboardInputListener
 
     // ...
 }
@@ -157,7 +162,7 @@ To receive keyboard events, register as a listener to [IKeyboardInputHandler](./
 using Godot;
 using Lavos.Console;
 using Lavos.Input;
-using Lavos.Dependency; // Needed for locating services
+using Lavos.Dependency;
 
 public class PlayerController
     : Node
@@ -188,13 +193,12 @@ public class PlayerController
 
 ## Mouse
 
-The mouse handler will notify position changes as well as mouse button events. 
-Depending on the manufacturer, some keys might not be supported as they require 
-special software/firmware to be detected by the OS.
+The [IMouseInputHandler](./controllers/mouse/IMouseInputHandler.cs) will notify position changes as well as mouse button events. 
+Depending on the manufacturer, some keys might not be supported as they require special software/firmware to be detected by the OS.
 
 ### Mouse Configuration
 
-The mouse input configuration defines a set of mouse buttons it will listen 
+The [IMouseInputConfig](./controllers/mouse/IMouseInputConfig.cs) defines a set of mouse buttons it will listen 
 to and a `GetAction` method that converts the input button into an 
 [InputAction](./InputAction.cs)
 
@@ -224,7 +228,8 @@ public class MouseConfig : IMouseInputConfig
         {
             case ButtonList.Left: return InputAction.LeftTrigger; // Main ammo
             case ButtonList.Right: return InputAction.RightTrigger; // Alternative ammo
-            default: return InputAction.None;
+            //
+            default: return InputAction.Unknown;
         }
     }
 }
@@ -232,20 +237,20 @@ public class MouseConfig : IMouseInputConfig
 
 ### Mouse Handler
 
-We can enable the mouse handler passing to it a mouse configuration.
+We can enable the [IMouseInputHandler](./controllers/mouse/IMouseInputHandler.cs) passing to it a [IMouseInputConfig](./controllers/mouse/IMouseInputConfig.cs).
 The [IMouseInputHandler](./controllers/mouse/IMouseInputHandler.cs) 
 is a service that needs to be located.
 
 ```cs
 using Godot;
-using Lavos.Input; // Needed for the input classes
-using Lavos.Dependency; // Needed for locating services
+using Lavos.Input;
+using Lavos.Dependency;
 
 public class LazerGun
     : Node
 {
     IMouseInputHandler _mouseHandler = null;
-    MouseConfig _config = new MouseConfig();
+    IMouseInputConfig _config = new MouseConfig();
 
     public override void _EnterTree()
     {
@@ -264,12 +269,12 @@ Only one mouse configuration can be active at a time.
 
 ### Mouse Listener
 
-Implement the [IMouseInputListener](./controllers/mouse/IMouseInputListener.cs) interface to later register for mouse events
+Implement the [IMouseInputListener](./controllers/mouse/IMouseInputListener.cs) interface to register for mouse events
 
 
 ```cs
 using Godot;
-using Lavos.Console; // Needed for logging
+using Lavos.Console;
 using Lavos.Input;
 using Lavos.Dependency;
 
@@ -314,7 +319,7 @@ To receive mouse events, register as a listener to [IMouseInputHandler](./contro
 using Godot;
 using Lavos.Console;
 using Lavos.Input;
-using Lavos.Dependency; // Needed for locating services
+using Lavos.Dependency;
 
 public class LazerGun
     : Node
@@ -345,12 +350,252 @@ public class LazerGun
 
 ## Gamepad
 
+The gamepad handler will notify any gamepad input send from a standard controller.
+
+### Gamepad Configuration
+
+The [IGamepadInputConfig](./controllers/gamepad/IGamepadInputConfig.cs) defines a set of buttons and axis it will listen to and the following methods that converts gamepad input into an [InputAction](./InputAction.cs): `GetActionState`, `GetAxisState` and `GetTriggerState`.
+
+```c#
+using Godot;
+using Lavos.Input;
+using System.Collections.Generic;
+
+public class GamepadConfig
+    : IGamepadInputConfig
+{
+    IReadOnlyCollection<GamepadAxis> IGamepadInputConfig.Axis => _axis;
+    readonly HashSet<GamepadAxis> _axis = new HashSet<GamepadAxis>()
+    {
+        GamepadAxis.LeftStick, GamepadAxis.RightStick,
+        GamepadAxis.LeftTrigger, GamepadAxis.RightTrigger
+    };
+
+    IReadOnlyCollection<GamepadButtons> IGamepadInputConfig.Buttons => _buttons;
+    readonly HashSet<GamepadButtons> _buttons = new HashSet<GamepadButtons>()
+    {
+        GamepadButtons.South, 
+        GamepadButtons.East, 
+        GamepadButtons.West, 
+        GamepadButtons.North,
+    };
+
+    InputAction IGamepadInputConfig.GetActionState(GamepadButtons button)
+    {
+        if (_buttons.Contains(button) == false)
+        {
+            return InputAction.None;
+        }
+        //
+        switch (button)
+        {
+            case GamepadButtons.South: return InputAction.South;
+            case GamepadButtons.East: return InputAction.East;
+            case GamepadButtons.West: return InputAction.West;
+            case GamepadButtons.North: return InputAction.North;
+            //
+            default: return InputAction.Unkwnon;
+        }
+    }
+
+    InputAction IGamepadInputConfig.GetAxisState(GamepadAxis axis, float value)
+    {
+        if (_axis.Contains(axis) == false)
+        {
+            return InputAction.None;
+        }
+        //
+        switch (axis)
+        {
+            case GamepadAxis.LeftStick: return InputAction.LeftStick;
+            case GamepadAxis.RightStick: return InputAction.RightStick;
+            //
+            default: return InputAction.Unkwnon;
+        }
+    }
+
+    InputAction IGamepadInputConfig.GetTriggerState(GamepadAxis trigger, float pressure)
+    {
+        if (_axis.Contains(trigger) == false)
+        {
+            return InputAction.None;
+        }
+        //
+        const float THRESHOLD = 0.1f;
+        if (pressure < THRESHOLD)
+        {
+            return InputAction.None;
+        }
+        //
+        switch (trigger)
+        {
+            case GamepadAxis.LeftTrigger: return InputAction.LeftTrigger;
+            case GamepadAxis.RightTrigger: return InputAction.RightTrigger;
+            //
+            default: return InputAction.Unkwnon;
+        }
+    }
+}
+
+```
+
+### Gamepad Input Handler
+
+We can enable the gamepad handler for a specific gamepad by passing to it a [GamepadDevice](./controllers/gamepad/Gamepads.cs) and a [IGamepadInputConfig](./controllers/gamepad/IGamepadInputConfig.cs). The [IGamepadInputHandler](./controllers/gamepad/IGamepadInputHandler.cs) is a service that needs to be located.
+
+```c#
+using Godot;
+using Lavos.Input;
+using Lavos.Dependency;
+
+public class PlayerController
+    : Node
+{
+    IGamepadInputHandler _gamepadInputHandler = null;
+    IGamepadInputConfig _config = new GamepadConfig();
+
+    public override void _EnterTree()
+    {
+        _gamepadInputHandler = ServiceLocator.Locate<IGamepadInputHandler>();
+        _gamepadInputHandler.EnableHandler(GamepadDevice.Gamepad1, _config);
+    }
+
+    public override void _ExitTree()
+    {
+        _gamepadInputHandler.EnableHandler(GamepadDevice.Gamepad1, null);
+    }
+}
+```
+
+### Gamepad Input Listener
+
+Implement the [IGamepadInputListener](./controllers/gamepad/IGamepadInputListener.cs) interface to register for keyboard events
+
+```c#
+using Godot;
+using Lavos.Console;
+using Lavos.Input;
+using Lavos.Dependency;
+
+public class PlayerController
+    : Node
+    , IGamepadInputListener
+{
+    IGamepadInputHandler _gamepadInputHandler = null;
+    IGamepadInputConfig _config = new GamepadConfig();
+
+    #region IGamepadInputListener
+
+    GamepadDevice IGamepadInputListener.Gamepad => GamepadDevice.Gamepad1;
+    int IGamepadInputListener.Priority => 0;
+
+    bool IGamepadInputListener.OnTriggerValueChanged(GamepadDevice device, InputAction action, float value)
+    {
+        Log.Debug(Tag, $"Gamepad {device} trigger value changed {action} - {value}");
+        return true;
+    }
+
+    bool IGamepadInputListener.OnAxisValueChanged(GamepadDevice device, InputAction action, Vector2 value)
+    {
+        Log.Debug(Tag, $"Gamepad {device} axis value changed {action} - {value}");
+        return true;
+    }
+
+    bool IGamepadInputListener.OnGamepadButtonPressed(GamepadDevice device, InputAction action)
+    {
+        Log.Debug(Tag, $"Gamepad {device} Button {action} pressed");
+        return true;
+    }
+
+    bool IGamepadInputListener.OnGamepadButtonReleased(GamepadDevice device, InputAction action)
+    {
+        Log.Debug(Tag, $"Gamepad {device} Button {action} released");
+        return true;
+    }
+
+    #endregion IGamepadInputListener
+
+    //...
+}
+```
+
+To receive gamepad events, register as a listener to [IGamepadInputHandler](./controllers/mouse/IMouseInputHandler.cs)
 
 
-### Gamepad Config
+```c#
+using Godot;
+using Lavos.Console;
+using Lavos.Input;
+using Lavos.Dependency;
 
+public class PlayerController
+    : Node
+    , IGamepadInputListener
+{
+    //...
 
-### Gamepad Handler
+    public override void _EnterTree()
+    {
+        _gamepadInputHandler = ServiceLocator.Locate<IGamepadInputHandler>();
+        //...
+    }
 
+    public override void _ExitTree()
+    {
+        _gamepadInputHandler.UnregisterListener(this);
+        //...
+    }
 
-### Gamepad Listener
+    public override void _Ready()
+    {
+        _gamepadInputHandler.RegisterListener(this);
+    }
+}
+```
+
+### Gamepad Status Changes
+
+To receive notifications whenever the gamepad status changes, register a
+[IGamepadListener](./controllers/gamepad/IGamepadListener.cs) with the [IGamepadHandler](./controllers/gamepad/IGamepadHandler.cs) service.
+
+```c#
+using Godot;
+using Lavos.Input;
+using Lavos.Dependency;
+
+public class ControllerStatus
+    : Node
+    , IGamepadListener
+{
+    IGamepadHandler _gamepadHandler = null;
+
+    #region IGamepadListener
+
+    void IGamepadListener.OnGamepadConnected(GamepadDevice device)
+    {
+        Log.Debug(Tag, $"Gamepad {device} connected");
+    }
+
+    void IGamepadListener.OnGamepadDisconnected(GamepadDevice device)
+    {
+        Log.Debug(Tag, $"Gamepad {device} disconnected");
+    }
+
+    #endregion IGamepadListener
+
+    public override void _EnterTree()
+    {
+        _gamepadHandler = ServiceLocator.Locate<IGamepadHandler>();
+    }
+
+    public override void _ExitTree()
+    {
+        _gamepadHandler.UnregisterListener(this);
+    }
+
+    public override void _Ready()
+    {
+        _gamepadHandler.RegisterListener(this);
+    }
+}
+```
