@@ -5,6 +5,7 @@ using System;
 
 namespace Lavos.UI
 {
+    [Obsolete("Broken. Needs rework")]
     public sealed class GenericPopup
         : Control
         , IPopup
@@ -12,10 +13,10 @@ namespace Lavos.UI
         Label _titleLabel = null;
         Label _descriptionLabel = null;
 
-        ClickButton _acceptBtn = null;
-        public ClickButton AcceptButton => _acceptBtn;
-        ClickButton _declineBtn = null;
-        public ClickButton DeclineButton => _declineBtn;
+        Button _acceptBtn = null;
+        public Button AcceptButton => _acceptBtn;
+        Button _declineBtn = null;
+        public Button DeclineButton => _declineBtn;
 
 
         #region IPopup
@@ -53,20 +54,20 @@ namespace Lavos.UI
         {
             _titleLabel = this.GetNodeInChildrenByName<Label>("TitleLabel");
             _descriptionLabel = this.GetNodeInChildrenByName<Label>("DescriptionLabel");
-            _acceptBtn = this.GetNodeInChildrenByName<ClickButton>("AcceptButton");
-            _declineBtn = this.GetNodeInChildrenByName<ClickButton>("DeclineButton");
+            _acceptBtn = this.GetNodeInChildrenByName<Button>("AcceptButton");
+            _declineBtn = this.GetNodeInChildrenByName<Button>("DeclineButton");
         }
 
         public override void _Ready()
         {
-            _acceptBtn.ButtonPressed += OnAccepted;
-            _declineBtn.ButtonPressed += OnDeclined;
+            //_acceptBtn.ButtonPressed += OnAccepted;
+            //_declineBtn.ButtonPressed += OnDeclined;
         }
 
         public override void _ExitTree()
         {
-            _acceptBtn.ButtonPressed -= OnAccepted;
-            _declineBtn.ButtonPressed -= OnDeclined;
+            //_acceptBtn.ButtonPressed -= OnAccepted;
+            //_declineBtn.ButtonPressed -= OnDeclined;
             //
             PopupResult = null;
         }
