@@ -1,7 +1,7 @@
-
 using Godot;
 using Lavos.Console;
 using Lavos.Utils.Extensions;
+using System;
 using System.Collections.Generic;
 
 namespace Lavos.Input
@@ -34,12 +34,21 @@ namespace Lavos.Input
 
         void IInputHandler<IGamepadInputConfig>.EnableHandler(IGamepadInputConfig config)
         {
-            Log.Error(nameof(GamepadInputHandler),
-                        "Use EnableHandler(GamepadDevice device, IGamepadInputConfig config) instead. " +
-                        "Ignoring call...");
+            EnableHandler(GamepadDevice.GamepadAll, config);
         }
 
         public void EnableHandler(GamepadDevice device, IGamepadInputConfig config)
+        {
+            foreach (GamepadDevice value in Enum.GetValues(typeof(GamepadDevice)))
+            {
+                if (((uint)device & (uint)value) != 0)
+                {
+                    DoEnableHandler(value, config);
+                }
+            }
+        }
+
+        void DoEnableHandler(GamepadDevice device, IGamepadInputConfig config)
         {
             _configs.SetOrAdd(device, config);
             //
