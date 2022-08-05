@@ -2,54 +2,63 @@
 
 Input module
 
-
 # Index
 
-* [Config](#config)
-* [Input Configurations](#input-configurations)
-    * [Keyboard](#keyboard)
-        * [Keyboard Configuration](#keyboard-configuration)
-        * [Keyboard Handler](#keyboard-handler)
-        * [Keyboard Listener](#keyboard-listener)
-    * [Mouse](#mouse)
-        * [Mouse Configuration](#mouse-configuration)
-        * [Mouse Handler](#mouse-handler)
-        * [Mouse Listener](#mouse-listener)
-    * [Gamepad](#gamepad)
-        * [Gamepad Configuration](#gamepad-configuration)
-        * [Gamepad Input Handler](#gamepad-input-handler)
-        * [Gamepad Input Listener](#gamepad-input-listener)
-        * [Gamepad Status Changes](#gamepad-status-changes)
-
+- [Config](#config)
+- [Input Configurations](#input-configurations)
+  - [Keyboard](#keyboard)
+    - [Keyboard Configuration](#keyboard-configuration)
+    - [Keyboard Handler](#keyboard-handler)
+    - [Keyboard Listener](#keyboard-listener)
+  - [Mouse](#mouse)
+    - [Mouse Configuration](#mouse-configuration)
+    - [Mouse Handler](#mouse-handler)
+    - [Mouse Listener](#mouse-listener)
+  - [Gamepad](#gamepad)
+    - [Gamepad Configuration](#gamepad-configuration)
+    - [Gamepad Input Handler](#gamepad-input-handler)
+    - [Gamepad Input Listener](#gamepad-input-listener)
+    - [Gamepad Status Changes](#gamepad-status-changes)
 
 # Config
 
-The input module must be initialized as part of the boot process. 
+The input module must be initialized as part of the boot process.
 
-The easiest way is to create a resource and attached the [InputConfig](./config/InputConfig.cs) script to it. Add your input resource to your [game config](../dependency/README.md) list so that it is configured on startup.
+The easiest way is to create a resource and attached the
+[InputConfig](./config/InputConfig.cs) script to it. Add your input resource to
+your [game config](../dependency/README.md) list so that it is configured on
+startup.
 
 Three option are available:
+
 1. `Enable Keyboard` - Allow keyboard input
 1. `Enable Mouse` - Allow mouse input
 1. `Enable Gamepad` - Allow gamepad input
 
 # Input Configurations
 
-The input system will notify listeners according to configurations that are passed down to it. These configurations can be changed at runtime to adapt to the current gameplay or screen. This way certain input events can be ignored without adding extra complexity to the gameplay logic.
+The input system will notify listeners according to configurations that are
+passed down to it. These configurations can be changed at runtime to adapt to
+the current gameplay or screen. This way certain input events can be ignored
+without adding extra complexity to the gameplay logic.
 
-There are three configurations that you can implement; one for each support. 
+There are three configurations that you can implement; one for each support.
 Each configuration type will be described below.
 
 Each support will have its own API that matches its functionality.
 
 ## Keyboard
 
-The [IKeyboardInputHandler](./controllers/keyboard/IKeyboardInputHandler.cs) will notify any key input from a standard keyboard.
-Depending on the manufacturer, some keys might not be supported as they require special software/firmware to be detected by the OS.
+The [IKeyboardInputHandler](./controllers/keyboard/IKeyboardInputHandler.cs)
+will notify any key input from a standard keyboard. Depending on the
+manufacturer, some keys might not be supported as they require special
+software/firmware to be detected by the OS.
 
 ### Keyboard Configuration
 
-The [IKeyboardInputConfig](./controllers/keyboard/IKeyboardInputConfig.cs) defines a set of keys to be listen to and a `GetAction` method that converts the input key into an [InputAction](./InputAction.cs)
+The [IKeyboardInputConfig](./controllers/keyboard/IKeyboardInputConfig.cs)
+defines a set of keys to be listen to and a `GetAction` method that converts the
+input key into an [InputAction](./InputAction.cs)
 
 ```cs
 using Godot;
@@ -89,8 +98,11 @@ public sealed class KeyboardConfig
 
 ### Keyboard Handler
 
-We can enable the [IKeyboardInputHandler](./controllers/keyboard/IKeyboardInputHandler.cs) passing to it a [IKeyboardInputConfig](./controllers/keyboard/IKeyboardInputConfig.cs).
-The [IKeyboardInputHandler](./controllers/keyboard/IKeyboardInputHandler.cs) is a service that needs to be located.
+We can enable the
+[IKeyboardInputHandler](./controllers/keyboard/IKeyboardInputHandler.cs) passing
+to it a [IKeyboardInputConfig](./controllers/keyboard/IKeyboardInputConfig.cs).
+The [IKeyboardInputHandler](./controllers/keyboard/IKeyboardInputHandler.cs) is
+a service that needs to be located.
 
 ```cs
 using Godot;
@@ -120,7 +132,9 @@ Only one keyboard configuration can be active at a time.
 
 ### Keyboard Listener
 
-Implement the [IKeyboardInputListener](./controllers/keyboard/IKeyboardInputListener.cs) interface register for keyboard events.
+Implement the
+[IKeyboardInputListener](./controllers/keyboard/IKeyboardInputListener.cs)
+interface register for keyboard events.
 
 ```cs
 using Godot;
@@ -156,7 +170,8 @@ public class PlayerController
 }
 ```
 
-To receive keyboard events, register as a listener to [IKeyboardInputHandler](./controllers/keyboard/IKeyboardInputHandler.cs)
+To receive keyboard events, register as a listener to
+[IKeyboardInputHandler](./controllers/keyboard/IKeyboardInputHandler.cs)
 
 ```cs
 using Godot;
@@ -193,14 +208,16 @@ public class PlayerController
 
 ## Mouse
 
-The [IMouseInputHandler](./controllers/mouse/IMouseInputHandler.cs) will notify position changes as well as mouse button events. 
-Depending on the manufacturer, some keys might not be supported as they require special software/firmware to be detected by the OS.
+The [IMouseInputHandler](./controllers/mouse/IMouseInputHandler.cs) will notify
+position changes as well as mouse button events. Depending on the manufacturer,
+some keys might not be supported as they require special software/firmware to be
+detected by the OS.
 
 ### Mouse Configuration
 
-The [IMouseInputConfig](./controllers/mouse/IMouseInputConfig.cs) defines a set of mouse buttons it will listen 
-to and a `GetAction` method that converts the input button into an 
-[InputAction](./InputAction.cs)
+The [IMouseInputConfig](./controllers/mouse/IMouseInputConfig.cs) defines a set
+of mouse buttons it will listen to and a `GetAction` method that converts the
+input button into an [InputAction](./InputAction.cs)
 
 ```cs
 using Godot;
@@ -237,9 +254,11 @@ public class MouseConfig : IMouseInputConfig
 
 ### Mouse Handler
 
-We can enable the [IMouseInputHandler](./controllers/mouse/IMouseInputHandler.cs) passing to it a [IMouseInputConfig](./controllers/mouse/IMouseInputConfig.cs).
-The [IMouseInputHandler](./controllers/mouse/IMouseInputHandler.cs) 
-is a service that needs to be located.
+We can enable the
+[IMouseInputHandler](./controllers/mouse/IMouseInputHandler.cs) passing to it a
+[IMouseInputConfig](./controllers/mouse/IMouseInputConfig.cs). The
+[IMouseInputHandler](./controllers/mouse/IMouseInputHandler.cs) is a service
+that needs to be located.
 
 ```cs
 using Godot;
@@ -269,8 +288,8 @@ Only one mouse configuration can be active at a time.
 
 ### Mouse Listener
 
-Implement the [IMouseInputListener](./controllers/mouse/IMouseInputListener.cs) interface to register for mouse events
-
+Implement the [IMouseInputListener](./controllers/mouse/IMouseInputListener.cs)
+interface to register for mouse events
 
 ```cs
 using Godot;
@@ -312,8 +331,8 @@ public class LazerGun
 }
 ```
 
-To receive mouse events, register as a listener to [IMouseInputHandler](./controllers/mouse/IMouseInputHandler.cs)
-
+To receive mouse events, register as a listener to
+[IMouseInputHandler](./controllers/mouse/IMouseInputHandler.cs)
 
 ```cs
 using Godot;
@@ -350,11 +369,15 @@ public class LazerGun
 
 ## Gamepad
 
-The gamepad handler will notify any gamepad input send from a standard controller.
+The gamepad handler will notify any gamepad input send from a standard
+controller.
 
 ### Gamepad Configuration
 
-The [IGamepadInputConfig](./controllers/gamepad/IGamepadInputConfig.cs) defines a set of buttons and axis it will listen to and the following methods that converts gamepad input into an [InputAction](./InputAction.cs): `GetActionState`, `GetAxisState` and `GetTriggerState`.
+The [IGamepadInputConfig](./controllers/gamepad/IGamepadInputConfig.cs) defines
+a set of buttons and axis it will listen to and the following methods that
+converts gamepad input into an [InputAction](./InputAction.cs):
+`GetActionState`, `GetAxisState` and `GetTriggerState`.
 
 ```c#
 using Godot;
@@ -436,12 +459,15 @@ public class GamepadConfig
         }
     }
 }
-
 ```
 
 ### Gamepad Input Handler
 
-We can enable the gamepad handler for a specific gamepad by passing to it a [GamepadDevice](./controllers/gamepad/Gamepads.cs) and a [IGamepadInputConfig](./controllers/gamepad/IGamepadInputConfig.cs). The [IGamepadInputHandler](./controllers/gamepad/IGamepadInputHandler.cs) is a service that needs to be located.
+We can enable the gamepad handler for a specific gamepad by passing to it a
+[GamepadDevice](./controllers/gamepad/Gamepads.cs) and a
+[IGamepadInputConfig](./controllers/gamepad/IGamepadInputConfig.cs). The
+[IGamepadInputHandler](./controllers/gamepad/IGamepadInputHandler.cs) is a
+service that needs to be located.
 
 ```c#
 using Godot;
@@ -469,7 +495,9 @@ public class PlayerController
 
 ### Gamepad Input Listener
 
-Implement the [IGamepadInputListener](./controllers/gamepad/IGamepadInputListener.cs) interface to register for keyboard events
+Implement the
+[IGamepadInputListener](./controllers/gamepad/IGamepadInputListener.cs)
+interface to register for keyboard events
 
 ```c#
 using Godot;
@@ -519,8 +547,8 @@ public class PlayerController
 }
 ```
 
-To receive gamepad events, register as a listener to [IGamepadInputHandler](./controllers/mouse/IMouseInputHandler.cs)
-
+To receive gamepad events, register as a listener to
+[IGamepadInputHandler](./controllers/mouse/IMouseInputHandler.cs)
 
 ```c#
 using Godot;
@@ -556,7 +584,9 @@ public class PlayerController
 ### Gamepad Status Changes
 
 To receive notifications whenever the gamepad status changes, register a
-[IGamepadListener](./controllers/gamepad/IGamepadListener.cs) with the [IGamepadHandler](./controllers/gamepad/IGamepadHandler.cs) service.
+[IGamepadStatusListener](./controllers/gamepad/IGamepadStatusListener.cs) with
+the [IGamepadStatusHandler](./controllers/gamepad/IGamepadStatusHandler.cs)
+service.
 
 ```c#
 using Godot;
@@ -565,37 +595,37 @@ using Lavos.Dependency;
 
 public class ControllerStatus
     : Node
-    , IGamepadListener
+    , IGamepadStatusListener
 {
-    IGamepadHandler _gamepadHandler = null;
+    IGamepadStatusHandler _GamepadStatusHandler = null;
 
-    #region IGamepadListener
+    #region IGamepadStatusListener
 
-    void IGamepadListener.OnGamepadConnected(GamepadDevice device)
+    void IGamepadStatusListener.OnGamepadConnected(GamepadDevice device)
     {
         Log.Debug(Tag, $"Gamepad {device} connected");
     }
 
-    void IGamepadListener.OnGamepadDisconnected(GamepadDevice device)
+    void IGamepadStatusListener.OnGamepadDisconnected(GamepadDevice device)
     {
         Log.Debug(Tag, $"Gamepad {device} disconnected");
     }
 
-    #endregion IGamepadListener
+    #endregion IGamepadStatusListener
 
     public override void _EnterTree()
     {
-        _gamepadHandler = ServiceLocator.Locate<IGamepadHandler>();
+        _GamepadStatusHandler = ServiceLocator.Locate<IGamepadStatusHandler>();
     }
 
     public override void _ExitTree()
     {
-        _gamepadHandler.UnregisterListener(this);
+        _GamepadStatusHandler.UnregisterListener(this);
     }
 
     public override void _Ready()
     {
-        _gamepadHandler.RegisterListener(this);
+        _GamepadStatusHandler.RegisterListener(this);
     }
 }
 ```

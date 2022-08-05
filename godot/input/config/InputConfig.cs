@@ -34,12 +34,12 @@ namespace Lavos.Input
             if (EnableGamepad)
             {
                 binder.Bind<IGamepadInputHandler, GamepadInputHandler>();
-                binder.Bind<IGamepadHandler, GamepadHandler>();
+                binder.Bind<IGamepadStatusHandler, GamepadStatusHandler>();
             }
             else
             {
                 binder.Bind<IGamepadInputHandler, DummyGamepadInputHandler>();
-                binder.Bind<IGamepadHandler, DummyGamepadHandler>();
+                binder.Bind<IGamepadStatusHandler, DummyGamepadStatusHandler>();
             }
         }
 
@@ -56,7 +56,7 @@ namespace Lavos.Input
             if (EnableGamepad)
             {
                 resolver.Resolve<IGamepadInputHandler>();
-                resolver.Resolve<IGamepadHandler>();
+                resolver.Resolve<IGamepadStatusHandler>();
             }
         }
     }

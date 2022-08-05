@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace Lavos.Input
 {
-    sealed class GamepadHandler
+    sealed class GamepadStatusHandler
         : Node
-        , IGamepadHandler
+        , IGamepadStatusHandler
     {
-        readonly List<IGamepadListener> _listeners = new List<IGamepadListener>();
+        readonly List<IGamepadStatusListener> _listeners = new List<IGamepadStatusListener>();
 
         const float WAIT_TIME = 0.25f;
         float _timer = WAIT_TIME;
@@ -26,24 +26,24 @@ namespace Lavos.Input
             { GamepadDevice.Gamepad8, false},
         };
 
-        #region IGamepadHandler
+        #region IGamepadStatusHandler
 
-        void IGamepadHandler.RegisterListener(IGamepadListener listener)
+        void IGamepadStatusHandler.RegisterListener(IGamepadStatusListener listener)
         {
             _listeners.PushUnique(listener);
         }
 
-        void IGamepadHandler.UnregisterListener(IGamepadListener listener)
+        void IGamepadStatusHandler.UnregisterListener(IGamepadStatusListener listener)
         {
             _listeners.Remove(listener);
         }
 
-        bool IGamepadHandler.IsGamepadConnected(GamepadDevice device)
+        bool IGamepadStatusHandler.IsGamepadConnected(GamepadDevice device)
         {
             return _devicesState[device];
         }
 
-        #endregion IGamepadHandler
+        #endregion IGamepadStatusHandler
 
 
         public override void _Process(float delta)
