@@ -1,3 +1,4 @@
+#if false
 using Godot;
 
 namespace Lavos
@@ -6,3 +7,4 @@ namespace Lavos
     {
     }
 }
+#endif
