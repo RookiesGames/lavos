@@ -2,7 +2,7 @@ using Godot;
 
 namespace Lavos.Nodes
 {
-    public sealed class Rotator : Node2D
+    public sealed partial class Rotator : Node2D
     {
         [Export] double RotationSpeed = 5;
 
@@ -13,7 +13,7 @@ namespace Lavos.Nodes
             set => _rotationFactor = value ? 0f : 1f;
         }
 
-        public override void _Process(float delta)
+        public override void _Process(double delta)
         {
             Rotate((float)(delta * RotationSpeed * _rotationFactor));
         }

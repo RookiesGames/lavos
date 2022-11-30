@@ -4,7 +4,7 @@ using Lavos.Debug;
 
 namespace Lavos.Scene
 {
-    public sealed class SceneManager : Node
+    public sealed partial class SceneManager : Node
     {
         #region Methods
 
@@ -40,7 +40,7 @@ namespace Lavos.Scene
         public static Node AddSceneToParent(PackedScene scene, Node parent)
         {
             Assert.IsTrue(scene != null, $"Scene {scene.ResourceName} is nil");
-            var node = scene.Instance();
+            var node = scene.Instantiate();
             parent.AddChild(node);
             return node;
         }

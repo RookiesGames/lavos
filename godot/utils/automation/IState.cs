@@ -6,7 +6,7 @@ namespace Lavos.Utils.Automation
     {
         string Tag { get; }
         Action Enter { get; set; }
-        Action<float> Process { get; set; }
+        Action<double> Process { get; set; }
         Action Exit { get; set; }
     }
 }

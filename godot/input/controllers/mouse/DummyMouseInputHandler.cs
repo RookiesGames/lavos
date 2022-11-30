@@ -2,7 +2,7 @@ using Godot;
 
 namespace Lavos.Input
 {
-    sealed class DummyMouseInputHandler
+    sealed partial class DummyMouseInputHandler
         : Node
         , IMouseInputHandler
     {

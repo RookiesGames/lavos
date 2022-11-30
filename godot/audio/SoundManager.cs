@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Lavos.Audio
 {
-    public sealed class SoundManager : Node
+    public sealed partial class SoundManager : Node
     {
         const string Tag = nameof(SoundManager);
 
@@ -70,7 +70,7 @@ namespace Lavos.Audio
             }
         }
 
-        public void PlayStream(AudioStreamOGGVorbis stream)
+        public void PlayStream(AudioStreamOggVorbis stream)
         {
             var source = FindSource();
             source.Stream = stream;
@@ -98,7 +98,7 @@ namespace Lavos.Audio
             return null;
         }
 
-        public void PlayStreamUnique(AudioStreamOGGVorbis stream)
+        public void PlayStreamUnique(AudioStreamOggVorbis stream)
         {
             if (IsStreamPlaying(stream) == false)
             {
@@ -106,7 +106,7 @@ namespace Lavos.Audio
             }
         }
 
-        bool IsStreamPlaying(AudioStreamOGGVorbis stream)
+        bool IsStreamPlaying(AudioStreamOggVorbis stream)
         {
             foreach (var source in _sources)
             {

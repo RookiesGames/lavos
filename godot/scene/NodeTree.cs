@@ -5,7 +5,7 @@ using Lavos.Utils.Extensions;
 
 namespace Lavos.Scene
 {
-    public sealed class NodeTree : Node
+    public sealed partial class NodeTree : Node
     {
         #region Properties
 

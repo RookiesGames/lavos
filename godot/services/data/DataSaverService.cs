@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Lavos.Services.Data
 {
-    sealed class DataSaverService
+    sealed partial class DataSaverService
         : Node
         , IDataSaverService
     {
@@ -14,7 +14,7 @@ namespace Lavos.Services.Data
         const string SavePath = "user://saves";
         const float SaveTimer = 0.25f;
 
-        float _timer = 0f;
+        double _timer = 0;
         List<IDataSaver> _dataSavers = new List<IDataSaver>();
         JsonSerializer _serializer = new JsonSerializer();
 
@@ -33,15 +33,14 @@ namespace Lavos.Services.Data
 
         public void CleanData()
         {
-            var dir = new Godot.Directory();
-            var ok = dir.Open(SavePath);
-            if (ok != Error.Ok)
+            var dir = Godot.DirAccess.Open(SavePath);
+            if (Godot.DirAccess.GetOpenError() != Error.Ok)
             {
                 Log.Error(Tag, $"Failed to open directory {SavePath}");
                 return;
             }
 
-            dir.RemoveDirectory(SavePath);
+            Godot.DirAccess.RemoveAbsolute(dir.GetCurrentDir());
         }
 
         public void Load()
@@ -55,16 +54,12 @@ namespace Lavos.Services.Data
         public void Load(IDataSaver saver)
         {
             var path = $"{SavePath}/{saver.DataFile}";
-            var file = new Godot.File();
-            var error = file.Open(path, Godot.File.ModeFlags.Read);
-            if (error == Error.FileNotFound)
-            {
-                error = file.Open(path, Godot.File.ModeFlags.WriteRead);
-            }
+            using var file = (Godot.FileAccess.FileExists(path))
+                                ? Godot.FileAccess.Open(path, Godot.FileAccess.ModeFlags.Read)
+                                : Godot.FileAccess.Open(path, Godot.FileAccess.ModeFlags.WriteRead);
             //
-            if (error != Error.Ok)
+            if (Godot.FileAccess.GetOpenError() != Error.Ok)
             {
-
                 Log.Error(Tag, $"Failed to open file {path}");
                 return;
             }
@@ -72,7 +67,6 @@ namespace Lavos.Services.Data
             var content = file.GetAsText();
             var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(content);
             saver.LoadData(data);
-            file.Close();
         }
 
         public void Save()
@@ -91,9 +85,8 @@ namespace Lavos.Services.Data
         public void Save(IDataSaver saver)
         {
             var path = $"{SavePath}/{saver.DataFile}";
-            var file = new Godot.File();
-            var error = file.Open(path, Godot.File.ModeFlags.Write);
-            if (error != Error.Ok)
+            using var file = Godot.FileAccess.Open(path, Godot.FileAccess.ModeFlags.Write);
+            if (Godot.FileAccess.GetOpenError() != Error.Ok)
             {
                 Log.Error(Tag, $"Failed to open file {path}");
                 return;
@@ -102,7 +95,6 @@ namespace Lavos.Services.Data
             var data = new Dictionary<string, string>();
             saver.WriteData(data);
             file.StoreString(JsonConvert.SerializeObject(data, Formatting.Indented));
-            file.Close();
         }
 
         #endregion IDataSaverService
@@ -110,18 +102,19 @@ namespace Lavos.Services.Data
 
         public override void _Ready()
         {
-            var dir = new Godot.Directory();
-            if (!dir.DirExists(SavePath))
+            if (Godot.DirAccess.DirExistsAbsolute(SavePath))
             {
-                var ok = dir.MakeDir(SavePath);
-                if (ok != Error.Ok)
-                {
-                    Log.Error(Tag, $"Failed to create folder {SavePath}");
-                }
+                return;
+            }
+
+            var ok = Godot.DirAccess.MakeDirRecursiveAbsolute(SavePath);
+            if (ok != Error.Ok)
+            {
+                Log.Error(Tag, $"Failed to create folder {SavePath}");
             }
         }
 
-        public override void _Process(float delta)
+        public override void _Process(double delta)
         {
             _timer += delta;
             if (_timer < SaveTimer)

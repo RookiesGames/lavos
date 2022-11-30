@@ -3,10 +3,10 @@ using Lavos.Dependency;
 
 namespace Lavos.UI
 {
-    public sealed class CustomUIConfig : Config
+    public sealed partial class CustomUIConfig : Config
     {
-        [Export] AudioStreamOGGVorbis AcceptSound = null;
-        [Export] AudioStreamOGGVorbis CancelSound = null;
+        [Export] AudioStreamOggVorbis AcceptSound = null;
+        [Export] AudioStreamOggVorbis CancelSound = null;
 
 
         public override void Configure(IDependencyBinder binder)

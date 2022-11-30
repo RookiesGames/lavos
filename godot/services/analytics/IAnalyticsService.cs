@@ -9,10 +9,10 @@ namespace Lavos.Services.Analytics
 
         void EnableCollection(bool enable);
 
-        void SetDefaultParameters(Dictionary<string, object> parameters);
+        void SetDefaultParameters(Dictionary<string, Godot.Variant> parameters);
 
         void LogEvent(string name);
-        void LogEvent(string name, Dictionary<string, object> parameters);
+        void LogEvent(string name, Dictionary<string, Godot.Variant> parameters);
         void ResetData();
 
         void SetUserId(string id);

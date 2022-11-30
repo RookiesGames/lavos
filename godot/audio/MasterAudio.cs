@@ -4,7 +4,7 @@ using System;
 
 namespace Lavos.Audio
 {
-    public sealed class MasterAudio : Node
+    public sealed partial class MasterAudio : Node
     {
         public static event Action VolumeChanged;
 

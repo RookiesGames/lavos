@@ -9,7 +9,7 @@ using Lavos.Console;
 
 namespace Lavos.Dependency
 {
-    public sealed class DependencyContainer
+    public sealed partial class DependencyContainer
         : Node
         , IDependencyBinder
         , IDependencyResolver

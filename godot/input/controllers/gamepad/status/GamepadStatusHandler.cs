@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace Lavos.Input
 {
-    sealed class GamepadStatusHandler
+    sealed partial class GamepadStatusHandler
         : Node
         , IGamepadStatusHandler
     {
         readonly List<IGamepadStatusListener> _listeners = new List<IGamepadStatusListener>();
 
-        const float WAIT_TIME = 0.25f;
-        float _timer = WAIT_TIME;
+        const double WAIT_TIME = 0.25f;
+        double _timer = WAIT_TIME;
 
         readonly List<GamepadDevice> _connectedDevices = new List<GamepadDevice>();
         readonly Dictionary<GamepadDevice, bool> _devicesState = new Dictionary<GamepadDevice, bool>()
@@ -46,7 +46,7 @@ namespace Lavos.Input
         #endregion IGamepadStatusHandler
 
 
-        public override void _Process(float delta)
+        public override void _Process(double delta)
         {
             _timer += delta;
             if (_timer >= WAIT_TIME)

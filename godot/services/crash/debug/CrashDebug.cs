@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Lavos.Services.Crash.Debug
 {
-    sealed class CrashDebug : Node
+    sealed partial class CrashDebug : Node
     {
         ICrashService _crashService;
 
@@ -15,12 +15,12 @@ namespace Lavos.Services.Crash.Debug
             _crashService.EnableCollection(true);
             //
             _crashService.SetUserId("user_crash1234");
-            _crashService.SetCustomKey<int>("int", 123);
-            _crashService.SetCustomKey<long>("long", 123);
-            _crashService.SetCustomKey<float>("float", 123.123f);
-            _crashService.SetCustomKey<double>("double", 123.123);
-            _crashService.SetCustomKey<bool>("bool", true);
-            _crashService.SetCustomKey<string>("string", "abc");
+            _crashService.SetCustomKey("int", Godot.Variant.CreateFrom(123));
+            _crashService.SetCustomKey("long", Godot.Variant.CreateFrom(123));
+            _crashService.SetCustomKey("float", Godot.Variant.CreateFrom(123.123f));
+            _crashService.SetCustomKey("double", Godot.Variant.CreateFrom(123.123));
+            _crashService.SetCustomKey("bool", Godot.Variant.CreateFrom(true));
+            _crashService.SetCustomKey("string", Godot.Variant.CreateFrom("abc"));
         }
 
         public void OnLogEvent()

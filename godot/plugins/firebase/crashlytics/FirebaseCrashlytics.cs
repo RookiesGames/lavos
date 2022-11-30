@@ -30,7 +30,7 @@ namespace Lavos.Plugins.Firebase.Crashlytics
 
         public bool CheckForUnsentReports()
         {
-            return _plugin.Call<bool>("checkForUnsentReports");
+            return _plugin.CallBool("checkForUnsentReports");
         }
 
         public void SendUnsentReports()
@@ -45,7 +45,7 @@ namespace Lavos.Plugins.Firebase.Crashlytics
 
         public bool DidCrashOnPreviousExecution()
         {
-            return _plugin.Call<bool>("didCrashOnPreviousExecution");
+            return _plugin.CallBool("didCrashOnPreviousExecution");
         }
 
         public void Log(string message)
@@ -64,17 +64,15 @@ namespace Lavos.Plugins.Firebase.Crashlytics
             _plugin.CallVoid("setUserId", id);
         }
 
-        public void SetCustomKey<T>(string key, T value)
+        public void SetCustomKey(string key, Godot.Variant value)
         {
             var method = string.Empty;
-            var typeCode = Type.GetTypeCode(typeof(T));
-            switch (typeCode)
+            switch (value.VariantType)
             {
-                case TypeCode.Int16:
-                case TypeCode.Int32: _plugin.CallVoid("setCustomKeyI", key, value); return;
-                case TypeCode.Single: _plugin.CallVoid("setCustomKeyF", key, value); return;
-                case TypeCode.Boolean: _plugin.CallVoid("setCustomKeyB", key, value); return;
-                case TypeCode.String: _plugin.CallVoid("setCustomKeyS", key, value); return;
+                case Godot.Variant.Type.Int: _plugin.CallVoid("setCustomKeyI", key, value); return;
+                case Godot.Variant.Type.Float: _plugin.CallVoid("setCustomKeyF", key, value); return;
+                case Godot.Variant.Type.Bool: _plugin.CallVoid("setCustomKeyB", key, value); return;
+                case Godot.Variant.Type.String: _plugin.CallVoid("setCustomKeyS", key, value); return;
                 default:
                     {
                         _plugin.CallVoid("setCustomKeyS", key, "TypeNotSupported");

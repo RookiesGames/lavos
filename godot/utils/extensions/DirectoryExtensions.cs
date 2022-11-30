@@ -6,9 +6,9 @@ namespace Lavos.Utils.Extensions
 {
     public static class DirectoryExtensions
     {
-        const string Tag = nameof(Directory);
+        const string Tag = nameof(Godot.DirAccess);
 
-        public static List<string> GetFilesInDirectory(this Directory dir)
+        public static List<string> GetFilesInDirectory(this Godot.DirAccess dir)
         {
             var error = dir.ListDirBegin();
             if (error != Error.Ok)
@@ -43,7 +43,7 @@ namespace Lavos.Utils.Extensions
             return list;
         }
 
-        public static void RemoveDirectory(this Directory dir, string path)
+        public static void RemoveDirectory(this Godot.DirAccess dir, string path)
         {
             var ok = dir.ListDirBegin();
             if (ok != Error.Ok)

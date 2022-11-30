@@ -6,12 +6,12 @@ using System;
 
 namespace Lavos.Input
 {
-    sealed class MouseInputHandler : Node, IMouseInputHandler
+    sealed partial class MouseInputHandler : Node, IMouseInputHandler
     {
         #region Members
 
         IMouseInputConfig _config;
-        readonly HashSet<ButtonList> _pressedButtons = new HashSet<ButtonList>();
+        readonly HashSet<Godot.MouseButton> _pressedButtons = new HashSet<Godot.MouseButton>();
         readonly List<IMouseInputListener> _listeners = new List<IMouseInputListener>();
 
         #endregion
@@ -60,7 +60,7 @@ namespace Lavos.Input
             //
             if (inputEvent is InputEventMouseButton mouseButton)
             {
-                var button = (ButtonList)mouseButton.ButtonIndex;
+                var button = mouseButton.ButtonIndex;
                 var action = _config.GetAction(button);
                 //
                 if (action == InputAction.None)

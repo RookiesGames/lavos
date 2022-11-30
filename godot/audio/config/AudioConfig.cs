@@ -5,7 +5,7 @@ using Lavos.Utils.Extensions;
 
 namespace Lavos.Audio
 {
-    sealed class AudioConfig : Config
+    sealed partial class AudioConfig : Config
     {
         public override void Configure(IDependencyBinder binder)
         {

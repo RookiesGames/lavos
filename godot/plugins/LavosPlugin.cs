@@ -10,14 +10,14 @@ namespace Lavos.Plugins
             _object = obj;
         }
 
-        public void CallVoid(string method, params object[] args)
+        public void CallVoid(string method, params Godot.Variant[] args)
         {
             _object.Call(method, args);
         }
 
-        public T Call<T>(string method, params object[] args)
+        public bool CallBool(string method, params Godot.Variant[] args)
         {
-            return (T)_object.Call(method, args);
+            return _object.Call(method, args).AsBool();
         }
     }
 }

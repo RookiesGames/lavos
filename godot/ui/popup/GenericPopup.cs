@@ -6,7 +6,7 @@ using System;
 namespace Lavos.UI
 {
     [Obsolete("Broken. Needs rework")]
-    public sealed class GenericPopup
+    public sealed partial class GenericPopup
         : Control
         , IPopup
     {

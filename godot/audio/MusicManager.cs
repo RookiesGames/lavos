@@ -5,7 +5,7 @@ using Lavos.Utils.Extensions;
 
 namespace Lavos.Audio
 {
-    public sealed class MusicManager : Node
+    public sealed partial class MusicManager : Node
     {
         public enum Effect
         {
@@ -21,11 +21,11 @@ namespace Lavos.Audio
         readonly State _fadeInState = new State();
         readonly State _fadeOutState = new State();
         float _target = 0;
-        float _timer = 0;
-        const float Duration = 0.5f;
+        double _timer = 0;
+        const double Duration = 0.5;
 
-        public float FadeInSpeed = 0.25f;
-        public float FadeOutSpeed = 0.25f;
+        public double FadeInSpeed = 0.25;
+        public double FadeOutSpeed = 0.25;
 
 
         public override void _EnterTree()
@@ -60,12 +60,13 @@ namespace Lavos.Audio
                 _source.Play();
                 //
                 _target = _masterAudio.MasterMusicVolume;
-                _timer = 0f;
+                _timer = 0;
             };
             _fadeInState.Process += (delta) =>
             {
                 _timer += (delta * FadeInSpeed);
-                _source.SetVolume(Mathf.Lerp(0, _target, _timer / Duration));
+                var weight = (float)(_timer / Duration);
+                _source.SetVolume(Mathf.Lerp(0, _target, weight));
                 if (_source.GetVolume() >= _target)
                 {
                     _stateMachine.ChangeState(null);
@@ -84,7 +85,8 @@ namespace Lavos.Audio
             _fadeOutState.Process += (delta) =>
             {
                 _timer += (delta * FadeOutSpeed);
-                _source.SetVolume(Mathf.Lerp(0, _target, 1 - (_timer / Duration)));
+                var weight = 1f -(float)(_timer / Duration);
+                _source.SetVolume(Mathf.Lerp(0, _target, weight));
                 if (_source.GetVolume() == 0)
                 {
                     _stateMachine.ChangeState(null);
@@ -99,12 +101,12 @@ namespace Lavos.Audio
             _stateMachine.ChangeState(null);
         }
 
-        public override void _Process(float delta)
+        public override void _Process(double delta)
         {
             _stateMachine.Process(delta);
         }
 
-        public void PlayStream(AudioStreamOGGVorbis stream, Effect effect = Effect.Instant)
+        public void PlayStream(AudioStreamOggVorbis stream, Effect effect = Effect.Instant)
         {
             _source.Stream = stream;
             //

@@ -2,7 +2,7 @@ using Godot;
 
 namespace Lavos.Input
 {
-    sealed class DummyKeyboardInputHandler
+    sealed partial class DummyKeyboardInputHandler
         : Node
         , IKeyboardInputHandler
     {

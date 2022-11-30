@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Lavos.Services.Analytics.Debug
 {
-    sealed class AnalyticsDebug : Node
+    sealed partial class AnalyticsDebug : Node
     {
         IAnalyticsService _service;
 
@@ -16,7 +16,7 @@ namespace Lavos.Services.Analytics.Debug
             //
             _service.SetUserId("user_analytics123");
             //
-            var parameters = new Dictionary<string, object>();
+            var parameters = new Dictionary<string, Godot.Variant>();
             parameters.Add("version", "1.0");
             parameters.Add("os", "Android 42");
             parameters.Add("level", 24);
@@ -29,7 +29,7 @@ namespace Lavos.Services.Analytics.Debug
         {
             Lavos.Console.Log.Debug("fsd", "fsdaf");
             _service.LogEvent("debug");
-            _service.LogEvent("debug params", new Dictionary<string, object>() { { "key1", "value1" }, { "key2", "value2" } });
+            _service.LogEvent("debug params", new Dictionary<string, Godot.Variant>() { { "key1", "value1" }, { "key2", "value2" } });
         }
 
         public void OnTaskLogEvent()
@@ -37,7 +37,7 @@ namespace Lavos.Services.Analytics.Debug
             Task.Run(() =>
             {
                 _service.LogEvent("task");
-                _service.LogEvent("task params", new Dictionary<string, object>() { { "key1", "value1" }, { "key2", "value2" } });
+                _service.LogEvent("task params", new Dictionary<string, Godot.Variant>() { { "key1", "value1" }, { "key2", "value2" } });
             });
         }
     }

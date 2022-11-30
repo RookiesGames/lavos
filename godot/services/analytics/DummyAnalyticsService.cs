@@ -8,10 +8,10 @@ namespace Lavos.Services.Analytics
 
         public void EnableCollection(bool enable) { }
 
-        public void SetDefaultParameters(Dictionary<string, object> parameters) { }
+        public void SetDefaultParameters(Dictionary<string, Godot.Variant> parameters) { }
 
         public void LogEvent(string name) { }
-        public void LogEvent(string name, Dictionary<string, object> parameters) { }
+        public void LogEvent(string name, Dictionary<string, Godot.Variant> parameters) { }
 
         public void ResetData() { }
 

@@ -5,7 +5,7 @@ using Lavos.Utils.Extensions;
 
 namespace Lavos.Input
 {
-    public sealed class InputConfig : Config
+    public sealed partial class InputConfig : Config
     {
         [Export] bool EnableKeyboard = false;
         [Export] bool EnableMouse = false;

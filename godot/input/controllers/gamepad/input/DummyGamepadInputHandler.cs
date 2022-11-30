@@ -2,7 +2,7 @@ using Godot;
 
 namespace Lavos.Input
 {
-    sealed class DummyGamepadInputHandler
+    sealed partial class DummyGamepadInputHandler
         : Node
         , IGamepadInputHandler
     {

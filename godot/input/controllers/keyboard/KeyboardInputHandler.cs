@@ -5,14 +5,14 @@ using System.Collections.Generic;
 
 namespace Lavos.Input
 {
-    sealed class KeyboardInputHandler
+    sealed partial class KeyboardInputHandler
         : Node
         , IKeyboardInputHandler
     {
         #region Members
 
         IKeyboardInputConfig _config;
-        readonly HashSet<KeyList> _pressedKeys = new HashSet<KeyList>();
+        readonly HashSet<Godot.Key> _pressedKeys = new HashSet<Godot.Key>();
         readonly List<IKeyboardInputListener> _listeners = new List<IKeyboardInputListener>();
 
         #endregion
@@ -61,7 +61,7 @@ namespace Lavos.Input
             //
             if (@event is InputEventKey eventKey)
             {
-                var key = (KeyList)eventKey.Scancode;
+                var key = eventKey.Keycode;
                 var action = _config.GetAction(key);
                 //
                 if (action == InputAction.None)

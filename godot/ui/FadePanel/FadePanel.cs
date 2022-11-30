@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Lavos.UI
 {
-    public class FadePanel : Sprite
+    public sealed partial class FadePanel : Sprite2D
     {
         public enum PanelState
         {
@@ -24,7 +24,7 @@ namespace Lavos.UI
         readonly State _fadeInState = new State();
         readonly State _fadeOutState = new State();
 
-        float _timer = 0;
+        double _timer = 0;
 
         PanelState _currentState;
         public PanelState State => _currentState;
@@ -49,7 +49,8 @@ namespace Lavos.UI
             _fadeInState.Process = (dt) =>
             {
                 _timer += dt;
-                var alpha = Mathf.Lerp(1, 0, _timer / FadeInDuration);
+                var weight = (float)(_timer / FadeInDuration);
+                var alpha = Mathf.Lerp(1, 0, weight);
                 this.SetAlpha(alpha);
                 //
                 if (alpha <= 0)
@@ -71,7 +72,8 @@ namespace Lavos.UI
             _fadeOutState.Process = (dt) =>
             {
                 _timer += dt;
-                var alpha = Mathf.Lerp(0, 1, _timer / FadeOutDuration);
+                var weight = (float)(_timer / FadeOutDuration);
+                var alpha = Mathf.Lerp(0, 1, weight);
                 this.SetAlpha(alpha);
                 //
                 if (alpha >= 1)
@@ -85,7 +87,7 @@ namespace Lavos.UI
             };
         }
 
-        public override void _Process(float delta)
+        public override void _Process(double delta)
         {
             _stateMachine.Process(delta);
         }

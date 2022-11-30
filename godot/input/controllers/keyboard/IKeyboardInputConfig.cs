@@ -5,7 +5,7 @@ namespace Lavos.Input
 {
     public interface IKeyboardInputConfig : IInputConfig
     {
-        IReadOnlyCollection<KeyList> Keys { get; }
-        InputAction GetAction(KeyList key);
+        IReadOnlyCollection<Godot.Key> Keys { get; }
+        InputAction GetAction(Godot.Key key);
     }
 }

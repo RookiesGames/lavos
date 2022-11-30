@@ -5,7 +5,7 @@ using Lavos.Utils.Platform;
 
 namespace Lavos.Services.Crash
 {
-    public sealed class CrashConfig : Config
+    public sealed partial class CrashConfig : Config
     {
         public override void Configure(IDependencyBinder binder)
         {

@@ -8,10 +8,10 @@ using System.Collections.Generic;
 
 namespace Lavos.Nodes
 {
-    public sealed class OmniNode : NodeSingleton<OmniNode>
+    public sealed partial class OmniNode : NodeSingleton<OmniNode>
     {
         [Export] PackedScene _scene = null;
-        [Export] List<Config> _configs = new List<Config>();
+        [Export] Config[] _configs = null;
 
 
         public override void _EnterTree()
@@ -33,7 +33,7 @@ namespace Lavos.Nodes
 
         private void HandleConfigs(DependencyContainer container)
         {
-            if (_configs?.Count > 0)
+            if (_configs?.Length > 0)
             {
                 CreateConfigs(container);
                 InitializeConfigs(container);
@@ -58,7 +58,7 @@ namespace Lavos.Nodes
 
         public static void RequestQuit()
         {
-            Instance.GetTree().Notification(MainLoop.NotificationWmQuitRequest);
+            Instance.GetTree().Quit();
         }
     }
 }

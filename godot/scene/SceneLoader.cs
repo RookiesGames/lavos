@@ -4,17 +4,17 @@ using System;
 
 namespace Lavos.Scene
 {
-    public sealed class SceneLoader : Node
+    public sealed partial class SceneLoader : Node
     {
         [Export] PackedScene _nextScene = null;
-        [Export] float _delay = 0f;
+        [Export] double _delay = 0;
 
-        private float _currentTime;
+        private double _currentTime;
 
 
         #region Node
 
-        public override void _Process(float delta)
+        public override void _Process(double delta)
         {
             _currentTime += delta;
             if (_currentTime >= _delay)

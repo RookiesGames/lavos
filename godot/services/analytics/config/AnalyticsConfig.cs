@@ -5,7 +5,7 @@ using Lavos.Utils.Platform;
 
 namespace Lavos.Services.Analytics
 {
-    public sealed class AnalyticsConfig : Config
+    public sealed partial class AnalyticsConfig : Config
     {
         public override void Configure(IDependencyBinder binder)
         {

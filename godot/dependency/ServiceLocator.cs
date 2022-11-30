@@ -4,7 +4,7 @@ using Lavos.Debug;
 
 namespace Lavos.Dependency
 {
-    public sealed class ServiceLocator : Node
+    public sealed partial class ServiceLocator : Node
     {
         private static DependencyContainer _container = null;
 

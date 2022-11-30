@@ -6,7 +6,7 @@ using System;
 
 namespace Lavos.UI
 {
-    public class ClickButton : Button
+    public partial class ClickButton : Button
     {
         public enum Type
         {
@@ -20,8 +20,8 @@ namespace Lavos.UI
 
         [Export] Type ButtonType = Type.None;
 
-        public static AudioStreamOGGVorbis AcceptSound = null;
-        public static AudioStreamOGGVorbis CancelSound = null;
+        public static AudioStreamOggVorbis AcceptSound = null;
+        public static AudioStreamOggVorbis CancelSound = null;
 
         static LazyBuilder<SoundManager> SoundManagerLazy = new LazyBuilder<SoundManager>(
             () => NodeTree.GetPinnedNode<SoundManager>()

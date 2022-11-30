@@ -17,7 +17,7 @@ namespace Lavos.Utils.Automation
             _pendingTransition = true;
         }
 
-        public void Process(float dt)
+        public void Process(double dt)
         {
             if (HasPendingState)
             {

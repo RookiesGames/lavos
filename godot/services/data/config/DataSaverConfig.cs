@@ -2,7 +2,7 @@ using Lavos.Dependency;
 
 namespace Lavos.Services.Data
 {
-    public sealed class DataSaverConfig : Config
+    public sealed partial class DataSaverConfig : Config
     {
         public override void Configure(IDependencyBinder binder)
         {

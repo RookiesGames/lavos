@@ -19,7 +19,7 @@ namespace Lavos.Services.Crash
         public void LogException(Exception e) { }
 
         public void SetUserId(string id) { }
-        public void SetCustomKey<T>(string key, T value) { }
+        public void SetCustomKey(string key, Godot.Variant value) { }
 
         public void NativeCrash() { }
     }

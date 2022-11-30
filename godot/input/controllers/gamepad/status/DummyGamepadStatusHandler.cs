@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Lavos.Input
 {
-    sealed class DummyGamepadStatusHandler
+    sealed partial class DummyGamepadStatusHandler
         : Node
         , IGamepadStatusHandler
     {

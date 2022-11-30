@@ -26,7 +26,7 @@ namespace Lavos.Plugins.Firebase.Analytics
             _plugin.CallVoid("setAnalyticsCollectionEnabled", enable);
         }
 
-        public void SetDefaultParameters(Dictionary<string, object> parameters)
+        public void SetDefaultParameters(Dictionary<string, Godot.Variant> parameters)
         {
             _plugin.CallVoid("setDefaultEventParameters", parameters);
         }
@@ -36,7 +36,7 @@ namespace Lavos.Plugins.Firebase.Analytics
             _plugin.CallVoid("logEvent");
         }
 
-        public void LogEvent(string name, Dictionary<string, object> parameters)
+        public void LogEvent(string name, Dictionary<string, Godot.Variant> parameters)
         {
             _plugin.CallVoid("logEvent", name, parameters);
         }

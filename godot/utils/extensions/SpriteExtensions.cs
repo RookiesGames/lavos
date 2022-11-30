@@ -4,7 +4,7 @@ namespace Lavos.Utils.Extensions
 {
     public static class SpriteExtensions
     {
-        public static void SetAlpha(this Sprite sprite, float alpha)
+        public static void SetAlpha(this Sprite2D sprite, float alpha)
         {
             var color = sprite.Modulate;
             color.a = alpha;

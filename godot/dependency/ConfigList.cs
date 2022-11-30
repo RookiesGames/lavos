@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Lavos.Dependency
 {
-    public sealed class ConfigList : Config
+    public sealed partial class ConfigList : Config
     {
-        [Export] List<Config> Configs = new List<Config>();
+        [Export] Config[] Configs = null;
 
 
         public override void Configure(IDependencyBinder binder)

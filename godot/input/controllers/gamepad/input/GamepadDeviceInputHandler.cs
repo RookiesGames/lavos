@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace Lavos.Input
 {
-    sealed class GamepadDeviceInputHandler
+    sealed partial class GamepadDeviceInputHandler
         : Node
     {
-        readonly Dictionary<int, float> _joystickValues = new Dictionary<int, float>();
-        readonly HashSet<GamepadButtons> _pressedButtons = new HashSet<GamepadButtons>();
+        readonly Dictionary<Godot.JoyAxis, float> _joystickValues = new Dictionary<Godot.JoyAxis, float>();
+        readonly HashSet<Godot.JoyButton> _pressedButtons = new HashSet<Godot.JoyButton>();
 
         int DeviceId = -1;
         GamepadDevice _gamepad = GamepadDevice.GamepadNone;
@@ -46,40 +46,53 @@ namespace Lavos.Input
                     return;
                 }
                 //
-                var axis = GamepadAxisHelper.FromJoystickList(joypadMotion.Axis);
-                //
-                if (axis == GamepadAxis.LeftTrigger || axis == GamepadAxis.RightTrigger)
+                var axis = joypadMotion.Axis;
+                switch(axis)
                 {
-                    var action = Config.GetTriggerState(axis, joypadMotion.AxisValue);
-                    if (action == InputAction.None)
+                    case Godot.JoyAxis.TriggerLeft:
+                    case Godot.JoyAxis.TriggerRight:
                     {
-                        return;
+                        var action = Config.GetTriggerState(axis, joypadMotion.AxisValue);
+                        if (action == InputAction.None)
+                        {
+                            return;
+                        }
+                        //
+                        _parent.OnTriggerValueChanged(Gamepad, action, joypadMotion.AxisValue);
+                        break;
                     }
-                    //
-                    _parent.OnTriggerValueChanged(Gamepad, action, joypadMotion.AxisValue);
-                }
-                else
-                {
-                    _joystickValues.SetOrAdd(joypadMotion.Axis, joypadMotion.AxisValue);
-                    //
-                    var action = Config.GetAxisState(axis, joypadMotion.AxisValue);
-                    if (action == InputAction.None)
+                    default: 
                     {
-                        return;
+                        _joystickValues.SetOrAdd(joypadMotion.Axis, joypadMotion.AxisValue);
+                        //
+                        var action = Config.GetAxisState(axis, joypadMotion.AxisValue);
+                        if (action == InputAction.None)
+                        {
+                            return;
+                        }
+                        //
+                        var value = Vector2.Zero;
+                        switch(axis)
+                        {
+                            case Godot.JoyAxis.LeftX:
+                            case Godot.JoyAxis.LeftY:
+                            {
+                                value.x = _joystickValues.GetOrDefault(Godot.JoyAxis.LeftX, 0f);
+                                value.y = _joystickValues.GetOrDefault(Godot.JoyAxis.LeftY, 0f);
+                                break;
+                            }
+                            case Godot.JoyAxis.RightX:
+                            case Godot.JoyAxis.RightY:
+                            {
+                                value.x = _joystickValues.GetOrDefault(Godot.JoyAxis.RightX, 0f);
+                                value.y = _joystickValues.GetOrDefault(Godot.JoyAxis.RightY, 0f);
+                                break;
+                            }
+                        }
+                        //
+                        _parent.OnAxisValueChanged(Gamepad, action, value);
+                        break;
                     }
-                    //
-                    var haxis = (axis == GamepadAxis.LeftStick)
-                                            ? ((int)JoystickList.Axis0)
-                                            : ((int)JoystickList.Axis2);
-                    var vaxis = (axis == GamepadAxis.LeftStick)
-                                            ? ((int)JoystickList.Axis1)
-                                            : ((int)JoystickList.Axis3);
-                    //
-                    var value = Vector2.Zero;
-                    value.x = _joystickValues.GetOrDefault(haxis, 0f);
-                    value.y = _joystickValues.GetOrDefault(vaxis, 0f);
-                    //
-                    _parent.OnAxisValueChanged(Gamepad, action, value);
                 }
             }
             else if (inputEvent is InputEventJoypadButton joypadButton)
@@ -89,7 +102,7 @@ namespace Lavos.Input
                     return;
                 }
                 //
-                var button = GamepadButtonsHelper.FromJoystickList(joypadButton.ButtonIndex);
+                var button = joypadButton.ButtonIndex;
                 var action = Config.GetActionState(button);
                 //
                 if (action == InputAction.None)

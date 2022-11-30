@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Lavos.Input
 {
-    sealed class GamepadInputHandler
+    sealed partial class GamepadInputHandler
         : Node
         , IGamepadInputHandler
     {
