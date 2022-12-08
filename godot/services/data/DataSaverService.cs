@@ -1,3 +1,4 @@
+/*
 using Godot;
 using Lavos.Console;
 using Lavos.Utils.Extensions;
@@ -124,5 +125,27 @@ namespace Lavos.Services.Data
 
             Save();
         }
+    }
+}
+*/
+
+using Godot;
+
+namespace Lavos.Services.Data
+{
+    sealed partial class DataSaverService
+        : Node
+        , IDataSaverService
+    {
+        void IDataSaverService.Register(IDataSaver saver) { }
+        void IDataSaverService.Unregister(IDataSaver saver) { }
+
+        void IDataSaverService.CleanData() { }
+
+        void IDataSaverService.Load() { }
+        void IDataSaverService.Load(IDataSaver saver) { }
+
+        void IDataSaverService.Save() { }
+        void IDataSaverService.Save(IDataSaver saver) { }
     }
 }
