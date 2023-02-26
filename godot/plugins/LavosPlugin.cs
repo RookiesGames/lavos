@@ -1,11 +1,12 @@
+using Godot;
 
 namespace Lavos.Plugins
 {
     sealed class LavosPlugin
     {
-        readonly Godot.Object _object;
+        readonly GodotObject _object;
 
-        public LavosPlugin(Godot.Object obj)
+        public LavosPlugin(GodotObject obj)
         {
             _object = obj;
         }

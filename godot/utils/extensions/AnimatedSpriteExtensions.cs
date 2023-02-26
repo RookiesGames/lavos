@@ -6,7 +6,7 @@ namespace Lavos.Utils.Extensions
     {
         public static bool IsAnimFinished(this AnimatedSprite2D sprite, string anim = "default")
         {
-            return sprite.Frame == sprite.Frames.GetFrameCount(anim) - 1;
+            return sprite.Frame == sprite.SpriteFrames.GetFrameCount(anim) - 1;
         }
     }
 }

@@ -15,8 +15,8 @@ namespace Lavos.UI
             Back,
         };
 
-        public event Action ButtonPressed = null;
-        public event Action<bool> ButtonToggled = null;
+        public event Action OnButtonPressed = null;
+        public event Action<bool> OnButtonToggled = null;
 
         [Export] Type ButtonType = Type.None;
 
@@ -36,8 +36,8 @@ namespace Lavos.UI
         public override void _ExitTree()
         {
             base._ExitTree();
-            ButtonPressed = null;
-            ButtonToggled = null;
+            OnButtonPressed = null;
+            OnButtonToggled = null;
         }
 
         public override void _Pressed()
@@ -49,7 +49,7 @@ namespace Lavos.UI
         public void Press()
         {
             PlayClick();
-            ButtonPressed?.Invoke();
+            OnButtonPressed?.Invoke();
         }
 
         void PlayClick()
@@ -79,7 +79,7 @@ namespace Lavos.UI
         public override void _Toggled(bool buttonPressed)
         {
             base._Toggled(buttonPressed);
-            ButtonToggled?.Invoke(buttonPressed);
+            OnButtonToggled?.Invoke(buttonPressed);
         }
     }
 }

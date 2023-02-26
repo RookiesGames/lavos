@@ -6,7 +6,7 @@ namespace Lavos.Math
     {
         public static Vector3 ToVector3(this Vector2 vec)
         {
-            return new Vector3(vec.x, vec.y, 0f);
+            return new Vector3(vec.X, vec.Y, 0f);
         }
     }
 }

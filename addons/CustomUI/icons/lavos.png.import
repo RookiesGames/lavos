@@ -16,9 +16,9 @@ dest_files=["res://.godot/imported/lavos.png-08162ca8aa656693d6e0e94f3a76d981.ct
 [params]
 
 compress/mode=0
+compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
-compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=false
