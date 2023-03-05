@@ -2,7 +2,7 @@
 
 Dependency module
 
-# Index
+## Index
 
 - [Services](#services)
   - [Registering a Service](#registering-a-service)
@@ -13,7 +13,7 @@ Dependency module
       - [Register](#register)
       - [Locate](#locate)
 
-# Services
+## Services
 
 Services are entities that operate on a very specific area. They inherit from
 Node but it is not mandatory.
@@ -21,14 +21,14 @@ Node but it is not mandatory.
 To define a service, inherit from [IService](./IService.cs). The dependency
 manager can only work with `IService`s.
 
-## Registering a Service
+### Registering a Service
 
 There are two ways to register a service
 
 - Using [Config](./Config.cs)
 - Using [ServiceLocator](./ServiceLocator.cs)
 
-### Config
+#### Config
 
 A [Config](./Config.cs) is a resource file that can be created and added to the
 initial [bootstrap process](../scene/README.md).
@@ -36,7 +36,7 @@ initial [bootstrap process](../scene/README.md).
 Create a new resource and assign to it the [Config](./Config.cs) script. Configs
 define two methods: `Configure` and `Initialize`
 
-#### Configure
+##### Configure
 
 Use this step to bind services
 
@@ -72,7 +72,7 @@ public sealed class InputConfig : Config
 }
 ```
 
-#### Initialize
+##### Initialize
 
 Use the initialize step to setup the services that need and early
 initialization. Don't expect other services to be available at this stage, the
@@ -93,13 +93,13 @@ public sealed class InputConfig : Config
 }
 ```
 
-### Service Locator
+#### Service Locator
 
 The [ServiceLocator](./ServiceLocator.cs) is used to locate services as well as
 registering new ones. It is adviced to register services during the
 [Config](#config) process but it is not always possible or convinient to do so.
 
-#### Register
+##### Register
 
 When you create a service, you can register it using the `Register` method. Only
 interfaces that inherit from [IService](#services) can be located.
@@ -122,7 +122,7 @@ public sealed class AudioManager : IAudioManager
 }
 ```
 
-#### Locate
+##### Locate
 
 You can locate a service using the `Locate` method. Only interfaces that inherit
 from [IService](#services) can be located.
