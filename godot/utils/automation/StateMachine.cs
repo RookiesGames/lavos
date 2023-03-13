@@ -1,4 +1,3 @@
-using Lavos.Console;
 
 namespace Lavos.Utils.Automation
 {
