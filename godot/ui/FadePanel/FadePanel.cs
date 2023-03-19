@@ -11,7 +11,7 @@ namespace Lavos.UI
         [Export] double FadeInDuration = 1;
         [Export] double FadeOutDuration = 1;
 
-        readonly StateMachine _stateMachine = new StateMachine();
+        readonly IStateMachine _stateMachine = new StateMachine();
         IState _fadeInState = null;
         IState _fadeOutState = null;
 

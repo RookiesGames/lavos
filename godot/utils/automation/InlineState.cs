@@ -1,3 +1,4 @@
+using Lavos.Core;
 using System;
 
 namespace Lavos.Utils.Automation
@@ -13,7 +14,7 @@ namespace Lavos.Utils.Automation
         public Action Exit;
 
         void IState.Enter() => Enter?.Invoke();
-        void IState.Process(double dt) => Process?.Invoke(dt);
+        void IProcessable.Process(double dt) => Process?.Invoke(dt);
         void IState.Exit() => Exit?.Invoke();
 
         #endregion

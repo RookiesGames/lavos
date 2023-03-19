@@ -1,96 +1,121 @@
-using Lavos.Debug;
+using Lavos.Core;
+using System;
 using System.Collections.Generic;
 
 namespace Lavos.Utils.Automation
 {
-    public sealed class StackStateMachine
+    public sealed class StackStateMachine : IStackStateMachine
     {
-        Stack<IStackState> _stateStack = null;
+        IStackState _pendingState = null;
+        Stack<IStackState> _stateStack = new Stack<IStackState>();
 
-        public void PushState(IStackState state)
+        public StackStateMachine(IStackState initialState)
         {
-            var peek = _stateStack.Peek();
-            if (peek != null)
-            {
-                peek.Phase = StackStatePhase.Pausing;
-            }
-
-            state.Phase = StackStatePhase.Pushing;
-            _stateStack.Push(state);
+            initialState.Phase = StackStatePhase.Pushing;
+            _stateStack.Push(initialState);
         }
 
-        public void PopState()
-        {
-            var peek = _stateStack.Peek();
-            peek.Phase = StackStatePhase.Popping;
-        }
+        #region IStackStateMachine
 
-        public void PushAndPopState(IStackState state)
-        {
-            var peek = _stateStack.Peek();
-            peek.Phase = StackStatePhase.Popping;
+        IStackState IStackStateMachine.CurrentState => _stateStack.Peek();
 
-            state.Phase = StackStatePhase.Pushing;
-            _stateStack.Push(state);
-        }
-
-        public void Process(double dt)
+        void IProcessable.Process(double dt)
         {
-            var peek = _stateStack.Peek();
-            if (peek == null)
+            if (_stateStack.TryPeek(out IStackState peek))
             {
-                return;
-            }
-            //
-            if (peek.Phase == StackStatePhase.Popped)
-            {
-                _stateStack.Pop();
-                peek = _stateStack.Peek();
-                if (peek != null)
+                switch (peek.Phase)
                 {
-                    peek.Phase = StackStatePhase.Resuming;
-                }
-            }
-            //
-            foreach (var state in _stateStack)
-            {
-                switch (state.Phase)
-                {
-                    case StackStatePhase.Popped: break;
+                    case StackStatePhase.Popped:
+                        {
+                            _stateStack.Pop();
+                            break;
+                        }
                     case StackStatePhase.Popping:
                         {
-                            state.Pause();
-                            state.Exit();
-                            state.Phase = StackStatePhase.Popped;
+                            peek.Pause();
+                            peek.Exit();
+                            //
+                            peek.StatePushed -= OnStatePushed;
+                            peek.StatePopped -= OnStatePopped;
+                            //
+                            peek.Phase = StackStatePhase.Popped;
                             break;
-                        };
+                        }
                     case StackStatePhase.Pushing:
                         {
-                            state.Enter();
-                            state.Resume();
-                            state.Phase = StackStatePhase.Running;
+                            peek.StatePushed += OnStatePushed;
+                            peek.StatePopped += OnStatePopped;
+                            //
+                            peek.Enter();
+                            peek.Resume();
+                            //
+                            peek.Phase = StackStatePhase.Running;
                             break;
                         }
                     case StackStatePhase.Resuming:
                         {
-                            state.Resume();
-                            state.Phase = StackStatePhase.Running;
+                            peek.Resume();
+                            peek.Phase = StackStatePhase.Running;
                             break;
                         }
                     case StackStatePhase.Running:
                         {
-                            state.Process(dt);
+                            peek.Process(dt);
                             break;
                         };
                     case StackStatePhase.Pausing:
                         {
-                            state.Pause();
-                            state.Phase = StackStatePhase.Paused;
+                            peek.Pause();
+                            peek.Phase = StackStatePhase.Paused;
                             break;
                         }
-                    case StackStatePhase.Paused: break;
+                    case StackStatePhase.Paused:
+                        {
+                            if (_pendingState != null)
+                            {
+                                _pendingState.Phase = StackStatePhase.Pushing;
+                                _stateStack.Push(_pendingState);
+                                //
+                                _pendingState = null;
+                            }
+                            else
+                            {
+                                peek.Phase = StackStatePhase.Resuming;
+                            }
+                            break;
+                        }
                 }
             }
         }
+
+        void IStackStateMachine.PushState(IStackState state)
+        {
+            OnStatePushed(this, state);
+        }
+
+        void OnStatePushed(object sender, IStackState state)
+        {
+            if (_stateStack.TryPeek(out IStackState peek))
+            {
+                peek.Phase = StackStatePhase.Pausing;
+            }
+            //
+            _pendingState = state;
+        }
+
+        void IStackStateMachine.PopState()
+        {
+            OnStatePopped(this, null);
+        }
+
+        void OnStatePopped(object sender, EventArgs e)
+        {
+            if (_stateStack.TryPeek(out IStackState peek))
+            {
+                peek.Phase = StackStatePhase.Popping;
+            }
+        }
+
+        #endregion
     }
 }

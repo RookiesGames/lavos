@@ -1,4 +1,5 @@
 using Godot;
+using Lavos.Core;
 using Lavos.Utils.Automation;
 using Lavos.Utils.Extensions;
 using System;
@@ -22,7 +23,7 @@ namespace Lavos.Audio
             _timer = 0;
         }
 
-        void IState.Process(double dt)
+        void IProcessable.Process(double dt)
         {
             _timer += (dt * _musicManager.FadeInSpeed);
             var weight = (float)(_timer / Duration);

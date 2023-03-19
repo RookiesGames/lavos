@@ -9,28 +9,23 @@ namespace Lavos.Utils.Automation
         bool _pendingTransition = false;
         bool HasPendingState => _pendingTransition;
 
-        public StateMachine(IState initialState = null)
-        {
-            ChangeState(initialState);
-        }
-
         #region IStateMachine
 
         IState _state = null;
         public IState CurrentState => _state;
 
-        public void ChangeState(IState state)
+        void IStateMachine.ChangeState(IState state)
         {
             OnStateChanged(this, state);
         }
 
-        private void OnStateChanged(object sender, IState state)
+        void OnStateChanged(object sender, IState state)
         {
             _pendingState = state;
             _pendingTransition = true;
         }
 
-        public void Process(double dt)
+        void IProcessable.Process(double dt)
         {
             if (HasPendingState)
             {
@@ -39,7 +34,7 @@ namespace Lavos.Utils.Automation
             _state?.Process(dt);
         }
 
-        private void SwitchState()
+        void SwitchState()
         {
             if (_state != null)
             {

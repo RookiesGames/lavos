@@ -1,4 +1,5 @@
 using Godot;
+using Lavos.Core;
 using Lavos.Utils.Automation;
 using Lavos.Utils.Extensions;
 using System;
@@ -19,7 +20,7 @@ namespace Lavos.UI
             _panel.SetAlpha(0);
         }
 
-        void IState.Process(double dt)
+        void IProcessable.Process(double dt)
         {
             _timer += dt;
             var weight = (float)(_timer / _duration);
