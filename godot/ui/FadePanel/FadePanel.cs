@@ -7,84 +7,22 @@ namespace Lavos.UI
 {
     public sealed partial class FadePanel : Sprite2D
     {
-        public enum PanelState
-        {
-            FadingIn,
-            FadedIn,
-            FadingOut,
-            FadedOut,
-        }
-
         [Export] bool Faded = false;
-        [Export] float FadeInDuration = 1;
-        [Export] float FadeOutDuration = 1;
+        [Export] double FadeInDuration = 1;
+        [Export] double FadeOutDuration = 1;
 
         readonly StateMachine _stateMachine = new StateMachine();
-        readonly State _idleState = new State();
-        readonly State _fadeInState = new State();
-        readonly State _fadeOutState = new State();
+        IState _fadeInState = null;
+        IState _fadeOutState = null;
 
-        double _timer = 0;
-
-        PanelState _currentState;
-        public PanelState State => _currentState;
-
+        bool IsFadingIn => _stateMachine.CurrentState == _fadeInState;
+        bool IsFadingOut => _stateMachine.CurrentState == _fadeOutState;
 
         public override void _Ready()
         {
             this.SetAlpha(Faded ? 1f : 0f);
-            SetupStates();
-            _stateMachine.ChangeState(_idleState);
-            _currentState = Faded ? PanelState.FadedOut : PanelState.FadedIn;
-        }
-
-        void SetupStates()
-        {
-            _fadeInState.Enter = () =>
-            {
-                _timer = 0;
-                _currentState = PanelState.FadingIn;
-                this.SetAlpha(1);
-            };
-            _fadeInState.Process = (dt) =>
-            {
-                _timer += dt;
-                var weight = (float)(_timer / FadeInDuration);
-                var alpha = Mathf.Lerp(1, 0, weight);
-                this.SetAlpha(alpha);
-                //
-                if (alpha <= 0)
-                {
-                    _stateMachine.ChangeState(_idleState);
-                }
-            };
-            _fadeInState.Exit = () =>
-            {
-                _currentState = PanelState.FadedIn;
-            };
-            //
-            _fadeOutState.Enter = () =>
-            {
-                _timer = 0;
-                _currentState = PanelState.FadingOut;
-                this.SetAlpha(0);
-            };
-            _fadeOutState.Process = (dt) =>
-            {
-                _timer += dt;
-                var weight = (float)(_timer / FadeOutDuration);
-                var alpha = Mathf.Lerp(0, 1, weight);
-                this.SetAlpha(alpha);
-                //
-                if (alpha >= 1)
-                {
-                    _stateMachine.ChangeState(_idleState);
-                }
-            };
-            _fadeOutState.Exit = () =>
-            {
-                _currentState = PanelState.FadedOut;
-            };
+            _fadeInState = new FadeInState(this, FadeInDuration);
+            _fadeOutState = new FadeOutState(this, FadeOutDuration);
         }
 
         public override void _Process(double delta)
@@ -98,7 +36,7 @@ namespace Lavos.UI
             return Task.Run(async () =>
             {
                 System.TimeSpan timeSpan = System.TimeSpan.FromMilliseconds(60);
-                while (State != PanelState.FadedIn)
+                while (IsFadingIn)
                 {
                     await Task.Delay(timeSpan);
                 }
@@ -112,7 +50,7 @@ namespace Lavos.UI
             return Task.Run(async () =>
             {
                 System.TimeSpan timeSpan = System.TimeSpan.FromMilliseconds(60);
-                while (State != PanelState.FadedOut)
+                while (IsFadingOut)
                 {
                     await Task.Delay(timeSpan);
                 }
