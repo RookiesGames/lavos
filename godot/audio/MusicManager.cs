@@ -1,4 +1,5 @@
 using Godot;
+using Lavos.Core;
 using Lavos.Scene;
 using Lavos.Utils.Automation;
 using Lavos.Utils.Extensions;
@@ -15,18 +16,15 @@ namespace Lavos.Audio
         }
 
         AudioStreamPlayer _source = null;
+        public AudioStreamPlayer Source => _source;
+
         MasterAudio _masterAudio = null;
 
-        readonly StateMachine _stateMachine = new StateMachine();
-        readonly State _fadeInState = new State();
-        readonly State _fadeOutState = new State();
-        float _target = 0;
-        double _timer = 0;
-        const double Duration = 0.5;
-
+        readonly IStateMachine _stateMachine = new StateMachine();
+        readonly IState _fadeInState = new FadeInState();
+        readonly IState _fadeOutState = new FadeOutState();
         public double FadeInSpeed = 0.25;
         public double FadeOutSpeed = 0.25;
-
 
         public override void _EnterTree()
         {
@@ -49,61 +47,11 @@ namespace Lavos.Audio
         {
             _source = this.AddNode<AudioStreamPlayer>("MusicSource");
             _masterAudio = NodeTree.GetPinnedNode<MasterAudio>();
-            SetupStates();
         }
 
-        void SetupStates()
+        public override void _Process(double dt)
         {
-            _fadeInState.Enter += () =>
-            {
-                _source.SetVolume(0);
-                _source.Play();
-                //
-                _target = _masterAudio.MasterMusicVolume;
-                _timer = 0;
-            };
-            _fadeInState.Process += (delta) =>
-            {
-                _timer += (delta * FadeInSpeed);
-                var weight = (float)(_timer / Duration);
-                _source.SetVolume(Mathf.Lerp(0, _target, weight));
-                if (_source.GetVolume() >= _target)
-                {
-                    _stateMachine.ChangeState(null);
-                }
-            };
-            _fadeInState.Exit += () =>
-            {
-                _source.SetVolume(_target);
-            };
-            //
-            _fadeOutState.Enter += () =>
-            {
-                _target = _masterAudio.MasterMusicVolume;
-                _timer = 0f;
-            };
-            _fadeOutState.Process += (delta) =>
-            {
-                _timer += (delta * FadeOutSpeed);
-                var weight = 1f -(float)(_timer / Duration);
-                _source.SetVolume(Mathf.Lerp(0, _target, weight));
-                if (_source.GetVolume() == 0)
-                {
-                    _stateMachine.ChangeState(null);
-                }
-            };
-            _fadeOutState.Exit += () =>
-            {
-                _source.SetVolume(0);
-                _source.Stop();
-            };
-            //
-            _stateMachine.ChangeState(null);
-        }
-
-        public override void _Process(double delta)
-        {
-            _stateMachine.Process(delta);
+            _stateMachine.Process(dt);
         }
 
         public void PlayStream(AudioStreamOggVorbis stream, Effect effect = Effect.Instant)
