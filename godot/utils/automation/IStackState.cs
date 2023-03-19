@@ -2,9 +2,10 @@ using System;
 
 namespace Lavos.Utils.Automation
 {
-    public interface IStackState: IState
+    public interface IStackState : IState
     {
-        Action Resume { get; set; }
-        Action Pause { get; set; }
+        StackStatePhase Phase { get; set; }
+        void Resume();
+        void Pause();
     }
 }
