@@ -1,9 +1,8 @@
 
-namespace Lavos.UI
+namespace Lavos.UI;
+
+public enum PopupResult
 {
-    public enum PopupResult
-    {
-        Accepted,
-        Declined
-    }
+    Accepted,
+    Declined
 }

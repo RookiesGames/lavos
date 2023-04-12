@@ -1,24 +1,23 @@
 using Godot;
 
-namespace Lavos.Input
+namespace Lavos.Input;
+
+sealed partial class DummyGamepadInputHandler
+    : Node
+    , IGamepadInputHandler
 {
-    sealed partial class DummyGamepadInputHandler
-        : Node
-        , IGamepadInputHandler
-    {
-        #region IKeyboardInputHandler
+    #region IKeyboardInputHandler
 
-        public void RegisterListener(IGamepadInputListener listener) { }
-        public void UnregisterListener(IGamepadInputListener listener) { }
+    public void RegisterListener(IGamepadInputListener listener) { }
+    public void UnregisterListener(IGamepadInputListener listener) { }
 
-        #endregion
+    #endregion
 
 
-        #region IInputHandler
+    #region IInputHandler
 
-        void IInputHandler<IGamepadInputConfig>.EnableHandler(IGamepadInputConfig config) { }
-        public void EnableHandler(GamepadDevice device, IGamepadInputConfig config) { }
+    void IInputHandler<IGamepadInputConfig>.EnableHandler(IGamepadInputConfig config) { }
+    public void EnableHandler(GamepadDevice device, IGamepadInputConfig config) { }
 
-        #endregion IInputHandler
-    }
+    #endregion IInputHandler
 }

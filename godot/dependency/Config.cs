@@ -1,10 +1,9 @@
 using Godot;
 
-namespace Lavos.Dependency
+namespace Lavos.Dependency;
+
+public abstract partial class Config : Resource
 {
-    public abstract partial class Config : Resource
-    {
-        public abstract void Configure(IDependencyBinder binder);
-        public abstract void Initialize(IDependencyResolver resolver);
-    }
+    public abstract void Configure(IDependencyBinder binder);
+    public abstract void Initialize(IDependencyResolver resolver);
 }

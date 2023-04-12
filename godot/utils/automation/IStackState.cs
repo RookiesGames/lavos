@@ -1,18 +1,17 @@
 using Lavos.Core;
 using System;
 
-namespace Lavos.Utils.Automation
+namespace Lavos.Utils.Automation;
+
+public interface IStackState : IProcessable
 {
-    public interface IStackState : IProcessable
-    {
-        StackStatePhase Phase { get; set; }
+    StackStatePhase Phase { get; set; }
 
-        event EventHandler<IStackState> StatePushed;
-        event EventHandler StatePopped;
+    event EventHandler<IStackState> StatePushed;
+    event EventHandler StatePopped;
 
-        void Enter();
-        void Resume();
-        void Pause();
-        void Exit();
-    }
+    void Enter();
+    void Resume();
+    void Pause();
+    void Exit();
 }

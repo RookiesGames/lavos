@@ -4,82 +4,81 @@ using Lavos.Scene;
 using Lavos.Utils.Lazy;
 using System;
 
-namespace Lavos.UI
+namespace Lavos.UI;
+
+public partial class ClickButton : Button
 {
-    public partial class ClickButton : Button
+    public enum Type
     {
-        public enum Type
+        None,
+        Forward,
+        Back,
+    };
+
+    public event Action OnButtonPressed = null;
+    public event Action<bool> OnButtonToggled = null;
+
+    [Export] Type ButtonType = Type.None;
+
+    public static AudioStreamOggVorbis AcceptSound = null;
+    public static AudioStreamOggVorbis CancelSound = null;
+
+    static LazyBuilder<SoundManager> SoundManagerLazy = new LazyBuilder<SoundManager>(
+        () => NodeTree.GetPinnedNodeByType<SoundManager>()
+    );
+
+
+    public override void _EnterTree()
+    {
+        base._EnterTree();
+    }
+
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+        OnButtonPressed = null;
+        OnButtonToggled = null;
+    }
+
+    public override void _Pressed()
+    {
+        base._Pressed();
+        Press();
+    }
+
+    public void Press()
+    {
+        PlayClick();
+        OnButtonPressed?.Invoke();
+    }
+
+    void PlayClick()
+    {
+        switch (ButtonType)
         {
-            None,
-            Forward,
-            Back,
-        };
-
-        public event Action OnButtonPressed = null;
-        public event Action<bool> OnButtonToggled = null;
-
-        [Export] Type ButtonType = Type.None;
-
-        public static AudioStreamOggVorbis AcceptSound = null;
-        public static AudioStreamOggVorbis CancelSound = null;
-
-        static LazyBuilder<SoundManager> SoundManagerLazy = new LazyBuilder<SoundManager>(
-            () => NodeTree.GetPinnedNode<SoundManager>()
-        );
-
-
-        public override void _EnterTree()
-        {
-            base._EnterTree();
-        }
-
-        public override void _ExitTree()
-        {
-            base._ExitTree();
-            OnButtonPressed = null;
-            OnButtonToggled = null;
-        }
-
-        public override void _Pressed()
-        {
-            base._Pressed();
-            Press();
-        }
-
-        public void Press()
-        {
-            PlayClick();
-            OnButtonPressed?.Invoke();
-        }
-
-        void PlayClick()
-        {
-            switch (ButtonType)
-            {
-                case Type.Forward:
+            case Type.Forward:
+                {
+                    if (AcceptSound != null)
                     {
-                        if (AcceptSound != null)
-                        {
-                            SoundManagerLazy.Instance.PlayStream(AcceptSound);
-                        }
-                        break;
+                        SoundManagerLazy.Instance.PlayStream(AcceptSound);
                     }
-                case Type.Back:
+                    break;
+                }
+            case Type.Back:
+                {
+                    if (CancelSound != null)
                     {
-                        if (CancelSound != null)
-                        {
-                            SoundManagerLazy.Instance.PlayStream(CancelSound);
-                        }
-                        break;
+                        SoundManagerLazy.Instance.PlayStream(CancelSound);
                     }
-                default: break;
-            }
+                    break;
+                }
+            default: break;
         }
+    }
 
-        public override void _Toggled(bool buttonPressed)
-        {
-            base._Toggled(buttonPressed);
-            OnButtonToggled?.Invoke(buttonPressed);
-        }
+    public override void _Toggled(bool buttonPressed)
+    {
+        base._Toggled(buttonPressed);
+        OnButtonToggled?.Invoke(buttonPressed);
     }
 }

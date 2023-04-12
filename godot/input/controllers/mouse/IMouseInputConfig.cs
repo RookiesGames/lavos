@@ -1,11 +1,10 @@
 using Godot;
 using System.Collections.Generic;
 
-namespace Lavos.Input
+namespace Lavos.Input;
+
+public interface IMouseInputConfig : IInputConfig
 {
-    public interface IMouseInputConfig : IInputConfig
-    {
-        IReadOnlyCollection<Godot.MouseButton> Buttons { get; }
-        InputAction GetAction(Godot.MouseButton button);
-    }
+    IReadOnlyCollection<Godot.MouseButton> Buttons { get; }
+    InputAction GetAction(Godot.MouseButton button);
 }

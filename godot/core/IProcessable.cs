@@ -1,8 +1,7 @@
 
-namespace Lavos.Core
+namespace Lavos.Core;
+
+public interface IProcessable
 {
-    public interface IProcessable
-    {
-        void Process(double dt);
-    }
+    void Process(double delta);
 }

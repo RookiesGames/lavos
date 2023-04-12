@@ -1,10 +1,10 @@
 #if false
 using Godot;
 
-namespace Lavos
+namespace Lavos;
+
+public sealed class %CLASS% : %BASE%
 {
-    public sealed class %CLASS% : %BASE%
-    {
-    }
 }
+
 #endif

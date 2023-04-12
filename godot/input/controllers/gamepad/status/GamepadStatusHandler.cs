@@ -1,20 +1,19 @@
 using Godot;
-using Lavos.Utils.Extensions;
 using System.Collections.Generic;
 
-namespace Lavos.Input
+namespace Lavos.Input;
+
+sealed partial class GamepadStatusHandler
+    : Node
+    , IGamepadStatusHandler
 {
-    sealed partial class GamepadStatusHandler
-        : Node
-        , IGamepadStatusHandler
-    {
-        readonly List<IGamepadStatusListener> _listeners = new List<IGamepadStatusListener>();
+    readonly List<IGamepadStatusListener> _listeners = new List<IGamepadStatusListener>();
 
-        const double WAIT_TIME = 0.25f;
-        double _timer = WAIT_TIME;
+    const double WAIT_TIME = 0.25f;
+    double _timer = WAIT_TIME;
 
-        readonly List<GamepadDevice> _connectedDevices = new List<GamepadDevice>();
-        readonly Dictionary<GamepadDevice, bool> _devicesState = new Dictionary<GamepadDevice, bool>()
+    readonly List<GamepadDevice> _connectedDevices = new List<GamepadDevice>();
+    readonly Dictionary<GamepadDevice, bool> _devicesState = new Dictionary<GamepadDevice, bool>()
         {
             { GamepadDevice.Gamepad1, false},
             { GamepadDevice.Gamepad2, false},
@@ -26,84 +25,83 @@ namespace Lavos.Input
             { GamepadDevice.Gamepad8, false},
         };
 
-        #region IGamepadStatusHandler
+    #region IGamepadStatusHandler
 
-        void IGamepadStatusHandler.RegisterListener(IGamepadStatusListener listener)
+    void IGamepadStatusHandler.RegisterListener(IGamepadStatusListener listener)
+    {
+        _listeners.PushUnique(listener);
+    }
+
+    void IGamepadStatusHandler.UnregisterListener(IGamepadStatusListener listener)
+    {
+        _listeners.Remove(listener);
+    }
+
+    bool IGamepadStatusHandler.IsGamepadConnected(GamepadDevice device)
+    {
+        return _devicesState[device];
+    }
+
+    #endregion IGamepadStatusHandler
+
+
+    public override void _Process(double delta)
+    {
+        _timer += delta;
+        if (_timer >= WAIT_TIME)
         {
-            _listeners.PushUnique(listener);
+            _timer -= WAIT_TIME;
+            UpdateDevices();
         }
+    }
 
-        void IGamepadStatusHandler.UnregisterListener(IGamepadStatusListener listener)
+    void UpdateDevices()
+    {
+        var joypadIds = Godot.Input.GetConnectedJoypads();
+        //
+        _connectedDevices.Clear();
+        foreach (int id in joypadIds)
         {
-            _listeners.Remove(listener);
+            _connectedDevices.Add(GamepadDeviceHelper.FromId(id));
         }
-
-        bool IGamepadStatusHandler.IsGamepadConnected(GamepadDevice device)
+        //
+        var keys = new List<GamepadDevice>(_devicesState.Keys);
+        foreach (var device in keys)
         {
-            return _devicesState[device];
-        }
-
-        #endregion IGamepadStatusHandler
-
-
-        public override void _Process(double delta)
-        {
-            _timer += delta;
-            if (_timer >= WAIT_TIME)
-            {
-                _timer -= WAIT_TIME;
-                UpdateDevices();
-            }
-        }
-
-        void UpdateDevices()
-        {
-            var joypadIds = Godot.Input.GetConnectedJoypads();
+            var connected = _devicesState[device];
             //
-            _connectedDevices.Clear();
-            foreach (int id in joypadIds)
+            if (_connectedDevices.Contains(device))
             {
-                _connectedDevices.Add(GamepadDeviceHelper.FromId(id));
-            }
-            //
-            var keys = new List<GamepadDevice>(_devicesState.Keys);
-            foreach (var device in keys)
-            {
-                var connected = _devicesState[device];
-                //
-                if (_connectedDevices.Contains(device))
+                if (connected == false)
                 {
-                    if (connected == false)
-                    {
-                        _devicesState[device] = true;
-                        OnGamepadConnected(device);
-                    }
-                }
-                else
-                {
-                    if (connected)
-                    {
-                        _devicesState[device] = false;
-                        OnGamepadDisconnected(device);
-                    }
+                    _devicesState[device] = true;
+                    OnGamepadConnected(device);
                 }
             }
-        }
-
-        void OnGamepadConnected(GamepadDevice device)
-        {
-            foreach (var listener in _listeners)
+            else
             {
-                listener.OnGamepadConnected(device);
+                if (connected)
+                {
+                    _devicesState[device] = false;
+                    OnGamepadDisconnected(device);
+                }
             }
         }
+    }
 
-        void OnGamepadDisconnected(GamepadDevice device)
+    void OnGamepadConnected(GamepadDevice device)
+    {
+        foreach (var listener in _listeners)
         {
-            foreach (var listener in _listeners)
-            {
-                listener.OnGamepadDisconnected(device);
-            }
+            listener.OnGamepadConnected(device);
+        }
+    }
+
+    void OnGamepadDisconnected(GamepadDevice device)
+    {
+        foreach (var listener in _listeners)
+        {
+            listener.OnGamepadDisconnected(device);
         }
     }
 }

@@ -2,27 +2,26 @@ using Godot;
 using System;
 
 
-namespace Lavos.Scene
+namespace Lavos.Scene;
+
+public sealed partial class SceneLoader : Node
 {
-    public sealed partial class SceneLoader : Node
+    [Export] PackedScene _nextScene = null;
+    [Export] double _delay = 0;
+
+    private double _currentTime;
+
+
+    #region Node
+
+    public override void _Process(double delta)
     {
-        [Export] PackedScene _nextScene = null;
-        [Export] double _delay = 0;
-
-        private double _currentTime;
-
-
-        #region Node
-
-        public override void _Process(double delta)
+        _currentTime += delta;
+        if (_currentTime >= _delay)
         {
-            _currentTime += delta;
-            if (_currentTime >= _delay)
-            {
-                SceneManager.ChangeScene(_nextScene);
-            }
+            SceneManager.ChangeScene(_nextScene);
         }
-
-        #endregion
     }
+
+    #endregion
 }

@@ -1,11 +1,10 @@
 using System;
 
-namespace Lavos.Input
+namespace Lavos.Input;
+
+public interface IKeyboardInputHandler
+    : IInputHandler<IKeyboardInputConfig>
 {
-    public interface IKeyboardInputHandler
-        : IInputHandler<IKeyboardInputConfig>
-    {
-        void RegisterListener(IKeyboardInputListener listener);
-        void UnregisterListener(IKeyboardInputListener listener);
-    }
+    void RegisterListener(IKeyboardInputListener listener);
+    void UnregisterListener(IKeyboardInputListener listener);
 }

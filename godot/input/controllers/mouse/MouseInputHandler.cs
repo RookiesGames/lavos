@@ -1,135 +1,130 @@
 using Godot;
-using Lavos.Debug;
-using Lavos.Utils.Extensions;
 using System.Collections.Generic;
-using System;
 
-namespace Lavos.Input
+namespace Lavos.Input;
+
+sealed partial class MouseInputHandler : Node, IMouseInputHandler
 {
-    sealed partial class MouseInputHandler : Node, IMouseInputHandler
+    #region Members
+
+    IMouseInputConfig _config;
+    readonly HashSet<Godot.MouseButton> _pressedButtons = new HashSet<Godot.MouseButton>();
+    readonly List<IMouseInputListener> _listeners = new List<IMouseInputListener>();
+
+    #endregion
+
+
+    #region Properties
+
+    bool IsDisabled => _config == null;
+
+    #endregion
+
+
+    #region IKeyboardInputHandler
+
+    public void RegisterListener(IMouseInputListener listener)
     {
-        #region Members
+        _listeners.InsertUnique(listener.Priority, listener);
+    }
 
-        IMouseInputConfig _config;
-        readonly HashSet<Godot.MouseButton> _pressedButtons = new HashSet<Godot.MouseButton>();
-        readonly List<IMouseInputListener> _listeners = new List<IMouseInputListener>();
+    public void UnregisterListener(IMouseInputListener listener)
+    {
+        _listeners.Remove(listener);
+    }
 
-        #endregion
-
-
-        #region Properties
-
-        bool IsDisabled => _config == null;
-
-        #endregion
+    #endregion
 
 
-        #region IKeyboardInputHandler
+    #region IInputHandler
 
-        public void RegisterListener(IMouseInputListener listener)
+    public void EnableHandler(IMouseInputConfig config)
+    {
+        _config = config;
+    }
+
+    #endregion
+
+
+    #region Node
+
+    public override void _Input(InputEvent inputEvent)
+    {
+        if (IsDisabled)
         {
-            _listeners.InsertUnique(listener.Priority, listener);
+            return;
         }
-
-        public void UnregisterListener(IMouseInputListener listener)
+        //
+        if (inputEvent is InputEventMouseButton mouseButton)
         {
-            _listeners.Remove(listener);
-        }
-
-        #endregion
-
-
-        #region IInputHandler
-
-        public void EnableHandler(IMouseInputConfig config)
-        {
-            _config = config;
-        }
-
-        #endregion
-
-
-        #region Node
-
-        public override void _Input(InputEvent inputEvent)
-        {
-            if (IsDisabled)
+            var button = mouseButton.ButtonIndex;
+            var action = _config.GetAction(button);
+            //
+            if (action == InputAction.None)
             {
                 return;
             }
             //
-            if (inputEvent is InputEventMouseButton mouseButton)
+            if (mouseButton.Pressed)
             {
-                var button = mouseButton.ButtonIndex;
-                var action = _config.GetAction(button);
-                //
-                if (action == InputAction.None)
+                // Cache press to avoid repetition
+                if (_pressedButtons.Contains(button) == false)
                 {
-                    return;
-                }
-                //
-                if (mouseButton.Pressed)
-                {
-                    // Cache press to avoid repetition
-                    if (_pressedButtons.Contains(button) == false)
-                    {
-                        _pressedButtons.Add(button);
-                        OnMouseButtonPressed(action);
-                    }
-                }
-                else
-                {
-                    // Remove cache to avoid repetition
-                    if (_pressedButtons.Contains(button))
-                    {
-                        _pressedButtons.Remove(button);
-                        OnMouseButtonReleased(action);
-                    }
+                    _pressedButtons.Add(button);
+                    OnMouseButtonPressed(action);
                 }
             }
-            else if (inputEvent is InputEventMouseMotion mouseMotion)
+            else
             {
-                OnMousePositionChanged(mouseMotion.Position);
+                // Remove cache to avoid repetition
+                if (_pressedButtons.Contains(button))
+                {
+                    _pressedButtons.Remove(button);
+                    OnMouseButtonReleased(action);
+                }
             }
         }
-
-        void OnMouseButtonPressed(InputAction action)
+        else if (inputEvent is InputEventMouseMotion mouseMotion)
         {
-            foreach (var listener in _listeners)
-            {
-                var handled = listener.OnMouseButtonPressed(action);
-                if (handled)
-                {
-                    return;
-                }
-            }
+            OnMousePositionChanged(mouseMotion.Position);
         }
-
-        void OnMouseButtonReleased(InputAction action)
-        {
-            foreach (var listener in _listeners)
-            {
-                var handled = listener.OnMouseButtonReleased(action);
-                if (handled)
-                {
-                    return;
-                }
-            }
-        }
-
-        void OnMousePositionChanged(Vector2 position)
-        {
-            foreach (var listener in _listeners)
-            {
-                var handled = listener.OnMousePositionChanged(position);
-                if (handled)
-                {
-                    return;
-                }
-            }
-        }
-
-        #endregion
     }
 
+    void OnMouseButtonPressed(InputAction action)
+    {
+        foreach (var listener in _listeners)
+        {
+            var handled = listener.OnMouseButtonPressed(action);
+            if (handled)
+            {
+                return;
+            }
+        }
+    }
+
+    void OnMouseButtonReleased(InputAction action)
+    {
+        foreach (var listener in _listeners)
+        {
+            var handled = listener.OnMouseButtonReleased(action);
+            if (handled)
+            {
+                return;
+            }
+        }
+    }
+
+    void OnMousePositionChanged(Vector2 position)
+    {
+        foreach (var listener in _listeners)
+        {
+            var handled = listener.OnMousePositionChanged(position);
+            if (handled)
+            {
+                return;
+            }
+        }
+    }
+
+    #endregion
 }

@@ -2,10 +2,10 @@
 using Godot;
 using Lavos;
 
-namespace Game
+namespace Game;
+
+public sealed class %CLASS% : %BASE%
 {
-    public sealed class %CLASS% : %BASE%
-    {
-    }
 }
+
 #endif

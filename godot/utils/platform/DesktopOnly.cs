@@ -1,18 +1,16 @@
 using Godot;
-using Lavos.Utils.Extensions;
 
-namespace Lavos.Utils.Platform
+namespace Lavos.Utils.Platform;
+
+public sealed partial class DesktopOnly : Node
 {
-    public sealed partial class DesktopOnly : Node
+    public override void _Ready()
     {
-        public override void _Ready()
-        {
 #if GODOT_PC
-            this
+        this
 #else
             GetParent()
 #endif
-                .RemoveSelfDeferred();
-        }
+            .RemoveSelfDeferred();
     }
 }

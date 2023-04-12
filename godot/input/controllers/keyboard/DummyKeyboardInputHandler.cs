@@ -1,23 +1,22 @@
 using Godot;
 
-namespace Lavos.Input
+namespace Lavos.Input;
+
+sealed partial class DummyKeyboardInputHandler
+    : Node
+    , IKeyboardInputHandler
 {
-    sealed partial class DummyKeyboardInputHandler
-        : Node
-        , IKeyboardInputHandler
-    {
-        #region IKeyboardInputHandler
+    #region IKeyboardInputHandler
 
-        public void RegisterListener(IKeyboardInputListener listener) { }
-        public void UnregisterListener(IKeyboardInputListener listener) { }
+    public void RegisterListener(IKeyboardInputListener listener) { }
+    public void UnregisterListener(IKeyboardInputListener listener) { }
 
-        #endregion
+    #endregion
 
 
-        #region IInputHandler
+    #region IInputHandler
 
-        public void EnableHandler(IKeyboardInputConfig config) { }
+    public void EnableHandler(IKeyboardInputConfig config) { }
 
-        #endregion IInputHandler
-    }
+    #endregion IInputHandler
 }

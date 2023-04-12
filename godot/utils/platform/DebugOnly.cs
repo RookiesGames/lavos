@@ -1,18 +1,16 @@
 using Godot;
-using Lavos.Utils.Extensions;
 
-namespace Lavos.Utils.Platform
+namespace Lavos.Utils.Platform;
+
+public sealed partial class DebugOnly : Node
 {
-    public sealed partial class DebugOnly : Node
+    public override void _Ready()
     {
-        public override void _Ready()
-        {
 #if DEBUG
-            this
+        this
 #else
-            GetParent()
+        GetParent()
 #endif
-                .RemoveSelfDeferred();
-        }
+            .RemoveSelfDeferred();
     }
 }

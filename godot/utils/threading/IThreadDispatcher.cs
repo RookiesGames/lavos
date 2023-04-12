@@ -1,9 +1,8 @@
 using System;
 
-namespace Lavos.Utils.Threading
+namespace Lavos.Utils.Threading;
+
+public interface IThreadDispatcher
 {
-    public interface IThreadDispatcher
-    {
-        void AddAction(Action action);
-    }
+    void AddAction(Action action);
 }

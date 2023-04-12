@@ -1,9 +1,8 @@
 using Godot;
 using System;
 
-namespace Lavos.Utils.Platform
+namespace Lavos.Utils.Platform;
+
+public sealed partial class MobileOnly : Node
 {
-    public sealed partial class MobileOnly : Node
-    {
-    }
 }

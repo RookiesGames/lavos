@@ -1,101 +1,98 @@
 using Godot;
-using Lavos.Debug;
-using Lavos.Utils.Extensions;
 using System;
 
-namespace Lavos.UI
+namespace Lavos.UI;
+
+[Obsolete("Broken. Needs rework")]
+public sealed partial class GenericPopup
+    : Control
+    , IPopup
 {
-    [Obsolete("Broken. Needs rework")]
-    public sealed partial class GenericPopup
-        : Control
-        , IPopup
+    Label _titleLabel = null;
+    Label _descriptionLabel = null;
+
+    Button _acceptBtn = null;
+    public Button AcceptButton => _acceptBtn;
+    Button _declineBtn = null;
+    public Button DeclineButton => _declineBtn;
+
+
+    #region IPopup
+
+    public string TitleText
     {
-        Label _titleLabel = null;
-        Label _descriptionLabel = null;
+        get => _titleLabel.Text;
+        set => _titleLabel.Text = value;
+    }
 
-        Button _acceptBtn = null;
-        public Button AcceptButton => _acceptBtn;
-        Button _declineBtn = null;
-        public Button DeclineButton => _declineBtn;
+    public string DescriptionText
+    {
+        get => _descriptionLabel.Text;
+        set => _descriptionLabel.Text = value;
+    }
 
+    public string AcceptText
+    {
+        get => _acceptBtn.Text;
+        set => _acceptBtn.Text = value;
+    }
 
-        #region IPopup
+    public string DeclineText
+    {
+        get => _declineBtn.Text;
+        set => _declineBtn.Text = value;
+    }
 
-        public string TitleText
-        {
-            get => _titleLabel.Text;
-            set => _titleLabel.Text = value;
-        }
+    public event Action<PopupResult> PopupResult;
 
-        public string DescriptionText
-        {
-            get => _descriptionLabel.Text;
-            set => _descriptionLabel.Text = value;
-        }
-
-        public string AcceptText
-        {
-            get => _acceptBtn.Text;
-            set => _acceptBtn.Text = value;
-        }
-
-        public string DeclineText
-        {
-            get => _declineBtn.Text;
-            set => _declineBtn.Text = value;
-        }
-
-        public event Action<PopupResult> PopupResult;
-
-        #endregion
+    #endregion
 
 
-        public override void _EnterTree()
-        {
-            _titleLabel = this.GetNodeInChildrenByName<Label>("TitleLabel");
-            _descriptionLabel = this.GetNodeInChildrenByName<Label>("DescriptionLabel");
-            _acceptBtn = this.GetNodeInChildrenByName<Button>("AcceptButton");
-            _declineBtn = this.GetNodeInChildrenByName<Button>("DeclineButton");
-        }
+    public override void _EnterTree()
+    {
+        _titleLabel = this.GetNodeInChildrenByName<Label>("TitleLabel");
+        _descriptionLabel = this.GetNodeInChildrenByName<Label>("DescriptionLabel");
+        _acceptBtn = this.GetNodeInChildrenByName<Button>("AcceptButton");
+        _declineBtn = this.GetNodeInChildrenByName<Button>("DeclineButton");
+    }
 
-        public override void _Ready()
-        {
-            //_acceptBtn.ButtonPressed += OnAccepted;
-            //_declineBtn.ButtonPressed += OnDeclined;
-        }
+    public override void _Ready()
+    {
+        //_acceptBtn.ButtonPressed += OnAccepted;
+        //_declineBtn.ButtonPressed += OnDeclined;
+    }
 
-        public override void _ExitTree()
-        {
-            //_acceptBtn.ButtonPressed -= OnAccepted;
-            //_declineBtn.ButtonPressed -= OnDeclined;
-            //
-            PopupResult = null;
-        }
+    public override void _ExitTree()
+    {
+        //_acceptBtn.ButtonPressed -= OnAccepted;
+        //_declineBtn.ButtonPressed -= OnDeclined;
+        //
+        PopupResult = null;
+    }
 
-        #region IPopup
+    #region IPopup
 
-        public void ShowPopup()
-        {
-            this.MouseFilter = MouseFilterEnum.Stop;
-            Show();
-        }
+    public void ShowPopup()
+    {
+        this.MouseFilter = MouseFilterEnum.Stop;
+        Show();
+    }
 
-        public void HidePopup()
-        {
-            Hide();
-            this.MouseFilter = MouseFilterEnum.Ignore;
-        }
+    public void HidePopup()
+    {
+        Hide();
+        this.MouseFilter = MouseFilterEnum.Ignore;
+    }
 
-        #endregion IPopup
+    #endregion IPopup
 
-        void OnAccepted()
-        {
-            PopupResult?.Invoke(UI.PopupResult.Accepted);
-        }
+    void OnAccepted()
+    {
+        PopupResult?.Invoke(UI.PopupResult.Accepted);
+    }
 
-        void OnDeclined()
-        {
-            PopupResult?.Invoke(UI.PopupResult.Declined);
-        }
+    void OnDeclined()
+    {
+        PopupResult?.Invoke(UI.PopupResult.Declined);
     }
 }

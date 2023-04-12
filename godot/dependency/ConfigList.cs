@@ -1,27 +1,25 @@
 using Godot;
-using System.Collections.Generic;
 
-namespace Lavos.Dependency
+namespace Lavos.Dependency;
+
+public sealed partial class ConfigList : Config
 {
-    public sealed partial class ConfigList : Config
+    [Export] Config[] Configs = null;
+
+
+    public override void Configure(IDependencyBinder binder)
     {
-        [Export] Config[] Configs = null;
-
-
-        public override void Configure(IDependencyBinder binder)
+        foreach (var config in Configs)
         {
-            foreach (var config in Configs)
-            {
-                config.Configure(binder);
-            }
+            config.Configure(binder);
         }
+    }
 
-        public override void Initialize(IDependencyResolver resolver)
+    public override void Initialize(IDependencyResolver resolver)
+    {
+        foreach (var config in Configs)
         {
-            foreach (var config in Configs)
-            {
-                config.Initialize(resolver);
-            }
+            config.Initialize(resolver);
         }
     }
 }

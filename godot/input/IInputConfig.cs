@@ -1,7 +1,5 @@
 
-namespace Lavos.Input
-{
-    public interface IInputConfig
-    {
-    }
-}
+namespace Lavos.Input;
+
+public interface IInputConfig
+{ }

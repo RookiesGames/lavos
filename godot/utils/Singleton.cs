@@ -1,11 +1,10 @@
 using Godot;
 using Lavos.Utils.Lazy;
 
-namespace Lavos.Utils
+namespace Lavos.Utils;
+
+public class Singleton<T> where T : class
 {
-    public class Singleton<T> where T : class
-    {
-        static LazyBuilder<T> _builder = new LazyBuilder<T>();
-        public static T Instance => _builder.Instance;
-    }
+    static LazyBuilder<T> _builder = new LazyBuilder<T>();
+    public static T Instance => _builder.Instance;
 }

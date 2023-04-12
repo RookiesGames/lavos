@@ -1,9 +1,8 @@
 using Godot;
 
-namespace Lavos.Dependency
+namespace Lavos.Dependency;
+
+public interface IDependencyResolver
 {
-    public interface IDependencyResolver
-    {
-        T Resolve<T>();
-    }
+    T Resolve<T>();
 }

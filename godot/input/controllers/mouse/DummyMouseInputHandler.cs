@@ -1,23 +1,22 @@
 using Godot;
 
-namespace Lavos.Input
+namespace Lavos.Input;
+
+sealed partial class DummyMouseInputHandler
+    : Node
+    , IMouseInputHandler
 {
-    sealed partial class DummyMouseInputHandler
-        : Node
-        , IMouseInputHandler
-    {
-        #region IKeyboardInputHandler
+    #region IKeyboardInputHandler
 
-        public void RegisterListener(IMouseInputListener listener) { }
-        public void UnregisterListener(IMouseInputListener listener) { }
+    public void RegisterListener(IMouseInputListener listener) { }
+    public void UnregisterListener(IMouseInputListener listener) { }
 
-        #endregion
+    #endregion
 
 
-        #region IInputHandler
+    #region IInputHandler
 
-        public void EnableHandler(IMouseInputConfig config) { }
+    public void EnableHandler(IMouseInputConfig config) { }
 
-        #endregion IInputHandler
-    }
+    #endregion IInputHandler
 }

@@ -1,11 +1,13 @@
 using Lavos.Core;
+using System;
 
-namespace Lavos.Utils.Automation
+namespace Lavos.Utils.Automation;
+
+public interface IStateMachine : IProcessable
 {
-    public interface IStateMachine : IProcessable
-    {
-        IState CurrentState { get; }
+    event EventHandler<IState> StateChanged;
 
-        void ChangeState(IState state);
-    }
+    IState CurrentState { get; }
+
+    void ChangeState(IState state);
 }

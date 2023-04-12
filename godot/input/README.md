@@ -138,7 +138,6 @@ interface register for keyboard events.
 
 ```cs
 using Godot;
-using Lavos.Console;
 using Lavos.Input;
 using Lavos.Dependency;
 
@@ -175,7 +174,6 @@ To receive keyboard events, register as a listener to
 
 ```cs
 using Godot;
-using Lavos.Console;
 using Lavos.Input;
 using Lavos.Dependency;
 
@@ -293,7 +291,6 @@ interface to register for mouse events
 
 ```cs
 using Godot;
-using Lavos.Console;
 using Lavos.Input;
 using Lavos.Dependency;
 
@@ -336,7 +333,6 @@ To receive mouse events, register as a listener to
 
 ```cs
 using Godot;
-using Lavos.Console;
 using Lavos.Input;
 using Lavos.Dependency;
 
@@ -501,7 +497,6 @@ interface to register for keyboard events
 
 ```c#
 using Godot;
-using Lavos.Console;
 using Lavos.Input;
 using Lavos.Dependency;
 
@@ -552,7 +547,6 @@ To receive gamepad events, register as a listener to
 
 ```c#
 using Godot;
-using Lavos.Console;
 using Lavos.Input;
 using Lavos.Dependency;
 

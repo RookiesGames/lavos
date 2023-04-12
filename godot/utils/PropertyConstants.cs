@@ -1,10 +1,9 @@
 
-namespace Lavos.Utils
+namespace Lavos.Utils;
+
+public static class PropertyConstants
 {
-    public static class PropertyConstants
-    {
-        #region Control
-        public static string FontColor = "font_color";
-        #endregion
-    }
+    #region Control
+    public static string FontColor = "font_color";
+    #endregion
 }

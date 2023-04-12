@@ -1,26 +1,25 @@
 using Lavos.Dependency;
 using System;
 
-namespace Lavos.Services.Crash
+namespace Lavos.Services.Crash;
+
+public interface ICrashService : IService
 {
-    public interface ICrashService : IService
-    {
-        void Initialise();
+    void Initialise();
 
-        void EnableCollection(bool enable);
+    void EnableCollection(bool enable);
 
-        bool CheckForUnsentReports();
-        void SendUnsentReports();
-        void DeleteUnsentReports();
+    bool CheckForUnsentReports();
+    void SendUnsentReports();
+    void DeleteUnsentReports();
 
-        bool DidCrashOnPreviousExecution();
+    bool DidCrashOnPreviousExecution();
 
-        void Log(string message);
-        void LogException(Exception e);
+    void Log(string message);
+    void LogException(Exception e);
 
-        void SetUserId(string id);
-        void SetCustomKey(string key, Godot.Variant value);
+    void SetUserId(string id);
+    void SetCustomKey(string key, Godot.Variant value);
 
-        void NativeCrash();
-    }
+    void NativeCrash();
 }

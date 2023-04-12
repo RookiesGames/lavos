@@ -1,26 +1,25 @@
 
 using System;
 
-namespace Lavos.Services.Crash
+namespace Lavos.Services.Crash;
+
+sealed class DummyCrashService : ICrashService
 {
-    sealed class DummyCrashService : ICrashService
-    {
-        public void Initialise() { }
+    public void Initialise() { }
 
-        public void EnableCollection(bool enable) { }
+    public void EnableCollection(bool enable) { }
 
-        public bool CheckForUnsentReports() => false;
-        public void SendUnsentReports() { }
-        public void DeleteUnsentReports() { }
+    public bool CheckForUnsentReports() => false;
+    public void SendUnsentReports() { }
+    public void DeleteUnsentReports() { }
 
-        public bool DidCrashOnPreviousExecution() => false;
+    public bool DidCrashOnPreviousExecution() => false;
 
-        public void Log(string message) { }
-        public void LogException(Exception e) { }
+    public void Log(string message) { }
+    public void LogException(Exception e) { }
 
-        public void SetUserId(string id) { }
-        public void SetCustomKey(string key, Godot.Variant value) { }
+    public void SetUserId(string id) { }
+    public void SetCustomKey(string key, Godot.Variant value) { }
 
-        public void NativeCrash() { }
-    }
+    public void NativeCrash() { }
 }

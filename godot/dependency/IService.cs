@@ -1,6 +1,5 @@
 
-namespace Lavos.Dependency
-{
-    public interface IService
-    { }
-}
+namespace Lavos.Dependency;
+
+public interface IService
+{ }

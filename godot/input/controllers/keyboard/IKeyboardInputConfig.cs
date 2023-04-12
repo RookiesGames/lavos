@@ -1,11 +1,10 @@
 using Godot;
 using System.Collections.Generic;
 
-namespace Lavos.Input
+namespace Lavos.Input;
+
+public interface IKeyboardInputConfig : IInputConfig
 {
-    public interface IKeyboardInputConfig : IInputConfig
-    {
-        IReadOnlyCollection<Godot.Key> Keys { get; }
-        InputAction GetAction(Godot.Key key);
-    }
+    IReadOnlyCollection<Godot.Key> Keys { get; }
+    InputAction GetAction(Godot.Key key);
 }

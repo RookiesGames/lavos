@@ -1,38 +1,32 @@
 using System.Collections.Generic;
 
-namespace Lavos.Utils.Extensions
+namespace Lavos.Utils.Extensions;
+
+public static class DictionaryExtensions
 {
-    public static class DictionaryExtensions
+    public static bool DoesNotContainKey<T, U>(this Dictionary<T, U> dic, T key)
     {
-        public static bool DoesNotContainKey<T, U>(this Dictionary<T, U> dic, T key)
-        {
-            return dic.ContainsKey(key) == false;
-        }
+        return dic.ContainsKey(key) == false;
+    }
 
-        public static bool DoesNotContainValue<T, U>(this Dictionary<T, U> dic, U value)
+    public static U GetOrDefault<T, U>(this Dictionary<T, U> dic, T key, U fallback = default)
+    {
+        if (dic.DoesNotContainKey(key))
         {
-            return dic.ContainsValue(value) == false;
+            return fallback;
         }
+        //
+        return dic[key];
+    }
 
-        public static U GetOrDefault<T, U>(this Dictionary<T, U> dic, T key, U fallback)
+    public static void SetOrAdd<T, U>(this Dictionary<T, U> dic, T key, U value)
+    {
+        if (dic.ContainsKey(key))
         {
-            if (dic.DoesNotContainKey(key))
-            {
-                return fallback;
-            }
-            //
-            return dic[key];
+            dic[key] = value;
+            return;
         }
-
-        public static void SetOrAdd<T, U>(this Dictionary<T, U> dic, T key, U value)
-        {
-            if (dic.ContainsKey(key))
-            {
-                dic[key] = value;
-                return;
-            }
-            //
-            dic.Add(key, value);
-        }
+        //
+        dic.Add(key, value);
     }
 }

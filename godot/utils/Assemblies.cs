@@ -3,15 +3,14 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-namespace Lavos.Utils
+namespace Lavos.Utils;
+
+public static class Assemblies
 {
-    public static class Assemblies
+    public static Assembly GetMainAssembly()
     {
-        public static Assembly GetMainAssembly()
-        {
-            var appName = (string)ProjectSettings.GetSetting("application/config/name");
-            var assembly = AppDomain.CurrentDomain.GetAssemblies().First(a => a.FullName.StartsWith(appName));
-            return assembly;
-        }
+        var appName = (string)ProjectSettings.GetSetting("application/config/name");
+        var assembly = AppDomain.CurrentDomain.GetAssemblies().First(a => a.FullName.StartsWith(appName));
+        return assembly;
     }
 }

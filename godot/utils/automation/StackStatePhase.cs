@@ -1,14 +1,13 @@
 
-namespace Lavos.Utils.Automation
+namespace Lavos.Utils.Automation;
+
+public enum StackStatePhase
 {
-    public enum StackStatePhase
-    {
-        Popped,
-        Popping,
-        Pushing,
-        Resuming,
-        Running,
-        Pausing,
-        Paused
-    }
+    Popped,
+    Popping,
+    Pushing,
+    Resuming,
+    Running,
+    Pausing,
+    Paused
 }

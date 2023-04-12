@@ -1,11 +1,10 @@
 
-namespace Lavos.Utils.Extensions
+namespace Lavos.Utils.Extensions;
+
+public static class TypeExtensions
 {
-    public static class TypeExtensions
+    public static bool IsAssignableTo(this System.Type type, System.Type to)
     {
-        public static bool IsAssignableTo(this System.Type type, System.Type to)
-        {
-            return to.IsAssignableFrom(type);
-        }
+        return to.IsAssignableFrom(type);
     }
 }

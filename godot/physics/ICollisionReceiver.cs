@@ -1,12 +1,10 @@
 using Godot;
-using System;
 
-namespace Lavos.Physics
+namespace Lavos.Physics;
+
+public interface ICollisionReceiver
 {
-    public interface ICollisionReceiver
-    {
-        bool IsEnabled { get; }
+    bool IsEnabled { get; }
 
-        void OnCollisionReceived(PhysicsBody2D other);
-    }
+    void OnCollisionReceived(PhysicsBody2D other);
 }

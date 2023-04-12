@@ -1,13 +1,12 @@
 using Lavos.Core;
 using System;
 
-namespace Lavos.Utils.Automation
-{
-    public interface IState : IProcessable
-    {
-        event EventHandler<IState> StateChanged;
+namespace Lavos.Utils.Automation;
 
-        void Enter();
-        void Exit();
-    }
+public interface IState : IProcessable
+{
+    event EventHandler<IState> StateChanged;
+
+    void Enter();
+    void Exit();
 }

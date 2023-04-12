@@ -1,9 +1,8 @@
 
-namespace Lavos.Input
+namespace Lavos.Input;
+
+public interface IGamepadStatusListener
 {
-    public interface IGamepadStatusListener
-    {
-        void OnGamepadConnected(GamepadDevice device);
-        void OnGamepadDisconnected(GamepadDevice device);
-    }
+    void OnGamepadConnected(GamepadDevice device);
+    void OnGamepadDisconnected(GamepadDevice device);
 }

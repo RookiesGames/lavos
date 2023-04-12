@@ -1,32 +1,31 @@
 
-namespace Lavos.Input
+namespace Lavos.Input;
+
+public enum InputAction
 {
-    public enum InputAction
-    {
-        None,
+    None,
 
-        Up,
-        Down,
-        Left,
-        Right,
+    Up,
+    Down,
+    Left,
+    Right,
 
-        North,
-        South,
-        West,
-        East,
+    North,
+    South,
+    West,
+    East,
 
-        Start,
-        Select,
+    Start,
+    Select,
 
-        LeftTrigger,
-        RightTrigger,
+    LeftTrigger,
+    RightTrigger,
 
-        LeftShoulder,
-        RightShoulder,
+    LeftShoulder,
+    RightShoulder,
 
-        LeftStick,
-        RightStick,
+    LeftStick,
+    RightStick,
 
-        Unkwnon,
-    }
+    Unkwnon,
 }

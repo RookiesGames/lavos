@@ -1,10 +1,9 @@
 using Godot;
 
-namespace Lavos.Utils
+namespace Lavos.Utils;
+
+public partial class NodeSingleton<T> : Node
 {
-    public partial class NodeSingleton<T> : Node
-    {
-        protected static T _instance;
-        public static T Instance => _instance;
-    }
+    protected static T _instance;
+    public static T Instance => _instance;
 }
