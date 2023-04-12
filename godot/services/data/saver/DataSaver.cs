@@ -12,7 +12,7 @@ public abstract class DataSaver : IDataSaver
 
     public string DataFile => "data";
 
-    private Dictionary<string, Variant> _data;
+    private Dictionary<string, Variant> _data = new Dictionary<string, Variant>();
     public Dictionary<string, Variant> Data => _data;
 
     public void LoadData(Dictionary<string, Variant> data)
