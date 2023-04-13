@@ -9,10 +9,10 @@ public sealed partial class NodeTree : Node
 
     const string TAG = nameof(NodeTree);
 
-    private static Dictionary<string, Node> _pinnedNodes = new Dictionary<string, Node>();
-    private static Dictionary<string, Node> PinnedNodes => _pinnedNodes;
+    static Dictionary<string, Node> _pinnedNodes = new Dictionary<string, Node>();
+    static Dictionary<string, Node> PinnedNodes => _pinnedNodes;
 
-    private static NodeTree _node;
+    static NodeTree _node;
     public static NodeTree Instance => _node;
 
     #endregion

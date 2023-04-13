@@ -5,7 +5,7 @@ namespace Lavos.Dependency;
 
 public sealed partial class ServiceLocator : Node
 {
-    private static DependencyContainer _container = null;
+    static DependencyContainer _container = null;
 
 
     public ServiceLocator(DependencyContainer container)

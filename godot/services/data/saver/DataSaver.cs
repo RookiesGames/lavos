@@ -7,12 +7,12 @@ public abstract class DataSaver : IDataSaver
 {
     #region IDataSaver
 
-    private bool _isDirty = false;
+    bool _isDirty = false;
     public bool IsDirty => _isDirty;
 
     public string DataFile => "data";
 
-    private Dictionary<string, Variant> _data = new Dictionary<string, Variant>();
+    Dictionary<string, Variant> _data = new Dictionary<string, Variant>();
     public Dictionary<string, Variant> Data => _data;
 
     public void LoadData(Dictionary<string, Variant> data)

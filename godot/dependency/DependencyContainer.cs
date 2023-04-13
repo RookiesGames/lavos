@@ -10,10 +10,10 @@ public sealed partial class DependencyContainer
     , IDependencyBinder
     , IDependencyResolver
 {
-    private Node _nodes;
-    private readonly Dictionary<System.Type, System.Type> bindings = new Dictionary<System.Type, System.Type>();
-    private readonly Dictionary<System.Type, List<System.Type>> lookups = new Dictionary<System.Type, List<System.Type>>();
-    private readonly Dictionary<System.Type, object> instances = new Dictionary<System.Type, object>();
+    Node _nodes;
+    readonly Dictionary<System.Type, System.Type> bindings = new Dictionary<System.Type, System.Type>();
+    readonly Dictionary<System.Type, List<System.Type>> lookups = new Dictionary<System.Type, List<System.Type>>();
+    readonly Dictionary<System.Type, object> instances = new Dictionary<System.Type, object>();
 
 
     public override void _Ready()
@@ -84,7 +84,7 @@ public sealed partial class DependencyContainer
         return LookUpType(type);
     }
 
-    private object GetOrCreateInstance(Type type)
+    object GetOrCreateInstance(Type type)
     {
         if (instances.DoesNotContainKey(type))
         {
@@ -100,17 +100,17 @@ public sealed partial class DependencyContainer
         return instances[type];
     }
 
-    private object CreateInstance(Type type)
+    object CreateInstance(Type type)
     {
         return Activator.CreateInstance(type);
     }
 
-    private void AddInstance(Type type, object obj)
+    void AddInstance(Type type, object obj)
     {
         instances[type] = obj;
     }
 
-    private void InjectDependencies(object obj)
+    void InjectDependencies(object obj)
     {
         var realType = obj.GetType();
 
@@ -148,19 +148,19 @@ public sealed partial class DependencyContainer
         return;
     }
 
-    private void InjectProperty(PropertyInfo info, object target)
+    void InjectProperty(PropertyInfo info, object target)
     {
         var value = FindOrCreateType(info.PropertyType);
         info.SetValue(target, value);
     }
 
-    private void InjectField(FieldInfo info, object target)
+    void InjectField(FieldInfo info, object target)
     {
         var value = FindOrCreateType(info.FieldType);
         info.SetValue(target, value);
     }
 
-    private object LookUpType(Type type)
+    object LookUpType(Type type)
     {
         Assert.IsTrue(type.IsInterface, "Only interfaces can be looked up for");
 
@@ -183,7 +183,7 @@ public sealed partial class DependencyContainer
         return LookUpList(type);
     }
 
-    private List<object> LookUpList(Type type)
+    List<object> LookUpList(Type type)
     {
         Assert.IsTrue(type.IsInterface, "Only interfaces can be looked up for");
 

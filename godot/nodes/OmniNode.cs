@@ -10,7 +10,6 @@ public sealed partial class OmniNode : NodeSingleton<OmniNode>
     [Export] PackedScene _scene = null;
     [Export] Config[] _configs = null;
 
-
     public override void _EnterTree()
     {
         _instance = this;
@@ -28,7 +27,7 @@ public sealed partial class OmniNode : NodeSingleton<OmniNode>
         SceneManager.ChangeScene(_scene);
     }
 
-    private void HandleConfigs(DependencyContainer container)
+    void HandleConfigs(DependencyContainer container)
     {
         if (_configs?.Length > 0)
         {
@@ -37,7 +36,7 @@ public sealed partial class OmniNode : NodeSingleton<OmniNode>
         }
     }
 
-    private void CreateConfigs(DependencyContainer container)
+    void CreateConfigs(DependencyContainer container)
     {
         foreach (var config in _configs)
         {
@@ -45,7 +44,7 @@ public sealed partial class OmniNode : NodeSingleton<OmniNode>
         }
     }
 
-    private void InitializeConfigs(DependencyContainer container)
+    void InitializeConfigs(DependencyContainer container)
     {
         foreach (var config in _configs)
         {

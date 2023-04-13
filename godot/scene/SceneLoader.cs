@@ -9,7 +9,7 @@ public sealed partial class SceneLoader : Node
     [Export] PackedScene _nextScene = null;
     [Export] double _delay = 0;
 
-    private double _currentTime;
+    double _currentTime;
 
 
     #region Node
