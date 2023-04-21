@@ -7,18 +7,20 @@ namespace Lavos.Utils.Threading;
 // Untested
 public sealed class MainThreadDispatcher : IThreadDispatcher
 {
-    readonly object _lock = new object();
-    int _threadId = int.MinValue;
-    List<Action> _pendingActions = new List<Action>();
+    readonly object _lock;
+    readonly int _threadId;
+    readonly List<Action> _pendingActions;
 
     public MainThreadDispatcher()
     {
-        _threadId = System.Threading.Thread.CurrentThread.ManagedThreadId;
+        _lock = new();
+        _pendingActions = new();
+        _threadId = Environment.CurrentManagedThreadId;
     }
 
     public void AddAction(Action action)
     {
-        if (_threadId == System.Threading.Thread.CurrentThread.ManagedThreadId)
+        if (_threadId == Environment.CurrentManagedThreadId)
         {
             action.Invoke();
         }

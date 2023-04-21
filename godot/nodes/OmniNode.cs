@@ -1,18 +1,17 @@
 using Godot;
 using Lavos.Dependency;
-using Lavos.Scene;
 using Lavos.Utils;
 
 namespace Lavos.Nodes;
 
 public sealed partial class OmniNode : NodeSingleton<OmniNode>
 {
-    [Export] PackedScene _scene = null;
-    [Export] Config[] _configs = null;
+    [Export] PackedScene _scene;
+    [Export] Config[] _configs;
 
     public override void _EnterTree()
     {
-        _instance = this;
+        Instance = this;
     }
 
     public override void _Ready()

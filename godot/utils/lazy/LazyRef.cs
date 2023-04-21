@@ -4,7 +4,7 @@ namespace Lavos.Utils.Lazy;
 
 public struct LazyRef<T> where T : IService
 {
-    LazyRef(T instance = default(T))
+    LazyRef(T instance = default)
     {
         _instance = instance;
     }

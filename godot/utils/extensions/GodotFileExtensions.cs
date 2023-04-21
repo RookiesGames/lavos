@@ -8,19 +8,16 @@ public static class GodotFileExtensions
         var path = file.GetPath();
         //
         var end = path.LastIndexOf('/') + 1;
-        var name = path.Substring(end);
+        var name = path[end..];
         //
         end = name.LastIndexOf('.');
-        name = name.Substring(0, end);
-        //
-        return name;
+        return name[..end];
     }
 
     public static string GetFileExtension(this Godot.FileAccess file)
     {
         var path = file.GetPath();
         var end = path.LastIndexOf('.') + 1;
-        var ext = path.Substring(end);
-        return ext;
+        return path[end..];
     }
 }

@@ -4,11 +4,10 @@ namespace Lavos.Utils.Lazy;
 
 public sealed class LazyBuilder<T> where T : class
 {
-    Func<T> _constructor = null;
+    readonly Func<T> _constructor;
 
-    T _instance = null;
-    public T Instance => _instance ?? (_instance = Build());
-
+    T _instance;
+    public T Instance => _instance ??= Build();
 
     public LazyBuilder(Func<T> constructor = null)
     {

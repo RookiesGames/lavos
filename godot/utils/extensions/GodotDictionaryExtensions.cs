@@ -7,7 +7,7 @@ public static class GodotDictionaryExtensions
 {
     public static bool DoesNotContainKey<[MustBeVariant] T, [MustBeVariant] U>(this Dictionary<T, U> dic, T key)
     {
-        return dic.ContainsKey(key) == false;
+        return !dic.ContainsKey(key);
     }
 
     public static U GetOrDefault<[MustBeVariant] T, [MustBeVariant] U>(this Dictionary<T, U> dic, T key, U fallback = default)

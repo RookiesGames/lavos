@@ -19,4 +19,3 @@ sealed class DummyAnalyticsService : IAnalyticsService
 
     public void SetUserProperty(string name, string value) { }
 }
-

@@ -1,7 +1,7 @@
+using Godot;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Godot;
 
 namespace Lavos.Dependency;
 
@@ -11,10 +11,9 @@ public sealed partial class DependencyContainer
     , IDependencyResolver
 {
     Node _nodes;
-    readonly Dictionary<System.Type, System.Type> bindings = new Dictionary<System.Type, System.Type>();
-    readonly Dictionary<System.Type, List<System.Type>> lookups = new Dictionary<System.Type, List<System.Type>>();
-    readonly Dictionary<System.Type, object> instances = new Dictionary<System.Type, object>();
-
+    readonly Dictionary<Type, Type> bindings = new();
+    readonly Dictionary<Type, List<Type>> lookups = new();
+    readonly Dictionary<Type, object> instances = new();
 
     public override void _Ready()
     {
@@ -34,7 +33,7 @@ public sealed partial class DependencyContainer
         Assert.IsTrue(typeof(C).IsClass, "Only classes can be bound to");
         Assert.IsTrue(typeof(C).IsAssignableTo(typeof(I)), $"Type mismatch - {typeof(C)} does not inherit from {typeof(I)}");
         Assert.IsFalse(bindings.ContainsKey(typeof(I)), "Binding cannot be duplicated");
-
+        //
         DoBind<I, C>();
     }
 
@@ -48,7 +47,7 @@ public sealed partial class DependencyContainer
         Assert.IsTrue(typeof(I1).IsInterface, "Only interfaces can be lookup from");
         Assert.IsTrue(typeof(I2).IsInterface, "Only interfaces can be lookup to");
         Assert.IsTrue(typeof(I2).IsAssignableTo(typeof(I1)), $"Type mismatch - {typeof(I2)} does not inherit from {typeof(I1)}");
-
+        //
         if (lookups.DoesNotContainKey(typeof(I1)))
         {
             lookups[typeof(I1)] = new List<System.Type>();
@@ -80,7 +79,7 @@ public sealed partial class DependencyContainer
             var realType = bindings[type];
             return GetOrCreateInstance(realType);
         }
-
+        //
         return LookUpType(type);
     }
 
@@ -94,13 +93,14 @@ public sealed partial class DependencyContainer
                 node.Name = type.Name;
                 _nodes.AddChild(node);
             }
+            //
             AddInstance(type, obj);
             InjectDependencies(obj);
         }
         return instances[type];
     }
 
-    object CreateInstance(Type type)
+    static object CreateInstance(Type type)
     {
         return Activator.CreateInstance(type);
     }
@@ -115,11 +115,10 @@ public sealed partial class DependencyContainer
         var realType = obj.GetType();
 
         var flags = BindingFlags.Public | BindingFlags.NonPublic;
-        flags = flags | BindingFlags.DeclaredOnly | BindingFlags.Instance;
-        flags = flags | BindingFlags.SetProperty;
+        flags |= BindingFlags.DeclaredOnly | BindingFlags.Instance;
+        flags |= BindingFlags.SetProperty;
 
-        var fieldInfos = realType.GetFields(flags);
-        foreach (var field in fieldInfos)
+        foreach (var field in realType.GetFields(flags))
         {
             if (field.HasCustomAttribute<InjectAttribute>())
             {
@@ -127,8 +126,7 @@ public sealed partial class DependencyContainer
             }
         }
 
-        var propertyInfos = realType.GetProperties(flags);
-        foreach (var property in propertyInfos)
+        foreach (var property in realType.GetProperties(flags))
         {
             if (property.HasCustomAttribute<InjectAttribute>())
             {
@@ -136,16 +134,13 @@ public sealed partial class DependencyContainer
             }
         }
 
-        var methods = realType.GetMethods(flags);
-        foreach (var method in methods)
+        foreach (var method in realType.GetMethods(flags))
         {
             if (method.HasCustomAttribute<InjectMethodAttribute>())
             {
                 method.Invoke(obj, null);
             }
         }
-
-        return;
     }
 
     void InjectProperty(PropertyInfo info, object target)
@@ -163,16 +158,16 @@ public sealed partial class DependencyContainer
     object LookUpType(Type type)
     {
         Assert.IsTrue(type.IsInterface, "Only interfaces can be looked up for");
-
+        //
         if (lookups.ContainsKey(type))
         {
             var list = lookups[type];
             Assert.IsTrue(list.Count == 1, "Type has more than one lookup. Consider looking up as a list");
-
+            //
             var lookupType = list[0];
             return FindOrCreateType(lookupType) ?? LookUpType(lookupType);
         }
-
+        //
         Assert.Fail($"Failed to lookup type {type}");
         return null;
     }
@@ -186,7 +181,7 @@ public sealed partial class DependencyContainer
     List<object> LookUpList(Type type)
     {
         Assert.IsTrue(type.IsInterface, "Only interfaces can be looked up for");
-
+        //
         if (lookups.ContainsKey(type))
         {
             var list = lookups[type];
@@ -197,7 +192,7 @@ public sealed partial class DependencyContainer
             }
             return lookupList;
         }
-
+        //
         return null;
     }
 }

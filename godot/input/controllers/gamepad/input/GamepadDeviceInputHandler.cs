@@ -3,11 +3,10 @@ using System.Collections.Generic;
 
 namespace Lavos.Input;
 
-sealed partial class GamepadDeviceInputHandler
-    : Node
+sealed partial class GamepadDeviceInputHandler : Node
 {
-    readonly Dictionary<Godot.JoyAxis, float> _joystickValues = new Dictionary<Godot.JoyAxis, float>();
-    readonly HashSet<Godot.JoyButton> _pressedButtons = new HashSet<Godot.JoyButton>();
+    readonly Dictionary<JoyAxis, float> _joystickValues = new();
+    readonly HashSet<JoyButton> _pressedButtons = new();
 
     int DeviceId = -1;
     GamepadDevice _gamepad = GamepadDevice.GamepadNone;
@@ -20,11 +19,10 @@ sealed partial class GamepadDeviceInputHandler
         }
         get => _gamepad;
     }
-    public IGamepadInputConfig Config = null;
+    public IGamepadInputConfig Config;
     bool IsDisabled => Config == null;
 
-    GamepadInputHandler _parent = null;
-
+    GamepadInputHandler _parent;
 
     public override void _Ready()
     {
@@ -111,7 +109,7 @@ sealed partial class GamepadDeviceInputHandler
             //
             if (joypadButton.Pressed)
             {
-                if (_pressedButtons.Contains(button) == false)
+                if (!_pressedButtons.Contains(button))
                 {
                     _pressedButtons.Add(button);
                     _parent.OnGamepadButtonPressed(Gamepad, action);

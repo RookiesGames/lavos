@@ -1,5 +1,4 @@
 using Godot;
-using Lavos.Scene;
 using Lavos.Utils.Automation;
 
 namespace Lavos.Audio;
@@ -13,10 +12,10 @@ public sealed partial class MusicManager : Node
         FadeOut,
     }
 
-    AudioStreamPlayer _source = null;
+    AudioStreamPlayer _source;
     public AudioStreamPlayer Source => _source;
 
-    MasterAudio _masterAudio = null;
+    MasterAudio _masterAudio;
 
     readonly IStateMachine _stateMachine = new StateMachine();
     readonly IState _fadeInState = new FadeInState();

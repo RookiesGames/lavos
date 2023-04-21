@@ -8,7 +8,7 @@ public static class ListExtensions
     public static bool IsEmpty<T>(this List<T> list) => list.Count == 0;
     public static bool IsNotEmpty<T>(this List<T> list) => list.Count > 0;
 
-    public static T First<T>(this List<T> list) => (list.Count == 0) ? default(T) : list[0];
+    public static T First<T>(this List<T> list) => (list.Count == 0) ? default : list[0];
 
     public static bool PushUnique<T>(this List<T> list, T item)
     {

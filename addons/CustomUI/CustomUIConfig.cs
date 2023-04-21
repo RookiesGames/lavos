@@ -5,9 +5,8 @@ namespace Lavos.UI;
 
 public sealed partial class CustomUIConfig : Config
 {
-    [Export] AudioStreamOggVorbis AcceptSound = null;
-    [Export] AudioStreamOggVorbis CancelSound = null;
-
+    [Export] AudioStreamOggVorbis AcceptSound;
+    [Export] AudioStreamOggVorbis CancelSound;
 
     public override void Configure(IDependencyBinder binder)
     {

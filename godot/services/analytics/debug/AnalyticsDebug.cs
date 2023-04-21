@@ -16,10 +16,12 @@ sealed partial class AnalyticsDebug : Node
         //
         _service.SetUserId("user_analytics123");
         //
-        var parameters = new Dictionary<string, Godot.Variant>();
-        parameters.Add("version", "1.0");
-        parameters.Add("os", "Android 42");
-        parameters.Add("level", 24);
+        var parameters = new Dictionary<string, Variant>
+        {
+            { "version", "1.0" },
+            { "os", "Android 42" },
+            { "level", 24 }
+        };
         _service.SetDefaultParameters(parameters);
         //
         _service.SetUserProperty("race", "caucasian");
@@ -27,9 +29,9 @@ sealed partial class AnalyticsDebug : Node
 
     public void OnLogEvent()
     {
-        Lavos.Console.Log.Debug("fsd", "fsdaf");
+        Log.Debug("fsd", "fsdaf");
         _service.LogEvent("debug");
-        _service.LogEvent("debug params", new Dictionary<string, Godot.Variant>() { { "key1", "value1" }, { "key2", "value2" } });
+        _service.LogEvent("debug params", new Dictionary<string, Variant>() { { "key1", "value1" }, { "key2", "value2" } });
     }
 
     public void OnTaskLogEvent()

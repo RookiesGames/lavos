@@ -4,8 +4,7 @@ namespace Lavos.Dependency;
 
 public sealed partial class ConfigList : Config
 {
-    [Export] Config[] Configs = null;
-
+    [Export] Config[] Configs;
 
     public override void Configure(IDependencyBinder binder)
     {

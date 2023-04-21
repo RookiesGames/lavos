@@ -1,4 +1,3 @@
-using Lavos.Scene;
 
 namespace Lavos.Audio;
 
@@ -10,8 +9,8 @@ internal abstract class BaseFadeState
     protected double _timer = 0;
     protected const double Duration = 0.5;
 
-    protected MasterAudio _masterAudio = null;
-    protected MusicManager _musicManager = null;
+    protected MasterAudio _masterAudio;
+    protected MusicManager _musicManager;
 
     #endregion
 

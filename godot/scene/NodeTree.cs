@@ -9,14 +9,13 @@ public sealed partial class NodeTree : Node
 
     const string TAG = nameof(NodeTree);
 
-    static Dictionary<string, Node> _pinnedNodes = new Dictionary<string, Node>();
+    readonly static Dictionary<string, Node> _pinnedNodes = new();
     static Dictionary<string, Node> PinnedNodes => _pinnedNodes;
 
     static NodeTree _node;
     public static NodeTree Instance => _node;
 
     #endregion
-
 
     #region Node
 
@@ -26,7 +25,6 @@ public sealed partial class NodeTree : Node
     }
 
     #endregion
-
 
     #region Methods
 
@@ -60,7 +58,6 @@ public sealed partial class NodeTree : Node
         var key = typeof(T).Name;
         PinNodeByKey(key, node);
     }
-
 
     public static void UnpinNodeByKey(string key)
     {

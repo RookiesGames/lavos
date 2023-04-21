@@ -1,6 +1,5 @@
 using Godot;
 using Lavos.Audio;
-using Lavos.Scene;
 using Lavos.Utils.Lazy;
 using System;
 
@@ -15,23 +14,17 @@ public partial class ClickButton : Button
         Back,
     };
 
-    public event Action OnButtonPressed = null;
-    public event Action<bool> OnButtonToggled = null;
+    public event Action OnButtonPressed;
+    public event Action<bool> OnButtonToggled;
 
     [Export] Type ButtonType = Type.None;
 
-    public static AudioStreamOggVorbis AcceptSound = null;
-    public static AudioStreamOggVorbis CancelSound = null;
+    public static AudioStreamOggVorbis AcceptSound;
+    public static AudioStreamOggVorbis CancelSound;
 
-    static LazyBuilder<SoundManager> SoundManagerLazy = new LazyBuilder<SoundManager>(
+    static readonly LazyBuilder<SoundManager> SoundManagerLazy = new(
         () => NodeTree.GetPinnedNodeByType<SoundManager>()
     );
-
-
-    public override void _EnterTree()
-    {
-        base._EnterTree();
-    }
 
     public override void _ExitTree()
     {

@@ -13,7 +13,6 @@ sealed partial class DummyKeyboardInputHandler
 
     #endregion
 
-
     #region IInputHandler
 
     public void EnableHandler(IKeyboardInputConfig config) { }

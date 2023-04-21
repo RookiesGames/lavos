@@ -13,7 +13,6 @@ sealed partial class DummyMouseInputHandler
 
     #endregion
 
-
     #region IInputHandler
 
     public void EnableHandler(IMouseInputConfig config) { }

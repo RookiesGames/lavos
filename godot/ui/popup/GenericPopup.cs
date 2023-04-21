@@ -8,14 +8,13 @@ public sealed partial class GenericPopup
     : Control
     , IPopup
 {
-    Label _titleLabel = null;
-    Label _descriptionLabel = null;
+    Label _titleLabel;
+    Label _descriptionLabel;
 
-    Button _acceptBtn = null;
+    Button _acceptBtn;
     public Button AcceptButton => _acceptBtn;
-    Button _declineBtn = null;
+    Button _declineBtn;
     public Button DeclineButton => _declineBtn;
-
 
     #region IPopup
 
@@ -46,7 +45,6 @@ public sealed partial class GenericPopup
     public event Action<PopupResult> PopupResult;
 
     #endregion
-
 
     public override void _EnterTree()
     {

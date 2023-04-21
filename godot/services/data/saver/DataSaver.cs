@@ -11,14 +11,12 @@ public abstract class DataSaver : IDataSaver
     public bool IsDirty => _isDirty;
 
     public string DataFile => "data";
-
-    Dictionary<string, Variant> _data = new Dictionary<string, Variant>();
-    public Dictionary<string, Variant> Data => _data;
+    public Dictionary<string, Variant> Data { get; } = new();
 
     public void LoadData(Dictionary<string, Variant> data)
     {
-        _data.Clear();
-        _data.Merge(data);
+        Data.Clear();
+        Data.Merge(data);
     }
 
     public void SaveData(string key, Variant data)

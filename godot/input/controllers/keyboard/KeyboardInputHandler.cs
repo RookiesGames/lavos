@@ -10,18 +10,16 @@ sealed partial class KeyboardInputHandler
     #region Members
 
     IKeyboardInputConfig _config;
-    readonly HashSet<Godot.Key> _pressedKeys = new HashSet<Godot.Key>();
-    readonly List<IKeyboardInputListener> _listeners = new List<IKeyboardInputListener>();
+    readonly HashSet<Key> _pressedKeys = new();
+    readonly List<IKeyboardInputListener> _listeners = new();
 
     #endregion
-
 
     #region Properties
 
     bool IsDisabled => _config == null;
 
     #endregion
-
 
     #region IKeyboardInputHandler
 
@@ -37,7 +35,6 @@ sealed partial class KeyboardInputHandler
 
     #endregion
 
-
     #region IInputHandler
 
     public void EnableHandler(IKeyboardInputConfig config)
@@ -46,7 +43,6 @@ sealed partial class KeyboardInputHandler
     }
 
     #endregion IInputHandler
-
 
     #region Node
 
@@ -70,7 +66,7 @@ sealed partial class KeyboardInputHandler
             if (eventKey.Pressed)
             {
                 // Cache press to avoid repetition
-                if (_pressedKeys.Contains(key) == false)
+                if (!_pressedKeys.Contains(key))
                 {
                     _pressedKeys.Add(key);
                     OnKeyPressed(action);

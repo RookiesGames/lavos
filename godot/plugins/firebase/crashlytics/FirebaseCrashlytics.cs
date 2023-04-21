@@ -1,6 +1,6 @@
-using System;
 using Godot;
 using Lavos.Services.Crash;
+using System;
 
 namespace Lavos.Plugins.Firebase.Crashlytics;
 
@@ -63,19 +63,19 @@ sealed class FirebaseCrashlytics : ICrashService
         _plugin.CallVoid("setUserId", id);
     }
 
-    public void SetCustomKey(string key, Godot.Variant value)
+    public void SetCustomKey(string key, Variant value)
     {
         var method = string.Empty;
         switch (value.VariantType)
         {
-            case Godot.Variant.Type.Int: _plugin.CallVoid("setCustomKeyI", key, value); return;
-            case Godot.Variant.Type.Float: _plugin.CallVoid("setCustomKeyF", key, value); return;
-            case Godot.Variant.Type.Bool: _plugin.CallVoid("setCustomKeyB", key, value); return;
-            case Godot.Variant.Type.String: _plugin.CallVoid("setCustomKeyS", key, value); return;
+            case Variant.Type.Int: _plugin.CallVoid("setCustomKeyI", key, value); return;
+            case Variant.Type.Float: _plugin.CallVoid("setCustomKeyF", key, value); return;
+            case Variant.Type.Bool: _plugin.CallVoid("setCustomKeyB", key, value); return;
+            case Variant.Type.String: _plugin.CallVoid("setCustomKeyS", key, value); return;
             default:
                 {
                     _plugin.CallVoid("setCustomKeyS", key, "TypeNotSupported");
-                    Lavos.Console.Log.Error(nameof(FirebaseCrashlytics), "Unhandled custom type");
+                    Console.Log.Error(nameof(FirebaseCrashlytics), "Unhandled custom type");
                     return;
                 }
         }

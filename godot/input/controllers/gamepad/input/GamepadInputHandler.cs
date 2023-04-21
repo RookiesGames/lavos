@@ -8,10 +8,9 @@ sealed partial class GamepadInputHandler
     : Node
     , IGamepadInputHandler
 {
-    Dictionary<GamepadDevice, GamepadDeviceInputHandler> _deviceHandlers = new Dictionary<GamepadDevice, GamepadDeviceInputHandler>();
-    Dictionary<GamepadDevice, IGamepadInputConfig> _configs = new Dictionary<GamepadDevice, IGamepadInputConfig>();
-    readonly List<IGamepadInputListener> _listeners = new List<IGamepadInputListener>();
-
+    readonly Dictionary<GamepadDevice, GamepadDeviceInputHandler> _deviceHandlers = new();
+    readonly Dictionary<GamepadDevice, IGamepadInputConfig> _configs = new();
+    readonly List<IGamepadInputListener> _listeners = new();
 
     #region IGamepadInputHandler
 
@@ -26,7 +25,6 @@ sealed partial class GamepadInputHandler
     }
 
     #endregion
-
 
     #region IInputHandler
 
@@ -50,7 +48,7 @@ sealed partial class GamepadInputHandler
     {
         _configs.SetOrAdd(device, config);
         //
-        if (_deviceHandlers.ContainsKey(device) == false)
+        if (!_deviceHandlers.ContainsKey(device))
         {
             var handler = this.AddNode<GamepadDeviceInputHandler>();
             handler.Gamepad = device;
@@ -60,7 +58,6 @@ sealed partial class GamepadInputHandler
     }
 
     #endregion
-
 
     public void OnGamepadButtonPressed(GamepadDevice device, InputAction action)
     {

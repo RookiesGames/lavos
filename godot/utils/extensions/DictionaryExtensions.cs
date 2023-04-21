@@ -6,7 +6,7 @@ public static class DictionaryExtensions
 {
     public static bool DoesNotContainKey<T, U>(this Dictionary<T, U> dic, T key)
     {
-        return dic.ContainsKey(key) == false;
+        return !dic.ContainsKey(key);
     }
 
     public static U GetOrDefault<T, U>(this Dictionary<T, U> dic, T key, U fallback = default)

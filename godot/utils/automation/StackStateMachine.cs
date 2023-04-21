@@ -6,8 +6,8 @@ namespace Lavos.Utils.Automation;
 
 public sealed class StackStateMachine : IStackStateMachine
 {
-    IStackState _pendingState = null;
-    Stack<IStackState> _stateStack = new Stack<IStackState>();
+    IStackState _pendingState;
+    readonly Stack<IStackState> _stateStack = new();
 
     public StackStateMachine(IStackState initialState)
     {
@@ -62,7 +62,7 @@ public sealed class StackStateMachine : IStackStateMachine
                     {
                         peek.Process(delta);
                         break;
-                    };
+                    }
                 case StackStatePhase.Pausing:
                     {
                         peek.Pause();

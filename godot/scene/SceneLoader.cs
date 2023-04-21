@@ -1,16 +1,13 @@
 using Godot;
-using System;
-
 
 namespace Lavos.Scene;
 
 public sealed partial class SceneLoader : Node
 {
-    [Export] PackedScene _nextScene = null;
+    [Export] PackedScene _nextScene;
     [Export] double _delay = 0;
 
     double _currentTime;
-
 
     #region Node
 

@@ -8,7 +8,7 @@ public static class GodotArrayExtensions
     public static bool IsEmpty<[MustBeVariant] T>(this Array<T> array) => array.Count == 0;
     public static bool IsNotEmpty<[MustBeVariant] T>(this Array<T> array) => array.Count > 0;
 
-    public static T First<[MustBeVariant] T>(this Array<T> array) => (array.Count == 0) ? default(T) : array[0];
+    public static T First<[MustBeVariant] T>(this Array<T> array) => (array.Count == 0) ? default : array[0];
 
     public static bool PushUnique<[MustBeVariant] T>(this Array<T> array, T item)
     {

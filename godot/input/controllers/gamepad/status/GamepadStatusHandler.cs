@@ -7,13 +7,13 @@ sealed partial class GamepadStatusHandler
     : Node
     , IGamepadStatusHandler
 {
-    readonly List<IGamepadStatusListener> _listeners = new List<IGamepadStatusListener>();
+    readonly List<IGamepadStatusListener> _listeners = new();
 
     const double WAIT_TIME = 0.25f;
     double _timer = WAIT_TIME;
 
-    readonly List<GamepadDevice> _connectedDevices = new List<GamepadDevice>();
-    readonly Dictionary<GamepadDevice, bool> _devicesState = new Dictionary<GamepadDevice, bool>()
+    readonly List<GamepadDevice> _connectedDevices = new();
+    readonly Dictionary<GamepadDevice, bool> _devicesState = new()
         {
             { GamepadDevice.Gamepad1, false},
             { GamepadDevice.Gamepad2, false},
@@ -44,7 +44,6 @@ sealed partial class GamepadStatusHandler
 
     #endregion IGamepadStatusHandler
 
-
     public override void _Process(double delta)
     {
         _timer += delta;
@@ -72,7 +71,7 @@ sealed partial class GamepadStatusHandler
             //
             if (_connectedDevices.Contains(device))
             {
-                if (connected == false)
+                if (!connected)
                 {
                     _devicesState[device] = true;
                     OnGamepadConnected(device);

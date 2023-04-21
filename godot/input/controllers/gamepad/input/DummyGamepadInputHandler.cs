@@ -13,7 +13,6 @@ sealed partial class DummyGamepadInputHandler
 
     #endregion
 
-
     #region IInputHandler
 
     void IInputHandler<IGamepadInputConfig>.EnableHandler(IGamepadInputConfig config) { }

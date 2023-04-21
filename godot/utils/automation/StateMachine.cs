@@ -5,7 +5,7 @@ namespace Lavos.Utils.Automation;
 
 public sealed class StateMachine : IStateMachine
 {
-    IState _pendingState = null;
+    IState _pendingState;
 
     bool _pendingTransition = false;
     bool HasPendingState => _pendingTransition;
@@ -14,7 +14,7 @@ public sealed class StateMachine : IStateMachine
 
     public event EventHandler<IState> StateChanged;
 
-    IState _state = null;
+    IState _state;
     public IState CurrentState => _state;
 
     void IStateMachine.ChangeState(IState state)

@@ -15,12 +15,12 @@ sealed partial class CrashDebug : Node
         _crashService.EnableCollection(true);
         //
         _crashService.SetUserId("user_crash1234");
-        _crashService.SetCustomKey("int", Godot.Variant.CreateFrom(123));
-        _crashService.SetCustomKey("long", Godot.Variant.CreateFrom(123));
-        _crashService.SetCustomKey("float", Godot.Variant.CreateFrom(123.123f));
-        _crashService.SetCustomKey("double", Godot.Variant.CreateFrom(123.123));
-        _crashService.SetCustomKey("bool", Godot.Variant.CreateFrom(true));
-        _crashService.SetCustomKey("string", Godot.Variant.CreateFrom("abc"));
+        _crashService.SetCustomKey("int", Variant.CreateFrom(123));
+        _crashService.SetCustomKey("long", Variant.CreateFrom(123));
+        _crashService.SetCustomKey("float", Variant.CreateFrom(123.123f));
+        _crashService.SetCustomKey("double", Variant.CreateFrom(123.123));
+        _crashService.SetCustomKey("bool", Variant.CreateFrom(true));
+        _crashService.SetCustomKey("string", Variant.CreateFrom("abc"));
     }
 
     public void OnLogEvent()
@@ -35,12 +35,12 @@ sealed partial class CrashDebug : Node
 
     public void OnTaskLog()
     {
-        Task.Run(() => { _crashService.Log("Log from Task"); });
+        Task.Run(() => _crashService.Log("Log from Task"));
     }
 
     public void OnTaskException()
     {
-        Task.Run(() => { _crashService.LogException(new TaskCanceledException($"Task Exception from {nameof(CrashDebug)}")); });
+        Task.Run(() => _crashService.LogException(new TaskCanceledException($"Task Exception from {nameof(CrashDebug)}")));
     }
 
     public void OnNativeCrash()
@@ -48,13 +48,13 @@ sealed partial class CrashDebug : Node
         _crashService.NativeCrash();
     }
 
-    public void OnNullReference()
+    public static void OnNullReference()
     {
         List<int> list = null;
         list.Add(0);
     }
 
-    public void OnMemoryCrash()
+    public static void OnMemoryCrash()
     {
         var list = new List<byte[]>();
         while (true)

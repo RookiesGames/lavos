@@ -4,44 +4,24 @@ namespace Lavos.Math;
 
 public sealed class Range
 {
-    float _value = 0f;
+    float _value;
     public float Value
     {
         get => _value;
-        set => _value = Mathf.Clamp(value, _min, _max);
+        set => _value = Mathf.Clamp(value, Min, Max);
     }
-
-    float _min = 0f;
-    public float Min => _min;
-
-    float _max = 0f;
-    public float Max => _max;
-
+    public float Min { get; }
+    public float Max { get; }
 
     public Range(float value, float min, float max)
     {
         _value = value;
-        _min = min;
-        _max = max;
+        Min = min;
+        Max = max;
     }
 
-    public void Add(float value)
-    {
-        _value = Mathf.Clamp(_value + value, _min, _max);
-    }
-
-    public void Substract(float value)
-    {
-        _value = Mathf.Clamp(_value - value, _min, _max);
-    }
-
-    public void Multiply(float value)
-    {
-        _value = Mathf.Clamp(_value * value, _min, _max);
-    }
-
-    public void Divice(float value)
-    {
-        _value = Mathf.Clamp(_value / value, _min, _max);
-    }
+    public void Add(float value) => _value = Mathf.Clamp(_value + value, Min, Max);
+    public void Substract(float value) => _value = Mathf.Clamp(_value - value, Min, Max);
+    public void Multiply(float value) => _value = Mathf.Clamp(_value * value, Min, Max);
+    public void Divice(float value) => _value = Mathf.Clamp(_value / value, Min, Max);
 }

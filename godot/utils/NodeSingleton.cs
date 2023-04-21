@@ -4,6 +4,10 @@ namespace Lavos.Utils;
 
 public partial class NodeSingleton<T> : Node
 {
-    protected static T _instance;
-    public static T Instance => _instance;
+    static T _instance;
+    public static T Instance
+    {
+        get => _instance;
+        protected set => _instance = value;
+    }
 }

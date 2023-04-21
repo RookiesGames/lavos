@@ -9,8 +9,7 @@ public static class AudioStreamPlayerExtensions
     const float MinimumDb = -80;
     const float OffsetDb = 80;
 
-    static Math.Range _volume = new Math.Range(0f, 0f, 1f);
-
+    readonly static Math.Range _volume = new(0f, 0f, 1f);
 
     public static void SetVolume(this AudioStreamPlayer player, float value)
     {
@@ -20,7 +19,6 @@ public static class AudioStreamPlayerExtensions
 
     public static float GetVolume(this AudioStreamPlayer player)
     {
-        var volume = (player.VolumeDb + OffsetDb) / OffsetDb;
-        return volume;
+        return (player.VolumeDb + OffsetDb) / OffsetDb;
     }
 }

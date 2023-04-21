@@ -6,7 +6,7 @@ sealed class DummyDataSaverService : IDataSaverService
 {
     const string Tag = nameof(DummyDataSaverService);
 
-    List<IDataSaver> _dataSavers = new List<IDataSaver>();
+    readonly List<IDataSaver> _dataSavers = new();
 
     public void Register(IDataSaver saver)
     {
@@ -20,7 +20,7 @@ sealed class DummyDataSaverService : IDataSaverService
         Log.Debug(Tag, $"{saver.DataFile} unregistered");
     }
 
-    public T GetDataSaver<T>() where T : IDataSaver => default(T);
+    public T GetDataSaver<T>() where T : IDataSaver => default;
 
     public void CleanData()
     {

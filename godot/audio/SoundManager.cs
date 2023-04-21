@@ -1,5 +1,4 @@
 using Godot;
-using Lavos.Scene;
 using System.Collections.Generic;
 
 namespace Lavos.Audio;
@@ -8,23 +7,32 @@ public sealed partial class SoundManager : Node
 {
     const string Tag = nameof(SoundManager);
 
-    MasterAudio _masterAudio = null;
-    List<AudioStreamPlayer> _sources = new List<AudioStreamPlayer>();
+    MasterAudio _masterAudio;
+    List<AudioStreamPlayer> _sources;
     int _simultaniousSounds = 32;
-    int _nextAvailable = 0;
-
+    int _nextAvailable;
 
     public override void _EnterTree()
     {
+        _sources = new List<AudioStreamPlayer>();
+    }
+
+    public override void _Ready()
+    {
+        _masterAudio = NodeTree.GetPinnedNodeByType<MasterAudio>();
+        CreateSource();
+
         NodeTree.PinNodeByType<SoundManager>(this);
         MasterAudio.VolumeChanged += OnVolumeChanged;
     }
 
-    public override void _ExitTree()
+    AudioStreamPlayer CreateSource()
     {
-        MasterAudio.VolumeChanged -= OnVolumeChanged;
-        ClearSources();
-        NodeTree.UnpinNodeByType<SoundManager>();
+        _nextAvailable = _sources.Count;
+        var source = this.AddNode<AudioStreamPlayer>($"SoundSource{_sources.Count}");
+        source.SetVolume(_masterAudio.MasterSoundVolume);
+        _sources.Add(source);
+        return source;
     }
 
     void OnVolumeChanged()
@@ -35,19 +43,11 @@ public sealed partial class SoundManager : Node
         }
     }
 
-    public override void _Ready()
+    public override void _ExitTree()
     {
-        _masterAudio = NodeTree.GetPinnedNodeByType<MasterAudio>();
-        CreateSource();
-    }
-
-    AudioStreamPlayer CreateSource()
-    {
-        _nextAvailable = _sources.Count;
-        var source = this.AddNode<AudioStreamPlayer>($"SoundSource{_sources.Count}");
-        source.SetVolume(_masterAudio.MasterSoundVolume);
-        _sources.Add(source);
-        return source;
+        MasterAudio.VolumeChanged -= OnVolumeChanged;
+        ClearSources();
+        NodeTree.UnpinNodeByType<SoundManager>();
     }
 
     void ClearSources()
@@ -79,7 +79,7 @@ public sealed partial class SoundManager : Node
     {
         for (var idx = 0; idx < _sources.Count; ++idx)
         {
-            if (_sources[_nextAvailable].Playing == false)
+            if (!_sources[_nextAvailable].Playing)
             {
                 return _sources[_nextAvailable];
             }
@@ -98,7 +98,7 @@ public sealed partial class SoundManager : Node
 
     public void PlayStreamUnique(AudioStreamOggVorbis stream)
     {
-        if (IsStreamPlaying(stream) == false)
+        if (!IsStreamPlaying(stream))
         {
             PlayStream(stream);
         }

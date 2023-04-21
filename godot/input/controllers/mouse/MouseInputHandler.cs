@@ -8,18 +8,16 @@ sealed partial class MouseInputHandler : Node, IMouseInputHandler
     #region Members
 
     IMouseInputConfig _config;
-    readonly HashSet<Godot.MouseButton> _pressedButtons = new HashSet<Godot.MouseButton>();
-    readonly List<IMouseInputListener> _listeners = new List<IMouseInputListener>();
+    readonly HashSet<MouseButton> _pressedButtons = new();
+    readonly List<IMouseInputListener> _listeners = new();
 
     #endregion
-
 
     #region Properties
 
     bool IsDisabled => _config == null;
 
     #endregion
-
 
     #region IKeyboardInputHandler
 
@@ -35,7 +33,6 @@ sealed partial class MouseInputHandler : Node, IMouseInputHandler
 
     #endregion
 
-
     #region IInputHandler
 
     public void EnableHandler(IMouseInputConfig config)
@@ -44,7 +41,6 @@ sealed partial class MouseInputHandler : Node, IMouseInputHandler
     }
 
     #endregion
-
 
     #region Node
 
@@ -68,7 +64,7 @@ sealed partial class MouseInputHandler : Node, IMouseInputHandler
             if (mouseButton.Pressed)
             {
                 // Cache press to avoid repetition
-                if (_pressedButtons.Contains(button) == false)
+                if (!_pressedButtons.Contains(button))
                 {
                     _pressedButtons.Add(button);
                     OnMouseButtonPressed(action);
