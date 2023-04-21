@@ -13,7 +13,7 @@ public static class Assert
     [Conditional("DEBUG")]
     public static void IsFalse(bool condition, string message)
     {
-        System.Diagnostics.Debug.Assert(condition, message);
+        System.Diagnostics.Debug.Assert(!condition, message);
     }
 
     [Conditional("DEBUG")]
