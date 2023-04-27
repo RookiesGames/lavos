@@ -2,7 +2,7 @@ using Godot;
 
 namespace Lavos.Input;
 
-public interface IGamepadInputListener
+public interface IGamepadInputEventListener
 {
     int Priority { get; }
 

@@ -8,8 +8,8 @@ sealed partial class DummyGamepadInputHandler
 {
     #region IKeyboardInputHandler
 
-    public void RegisterListener(IGamepadInputListener listener) { }
-    public void UnregisterListener(IGamepadInputListener listener) { }
+    public void RegisterListener(IGamepadInputEventListener listener) { }
+    public void UnregisterListener(IGamepadInputEventListener listener) { }
 
     #endregion
 

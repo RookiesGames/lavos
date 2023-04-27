@@ -8,18 +8,18 @@ sealed partial class GamepadInputHandler
     : Node
     , IGamepadInputHandler
 {
-    readonly Dictionary<GamepadDevice, GamepadDeviceInputHandler> _deviceHandlers = new();
+    readonly Dictionary<GamepadDevice, GamepadInputNode> _deviceHandlers = new();
     readonly Dictionary<GamepadDevice, IGamepadInputConfig> _configs = new();
-    readonly List<IGamepadInputListener> _listeners = new();
+    readonly List<IGamepadInputEventListener> _listeners = new();
 
     #region IGamepadInputHandler
 
-    public void RegisterListener(IGamepadInputListener listener)
+    public void RegisterListener(IGamepadInputEventListener listener)
     {
         _listeners.PushUnique(listener);
     }
 
-    public void UnregisterListener(IGamepadInputListener listener)
+    public void UnregisterListener(IGamepadInputEventListener listener)
     {
         _listeners.Remove(listener);
     }
@@ -50,7 +50,7 @@ sealed partial class GamepadInputHandler
         //
         if (!_deviceHandlers.ContainsKey(device))
         {
-            var handler = this.AddNode<GamepadDeviceInputHandler>();
+            var handler = this.AddNode<GamepadInputNode>();
             handler.Gamepad = device;
             _deviceHandlers.SetOrAdd(device, handler);
         }

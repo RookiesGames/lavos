@@ -492,7 +492,7 @@ public class PlayerController
 ### Gamepad Input Listener
 
 Implement the
-[IGamepadInputListener](./controllers/gamepad/IGamepadInputListener.cs)
+[IGamepadInputEventListener](./controllers/gamepad/IGamepadInputEventListener.cs)
 interface to register for keyboard events
 
 ```c#
@@ -502,41 +502,41 @@ using Lavos.Dependency;
 
 public class PlayerController
     : Node
-    , IGamepadInputListener
+    , IGamepadInputEventListener
 {
     IGamepadInputHandler _gamepadInputHandler = null;
     IGamepadInputConfig _config = new GamepadConfig();
 
-    #region IGamepadInputListener
+    #region IGamepadInputEventListener
 
-    GamepadDevice IGamepadInputListener.Gamepad => GamepadDevice.Gamepad1;
-    int IGamepadInputListener.Priority => 0;
+    GamepadDevice IGamepadInputEventListener.Gamepad => GamepadDevice.Gamepad1;
+    int IGamepadInputEventListener.Priority => 0;
 
-    bool IGamepadInputListener.OnTriggerValueChanged(GamepadDevice device, InputAction action, float value)
+    bool IGamepadInputEventListener.OnTriggerValueChanged(GamepadDevice device, InputAction action, float value)
     {
         Log.Debug(Tag, $"Gamepad {device} trigger value changed {action} - {value}");
         return true;
     }
 
-    bool IGamepadInputListener.OnAxisValueChanged(GamepadDevice device, InputAction action, Vector2 value)
+    bool IGamepadInputEventListener.OnAxisValueChanged(GamepadDevice device, InputAction action, Vector2 value)
     {
         Log.Debug(Tag, $"Gamepad {device} axis value changed {action} - {value}");
         return true;
     }
 
-    bool IGamepadInputListener.OnGamepadButtonPressed(GamepadDevice device, InputAction action)
+    bool IGamepadInputEventListener.OnGamepadButtonPressed(GamepadDevice device, InputAction action)
     {
         Log.Debug(Tag, $"Gamepad {device} Button {action} pressed");
         return true;
     }
 
-    bool IGamepadInputListener.OnGamepadButtonReleased(GamepadDevice device, InputAction action)
+    bool IGamepadInputEventListener.OnGamepadButtonReleased(GamepadDevice device, InputAction action)
     {
         Log.Debug(Tag, $"Gamepad {device} Button {action} released");
         return true;
     }
 
-    #endregion IGamepadInputListener
+    #endregion IGamepadInputEventListener
 
     //...
 }
@@ -552,7 +552,7 @@ using Lavos.Dependency;
 
 public class PlayerController
     : Node
-    , IGamepadInputListener
+    , IGamepadInputEventListener
 {
     //...
 

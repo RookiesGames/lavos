@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Lavos.Input;
 
-sealed partial class GamepadDeviceInputHandler : Node
+sealed partial class GamepadInputNode : Node
 {
     readonly Dictionary<JoyAxis, float> _joystickValues = new();
     readonly HashSet<JoyButton> _pressedButtons = new();
@@ -46,8 +46,8 @@ sealed partial class GamepadDeviceInputHandler : Node
             var axis = joypadMotion.Axis;
             switch (axis)
             {
-                case Godot.JoyAxis.TriggerLeft:
-                case Godot.JoyAxis.TriggerRight:
+                case JoyAxis.TriggerLeft:
+                case JoyAxis.TriggerRight:
                     {
                         var action = Config.GetTriggerState(axis, joypadMotion.AxisValue);
                         if (action == InputAction.None)
@@ -71,18 +71,18 @@ sealed partial class GamepadDeviceInputHandler : Node
                         var value = Vector2.Zero;
                         switch (axis)
                         {
-                            case Godot.JoyAxis.LeftX:
-                            case Godot.JoyAxis.LeftY:
+                            case JoyAxis.LeftX:
+                            case JoyAxis.LeftY:
                                 {
-                                    value.X = _joystickValues.GetOrDefault(Godot.JoyAxis.LeftX, 0f);
-                                    value.Y = _joystickValues.GetOrDefault(Godot.JoyAxis.LeftY, 0f);
+                                    value.X = _joystickValues.GetOrDefault(JoyAxis.LeftX, 0f);
+                                    value.Y = _joystickValues.GetOrDefault(JoyAxis.LeftY, 0f);
                                     break;
                                 }
-                            case Godot.JoyAxis.RightX:
-                            case Godot.JoyAxis.RightY:
+                            case JoyAxis.RightX:
+                            case JoyAxis.RightY:
                                 {
-                                    value.X = _joystickValues.GetOrDefault(Godot.JoyAxis.RightX, 0f);
-                                    value.Y = _joystickValues.GetOrDefault(Godot.JoyAxis.RightY, 0f);
+                                    value.X = _joystickValues.GetOrDefault(JoyAxis.RightX, 0f);
+                                    value.Y = _joystickValues.GetOrDefault(JoyAxis.RightY, 0f);
                                     break;
                                 }
                         }

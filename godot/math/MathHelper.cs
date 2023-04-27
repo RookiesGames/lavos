@@ -29,11 +29,6 @@ public sealed class MathHelper
         return from.Lerp(to, weight);
     }
 
-    public static Vector3 Lerp(Vector3 from, Vector3 to, float weight)
-    {
-        return from.Lerp(to, weight);
-    }
-
     public static Color Lerp(Color from, Color to, float weight)
     {
         return from.Lerp(to, weight);

@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Lavos.Math;
+namespace Lavos.Utils.Extensions;
 
 public static class Vector2Extensions
 {
