@@ -28,8 +28,9 @@ fn update_modules() ! {
 
 fn setup_lavos() ! {
 	wd := os.dir(@FILE)
-	execute_command('~> Cleaning up previous lavos setup', 'v run ${wd}/lavos.vsh clean ${project}')!
-	execute_command('~> Setting up lavos', 'v run ${wd}/lavos.vsh link ${project}')!
+	cmd := $if windows { 'cmd /c v ' } $else { 'v' }
+	execute_command('~> Cleaning up previous lavos setup', '${cmd} run ${wd}/lavos.vsh clean ${project}')!
+	execute_command('~> Setting up lavos', '${cmd} run ${wd}/lavos.vsh link ${project}')!
 }
 
 if project.is_blank() {

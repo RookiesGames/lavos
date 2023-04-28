@@ -52,7 +52,7 @@ fn cmd_clean(cmd cli.Command) ! {
 fn remove_symlink(link string) ! {
 	if is_link(link) || is_dir(link) || is_file(link) {
 		print('\t~> Removing symlink ${link}')
-		rm(link) or {
+		rmdir(link) or {
 			println(' ❌')
 			return err
 		}
@@ -67,7 +67,6 @@ fn cmd_link(cmd cli.Command) ! {
 	//
 	println('~> Creating links...')
 	lavoswd := os.getwd()
-	println(path)
 	// lavos source
 	create_symlink('${lavoswd}/lavos/godot', '${path}/${symlink_lavos}')!
 	// script templates
