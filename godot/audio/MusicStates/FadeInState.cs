@@ -15,19 +15,19 @@ internal sealed class FadeInState : BaseFadeState, IState
 
     void IState.Enter()
     {
-        _musicManager.Source.SetVolume(0);
-        _musicManager.Source.Play();
+        _musicManager.Pin.Source.SetVolume(0);
+        _musicManager.Pin.Source.Play();
         //
-        _target = _masterAudio.MasterMusicVolume;
+        _target = _masterAudio.Pin.MasterMusicVolume;
         _timer = 0;
     }
 
     void IProcessable.Process(double delta)
     {
-        _timer += (delta * _musicManager.FadeInSpeed);
+        _timer += (delta * _musicManager.Pin.FadeInSpeed);
         var weight = (float)(_timer / Duration);
-        _musicManager.Source.SetVolume(Mathf.Lerp(0, _target, weight));
-        if (_musicManager.Source.GetVolume() >= _target)
+        _musicManager.Pin.Source.SetVolume(Mathf.Lerp(0, _target, weight));
+        if (_musicManager.Pin.Source.GetVolume() >= _target)
         {
             StateChanged?.Invoke(this, null);
         }
@@ -35,7 +35,7 @@ internal sealed class FadeInState : BaseFadeState, IState
 
     void IState.Exit()
     {
-        _musicManager.Source.SetVolume(_target);
+        _musicManager.Pin.Source.SetVolume(_target);
     }
 
     #endregion
