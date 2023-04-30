@@ -64,25 +64,24 @@ sealed partial class GamepadStatusHandler
             _connectedDevices.Add(GamepadDeviceHelper.FromId(id));
         }
         //
-        var keys = new List<GamepadDevice>(_devicesState.Keys);
-        foreach (var device in keys)
+        foreach (var key in _devicesState.Keys)
         {
-            var connected = _devicesState[device];
+            var connected = _devicesState[key];
             //
-            if (_connectedDevices.Contains(device))
+            if (_connectedDevices.Contains(key))
             {
                 if (!connected)
                 {
-                    _devicesState[device] = true;
-                    OnGamepadConnected(device);
+                    _devicesState[key] = true;
+                    OnGamepadConnected(key);
                 }
             }
             else
             {
                 if (connected)
                 {
-                    _devicesState[device] = false;
-                    OnGamepadDisconnected(device);
+                    _devicesState[key] = false;
+                    OnGamepadDisconnected(key);
                 }
             }
         }
