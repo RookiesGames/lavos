@@ -19,6 +19,9 @@ sealed partial class GamepadInputNode : Node
         }
         get => _gamepad;
     }
+
+    Vector2 JoyAxisValue = Vector2.Zero;
+
     public IGamepadInputConfig Config;
     bool IsDisabled => Config == null;
 
@@ -68,26 +71,31 @@ sealed partial class GamepadInputNode : Node
                             return;
                         }
                         //
-                        var value = Vector2.Zero;
                         switch (axis)
                         {
                             case JoyAxis.LeftX:
                             case JoyAxis.LeftY:
                                 {
-                                    value.X = _joystickValues.GetOrDefault(JoyAxis.LeftX, 0f);
-                                    value.Y = _joystickValues.GetOrDefault(JoyAxis.LeftY, 0f);
+                                    JoyAxisValue.X = _joystickValues.GetOrDefault(JoyAxis.LeftX, 0f);
+                                    JoyAxisValue.Y = _joystickValues.GetOrDefault(JoyAxis.LeftY, 0f);
                                     break;
                                 }
                             case JoyAxis.RightX:
                             case JoyAxis.RightY:
                                 {
-                                    value.X = _joystickValues.GetOrDefault(JoyAxis.RightX, 0f);
-                                    value.Y = _joystickValues.GetOrDefault(JoyAxis.RightY, 0f);
+                                    JoyAxisValue.X = _joystickValues.GetOrDefault(JoyAxis.RightX, 0f);
+                                    JoyAxisValue.Y = _joystickValues.GetOrDefault(JoyAxis.RightY, 0f);
+                                    break;
+                                }
+                            default:
+                                {
+                                    JoyAxisValue.X = 0;
+                                    JoyAxisValue.Y = 0;
                                     break;
                                 }
                         }
                         //
-                        _parent.OnAxisValueChanged(Gamepad, action, value);
+                        _parent.OnAxisValueChanged(Gamepad, action, JoyAxisValue);
                         break;
                     }
             }
