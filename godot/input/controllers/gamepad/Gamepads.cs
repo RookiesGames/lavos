@@ -3,7 +3,7 @@ using System;
 namespace Lavos.Input;
 
 [Flags]
-public enum GamepadDevice
+public enum GamepadDevice : uint
 {
     GamepadNone = 0,
     Gamepad1 = 1 << 0,
