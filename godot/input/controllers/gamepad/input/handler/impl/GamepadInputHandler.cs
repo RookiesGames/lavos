@@ -35,9 +35,15 @@ sealed partial class GamepadInputHandler
 
     public void EnableHandler(GamepadDevice device, IGamepadInputConfig config)
     {
-        foreach (GamepadDevice value in Enum.GetValues(typeof(GamepadDevice)))
+        foreach (GamepadDevice value in Enum.GetValues<GamepadDevice>())
         {
-            if (((uint)device & (uint)value) != 0)
+            if (value == GamepadDevice.GamepadAll)
+            {
+                continue;
+            }
+
+            var flag = (uint)device & (uint)value;
+            if (flag != 0)
             {
                 DoEnableHandler(value, config);
             }
