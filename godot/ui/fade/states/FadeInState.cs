@@ -11,7 +11,7 @@ internal sealed class FadeInState : BaseFadeState, IState
 
     #region IState
 
-    public event EventHandler<IState> StateChanged;
+    public event Action<IState> StateChanged;
 
     void IState.Enter()
     {
@@ -28,7 +28,7 @@ internal sealed class FadeInState : BaseFadeState, IState
         //
         if (alpha <= 0)
         {
-            StateChanged?.Invoke(this, null);
+            StateChanged?.Invoke(null);
         }
     }
 

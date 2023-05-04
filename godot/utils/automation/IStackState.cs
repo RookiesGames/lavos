@@ -7,8 +7,8 @@ public interface IStackState : IProcessable
 {
     StackStatePhase Phase { get; set; }
 
-    event EventHandler<IStackState> StatePushed;
-    event EventHandler StatePopped;
+    event Action<IStackState> StatePushed;
+    event Action StatePopped;
 
     void Enter();
     void Resume();

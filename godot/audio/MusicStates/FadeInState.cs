@@ -11,7 +11,7 @@ internal sealed class FadeInState : BaseFadeState, IState
 
     #region IState
 
-    public event EventHandler<IState> StateChanged;
+    public event Action<IState> StateChanged;
 
     void IState.Enter()
     {
@@ -29,7 +29,7 @@ internal sealed class FadeInState : BaseFadeState, IState
         _musicManager.Pin.Source.SetVolume(Mathf.Lerp(0, _target, weight));
         if (_musicManager.Pin.Source.GetVolume() >= _target)
         {
-            StateChanged?.Invoke(this, null);
+            StateChanged?.Invoke(null);
         }
     }
 

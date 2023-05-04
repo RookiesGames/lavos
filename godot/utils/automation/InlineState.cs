@@ -7,7 +7,7 @@ public sealed class InlineState : IState
 {
     #region IState
 
-    public event EventHandler<IState> StateChanged;
+    public event Action<IState> StateChanged;
 
     public Action Enter;
     public Action<double> Process;

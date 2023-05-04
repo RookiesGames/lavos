@@ -12,17 +12,17 @@ public sealed class StateMachine : IStateMachine
 
     #region IStateMachine
 
-    public event EventHandler<IState> StateChanged;
+    public event Action<IState> StateChanged;
 
     IState _state;
     public IState CurrentState => _state;
 
     void IStateMachine.ChangeState(IState state)
     {
-        OnStateChanged(this, state);
+        OnStateChanged(state);
     }
 
-    void OnStateChanged(object sender, IState state)
+    void OnStateChanged(IState state)
     {
         _pendingState = state;
         _pendingTransition = true;
@@ -55,7 +55,7 @@ public sealed class StateMachine : IStateMachine
             _state.Enter();
         }
         //
-        StateChanged?.Invoke(this, _state);
+        StateChanged?.Invoke(_state);
     }
 
     #endregion

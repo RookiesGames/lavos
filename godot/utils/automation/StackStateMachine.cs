@@ -90,10 +90,10 @@ public sealed class StackStateMachine : IStackStateMachine
 
     void IStackStateMachine.PushState(IStackState state)
     {
-        OnStatePushed(this, state);
+        OnStatePushed(state);
     }
 
-    void OnStatePushed(object sender, IStackState state)
+    void OnStatePushed(IStackState state)
     {
         if (_stateStack.TryPeek(out IStackState peek))
         {
@@ -105,10 +105,10 @@ public sealed class StackStateMachine : IStackStateMachine
 
     void IStackStateMachine.PopState()
     {
-        OnStatePopped(this, null);
+        OnStatePopped();
     }
 
-    void OnStatePopped(object sender, EventArgs e)
+    void OnStatePopped()
     {
         if (_stateStack.TryPeek(out IStackState peek))
         {

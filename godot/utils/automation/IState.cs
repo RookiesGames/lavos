@@ -5,7 +5,7 @@ namespace Lavos.Utils.Automation;
 
 public interface IState : IProcessable
 {
-    event EventHandler<IState> StateChanged;
+    event Action<IState> StateChanged;
 
     void Enter();
     void Exit();
