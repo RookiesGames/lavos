@@ -50,7 +50,15 @@ fn cmd_clean(cmd cli.Command) ! {
 }
 
 fn remove_symlink(link string) ! {
-	if is_link(link) || is_dir(link) || is_file(link) {
+	if is_file(link) {
+		print('\t~> Removing symlink ${link}')
+		rm(link) or {
+			println(' ❌')
+			return err
+		}
+		//
+		println(' ✅')
+	} else if is_dir(link) || is_link(link) {
 		print('\t~> Removing symlink ${link}')
 		rmdir(link) or {
 			println(' ❌')
