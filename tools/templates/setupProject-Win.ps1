@@ -10,6 +10,6 @@ if ($? -eq $false)
 
 # Setup project
 $dir = get-location
-$project = "speops"
+$project = "<project_folder>"
 $path = "$dir\$project"
 v run .\lavos\tools\setupProject.vsh -p $path

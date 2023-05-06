@@ -7,5 +7,5 @@ cd -- "$(dirname "$BASH_SOURCE")"
 ./lavos/tools/installEnv.command
 
 # Setup project
-path="$(pwd)/DreamDevour"
+path="$(pwd)/<project_folder>"
 v run ./lavos/tools/setupProject.vsh -p $path

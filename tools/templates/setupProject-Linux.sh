@@ -6,5 +6,5 @@
 sh ./lavos/tools/installEnv.sh
 
 # Setup project
-path="$(pwd)/DreamDevour"
+path="$(pwd)/<project_folder>"
 v run ./lavos/tools/setupProject.vsh -p $path
