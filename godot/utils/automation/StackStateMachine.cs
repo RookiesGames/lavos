@@ -72,7 +72,7 @@ public sealed class StackStateMachine : IStackStateMachine
                     }
                 case StackStatePhase.Running:
                     {
-                        peek.Process(delta);
+                        peek.Update(delta);
                         break;
                     }
                 case StackStatePhase.Pausing:

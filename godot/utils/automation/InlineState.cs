@@ -14,7 +14,7 @@ public sealed class InlineState : IState
     public Action Exit;
 
     void IState.Enter() => Enter?.Invoke();
-    void IProcessable.Process(double delta) => Process?.Invoke(delta);
+    void IState.Update(double delta) => Process?.Invoke(delta);
     void IState.Exit() => Exit?.Invoke();
 
     #endregion

@@ -22,7 +22,7 @@ internal sealed class FadeInState : BaseFadeState, IState
         _timer = 0;
     }
 
-    void IProcessable.Process(double delta)
+    void IState.Update(double delta)
     {
         _timer += (delta * _musicManager.Pin.FadeInSpeed);
         var weight = (float)(_timer / Duration);

@@ -20,7 +20,7 @@ internal sealed class FadeInState : BaseFadeState, IState
         _panel.MouseFilter = Control.MouseFilterEnum.Stop;
     }
 
-    void IProcessable.Process(double delta)
+    void IState.Update(double delta)
     {
         _timer += delta;
         var weight = (float)(_timer / _duration);

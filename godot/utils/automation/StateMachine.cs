@@ -52,7 +52,7 @@ public sealed class StateMachine : IStateMachine
         {
             SwitchState();
         }
-        _state?.Process(delta);
+        _state?.Update(delta);
     }
 
     void SwitchState()
