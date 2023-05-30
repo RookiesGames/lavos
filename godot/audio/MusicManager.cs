@@ -17,7 +17,7 @@ public sealed partial class MusicManager : Node
 
     MasterAudio _masterAudio;
 
-    readonly IStateMachine _stateMachine = new StateMachine();
+    readonly IStateMachine _stateMachine = new StateMachine(null);
     readonly IState _fadeInState = new FadeInState();
     readonly IState _fadeOutState = new FadeOutState();
     public double FadeInSpeed = 0.25;

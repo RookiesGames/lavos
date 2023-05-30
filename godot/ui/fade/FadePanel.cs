@@ -11,7 +11,7 @@ public sealed partial class FadePanel : ColorRect
     [Export] double FadeInDuration = 1;
     [Export] double FadeOutDuration = 1;
 
-    readonly IStateMachine _stateMachine = new StateMachine();
+    readonly IStateMachine _stateMachine = new StateMachine(null);
     IState _fadeInState;
     IState _fadeOutState;
 

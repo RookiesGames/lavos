@@ -17,6 +17,11 @@ public sealed class StateMachine : IStateMachine
     IState _state;
     public IState CurrentState => _state;
 
+    public StateMachine(IState initialState)
+    {
+        OnStateChanged(initialState);
+    }
+
     void IStateMachine.ChangeState(IState state)
     {
         OnStateChanged(state);
