@@ -19,12 +19,6 @@ public sealed partial class SceneManager : Node
         ChangeScene(scene);
     }
 
-    public static void ChangeScene(string path)
-    {
-        var scene = GD.Load<PackedScene>(path);
-        ChangeScene(scene);
-    }
-
     public static void ChangeScene(PackedScene scene)
     {
         NodeTree.CleanTree();
