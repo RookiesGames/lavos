@@ -15,11 +15,7 @@ public sealed partial class FadePanel : ColorRect
     IState _fadeInState;
     IState _fadeOutState;
 
-    bool IsFadingIn => _stateMachine.CurrentState == _fadeInState;
-    bool IsFadingOut => _stateMachine.CurrentState == _fadeOutState;
-
-    public event Action FadedIn;
-    public event Action FadedOut;
+    #region Node
 
     public override void _Ready()
     {
@@ -41,34 +37,17 @@ public sealed partial class FadePanel : ColorRect
         _stateMachine.Process(delta);
     }
 
-    public Task FadeIn()
+    #endregion
+
+    public async Task FadeIn()
     {
         _stateMachine.ChangeState(_fadeInState);
-        await Task.w
-        return Task.Run(async () =>
-        {
-            TimeSpan timeSpan = TimeSpan.FromMilliseconds(60);
-            while (IsFadingIn)
-            {
-                await Task.Delay(timeSpan);
-            }
-            _stateMachine.ChangeState(null);
-            return Task.CompletedTask;
-        });
+        await Task.Delay((int)(FadeInDuration * 1000));
     }
 
-    public Task FadeOut()
+    public async Task FadeOut()
     {
         _stateMachine.ChangeState(_fadeOutState);
-        return Task.Run(async () =>
-        {
-            TimeSpan timeSpan = TimeSpan.FromMilliseconds(60);
-            while (IsFadingOut)
-            {
-                await Task.Delay(timeSpan);
-            }
-            _stateMachine.ChangeState(null);
-            return Task.CompletedTask;
-        });
+        await Task.Delay((int)(FadeOutDuration * 1000));
     }
 }
