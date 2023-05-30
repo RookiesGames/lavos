@@ -17,6 +17,7 @@ internal sealed class FadeOutState : BaseFadeState, IState
     {
         _timer = 0;
         _panel.SetAlpha(0);
+        _panel.MouseFilter = Control.MouseFilterEnum.Stop;
     }
 
     void IProcessable.Process(double delta)
@@ -28,6 +29,7 @@ internal sealed class FadeOutState : BaseFadeState, IState
         //
         if (alpha >= 1)
         {
+            _panel.MouseFilter = Control.MouseFilterEnum.Stop;
             StateChanged?.Invoke(null);
         }
     }
