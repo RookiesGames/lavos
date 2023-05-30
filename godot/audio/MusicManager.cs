@@ -33,6 +33,8 @@ public sealed partial class MusicManager : Node
     {
         MasterAudio.VolumeChanged -= OnVolumeChanged;
         NodeTree.UnpinNodeByType<MusicManager>();
+        //
+        _stateMachine.Dispose();
     }
 
     void OnVolumeChanged()

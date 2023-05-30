@@ -30,11 +30,7 @@ public sealed partial class FadePanel : ColorRect
     public override void _ExitTree()
     {
         NodeTree.UnpinNodeByType<FadePanel>();
-    }
-
-    public override void _Process(double delta)
-    {
-        _stateMachine.Process(delta);
+        _stateMachine.Dispose();
     }
 
     #endregion

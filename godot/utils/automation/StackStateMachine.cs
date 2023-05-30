@@ -1,4 +1,5 @@
 using Lavos.Core;
+using Lavos.Dependency;
 using System;
 using System.Collections.Generic;
 
@@ -13,6 +14,15 @@ public sealed class StackStateMachine : IStackStateMachine
     {
         initialState.Phase = StackStatePhase.Pushing;
         _stateStack.Push(initialState);
+    }
+
+    void IDisposable.Dispose()
+    {
+        var service = ServiceLocator.Locate<IProcessorService>();
+        service.Unregister(this);
+        //
+        _pendingState = null;
+        _stateStack.Clear();
     }
 
     #region IStackStateMachine

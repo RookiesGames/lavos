@@ -1,4 +1,5 @@
 using Lavos.Core;
+using Lavos.Dependency;
 using System;
 
 namespace Lavos.Utils.Automation;
@@ -20,6 +21,15 @@ public sealed class StateMachine : IStateMachine
     public StateMachine(IState initialState)
     {
         OnStateChanged(initialState);
+    }
+
+    void IDisposable.Dispose()
+    {
+        var service = ServiceLocator.Locate<IProcessorService>();
+        service.Unregister(this);
+        //
+        StateChanged = null;
+        _state = null;
     }
 
     void IStateMachine.ChangeState(IState state)

@@ -3,7 +3,7 @@ using System;
 
 namespace Lavos.Utils.Automation;
 
-public interface IStateMachine : IProcessable
+public interface IStateMachine : IProcessable, IDisposable
 {
     event Action<IState> StateChanged;
 
