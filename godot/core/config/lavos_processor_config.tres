@@ -1,0 +1,6 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://dyoybynxq4vqu"]
+
+[ext_resource type="Script" path="res://lavos/core/config/ProcessorConfig.cs" id="1_gc2vr"]
+
+[resource]
+script = ExtResource("1_gc2vr")
