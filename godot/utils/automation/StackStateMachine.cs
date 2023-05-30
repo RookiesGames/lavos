@@ -12,6 +12,9 @@ public sealed class StackStateMachine : IStackStateMachine
 
     public StackStateMachine(IStackState initialState)
     {
+        var service = ServiceLocator.Locate<IProcessorService>();
+        service.Register(this);
+        //
         initialState.Phase = StackStatePhase.Pushing;
         _stateStack.Push(initialState);
     }

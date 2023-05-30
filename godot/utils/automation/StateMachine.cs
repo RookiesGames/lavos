@@ -20,6 +20,9 @@ public sealed class StateMachine : IStateMachine
 
     public StateMachine(IState initialState)
     {
+        var service = ServiceLocator.Locate<IProcessorService>();
+        service.Register(this);
+        //
         OnStateChanged(initialState);
     }
 
