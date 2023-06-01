@@ -1,5 +1,6 @@
 using Godot;
 using Lavos.Utils.Automation;
+using System.Threading.Tasks;
 
 namespace Lavos.Audio;
 
@@ -18,10 +19,9 @@ public sealed partial class MusicManager : Node
     MasterAudio _masterAudio;
 
     readonly IStateMachine _stateMachine = new StateMachine(null);
-    readonly IState _fadeInState = new FadeInState();
-    readonly IState _fadeOutState = new FadeOutState();
-    public double FadeInSpeed = 0.25;
-    public double FadeOutSpeed = 0.25;
+    public double FadeInSpeed = 1;
+    public double FadeOutSpeed = 1;
+    const double DefaultFadeDuration = 1;
 
     public override void _EnterTree()
     {
@@ -48,12 +48,7 @@ public sealed partial class MusicManager : Node
         _masterAudio = NodeTree.GetPinnedNodeByType<MasterAudio>();
     }
 
-    public override void _Process(double delta)
-    {
-        _stateMachine.Process(delta);
-    }
-
-    public void PlayStream(AudioStreamOggVorbis stream, Effect effect = Effect.Instant)
+    public void PlayStream(AudioStream stream, Effect effect = Effect.Instant)
     {
         _source.Stream = stream;
         //
@@ -66,24 +61,30 @@ public sealed partial class MusicManager : Node
         }
     }
 
-    public void PlayStream()
+    public void SetStream(AudioStream stream) => _source.Stream = stream;
+    public void PlayStream() => _source.Play();
+    public void StopStream() => _source.Stop();
+    public void ResumeStream() => _source.StreamPaused = false;
+    public void PauseStream() => _source.StreamPaused = true;
+
+    public async Task FadeIn(double duration = DefaultFadeDuration)
     {
-        _source.SetVolume(_masterAudio.MasterMusicVolume);
-        _source.Play();
+        var state = new FadeInState(duration);
+        _stateMachine.ChangeState(state);
+        await Task.Delay((int)(duration * 1000));
     }
 
-    public void StopStream()
+    public async Task FadeOut(double duration = DefaultFadeDuration)
     {
-        _source.Stop();
+        var state = new FadeOutState(duration);
+        _stateMachine.ChangeState(state);
+        await Task.Delay((int)(duration * 1000));
     }
 
-    public void FadeIn()
+    public async Task FadeOutAndIn(AudioStream stream, double fadeOutDuration = DefaultFadeDuration, double fadeInDuration = DefaultFadeDuration)
     {
-        _stateMachine.ChangeState(_fadeInState);
-    }
-
-    public void FadeOut()
-    {
-        _stateMachine.ChangeState(_fadeOutState);
+        await FadeOut(fadeOutDuration);
+        SetStream(stream);
+        await FadeIn(fadeInDuration);
     }
 }

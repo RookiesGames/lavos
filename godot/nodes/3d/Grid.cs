@@ -52,4 +52,5 @@ public sealed partial class Grid : Node3D
 
     public Node3D GetGridNodeAtIndex(int index) => _grid[index];
     public Node3D GetGridNodeAtPosition(int x, int y) => _grid[y * _width + x];
+    public Vector3 GetGridCenter() => new Vector3(_width * _elementSize * 0.5f, 0f, _height * _elementSize * 0.5f);
 }

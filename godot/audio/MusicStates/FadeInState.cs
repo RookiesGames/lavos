@@ -7,7 +7,10 @@ namespace Lavos.Audio;
 
 internal sealed class FadeInState : BaseFadeState, IState
 {
-    public FadeInState() : base() { }
+    public FadeInState(double duration) : base()
+    {
+        Duration = duration;
+    }
 
     #region IState
 

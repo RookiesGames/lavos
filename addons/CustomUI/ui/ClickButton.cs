@@ -1,6 +1,6 @@
 using Godot;
 using Lavos.Audio;
-using Lavos.Utils.Lazy;
+using Lavos.Core;
 using System;
 
 namespace Lavos.UI;

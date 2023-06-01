@@ -34,7 +34,7 @@ public sealed partial class ServiceLocator : Node
         return list;
     }
 
-    public static void Register<I, C>(C instance) where C : I, IService
+    public static void Register<I, C>(C instance) where I : IService where C : I
     {
         _container.Instance<I, C>(instance);
     }

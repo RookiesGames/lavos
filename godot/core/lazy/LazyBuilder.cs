@@ -1,8 +1,8 @@
 using System;
 
-namespace Lavos.Utils.Lazy;
+namespace Lavos.Core;
 
-public sealed class LazyBuilder<T> where T : class
+public struct LazyBuilder<T> where T : class
 {
     readonly Func<T> _constructor;
 
@@ -12,6 +12,7 @@ public sealed class LazyBuilder<T> where T : class
     public LazyBuilder(Func<T> constructor = null)
     {
         _constructor = constructor;
+        _instance = null;
     }
 
     T Build()

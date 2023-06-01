@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=5 format=3 uid="uid://ykimvvof07ql"]
+
+[ext_resource type="Script" path="res://lavos/dependency/ConfigList.cs" id="1"]
+[ext_resource type="Resource" uid="uid://dyoybynxq4vqu" path="res://lavos/config/lavos_processor_config.tres" id="1_j7vev"]
+[ext_resource type="Resource" path="res://lavos/config/lavos_audio_config.tres" id="2"]
+[ext_resource type="Resource" path="res://lavos/config/lavos_saver_config.tres" id="2_otu8j"]
+
+
+[resource]
+script = ExtResource("1")
+Configs = [ExtResource("1_j7vev"), ExtResource("2_otu8j"), ExtResource("2")]

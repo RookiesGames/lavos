@@ -27,7 +27,7 @@ public sealed partial class DependencyContainer
         instances.Clear();
     }
 
-    public void Bind<I, C>() where C : I, IService, new()
+    public void Bind<I, C>() where I : IService where C : I, new()
     {
         Assert.IsTrue(typeof(I).IsInterface, "Only interfaces can be bound from");
         Assert.IsTrue(typeof(C).IsClass, "Only classes can be bound to");
@@ -55,7 +55,7 @@ public sealed partial class DependencyContainer
         lookups[typeof(I1)].Add(typeof(I2));
     }
 
-    public void Instance<I, C>(C instance) where C : I, IService
+    public void Instance<I, C>(C instance) where I : IService where C : I
     {
         DoBind<I, C>();
         AddInstance(typeof(C), (object)instance);

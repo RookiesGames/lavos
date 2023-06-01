@@ -1,6 +1,6 @@
 using Lavos.Dependency;
 
-namespace Lavos.Utils.Lazy;
+namespace Lavos.Core;
 
 public struct LazyRef<T> where T : IService
 {

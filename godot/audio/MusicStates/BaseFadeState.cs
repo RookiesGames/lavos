@@ -1,4 +1,4 @@
-using Lavos.Utils.Lazy;
+using Lavos.Core;
 
 namespace Lavos.Audio;
 
@@ -8,7 +8,8 @@ internal abstract class BaseFadeState
 
     protected float _target = 0;
     protected double _timer = 0;
-    protected const double Duration = 0.5;
+
+    public double Duration = 0.25;
 
     protected LazyPin<MasterAudio> _masterAudio;
     protected LazyPin<MusicManager> _musicManager;
