@@ -4,6 +4,8 @@ namespace Lavos.Nodes;
 
 public sealed partial class Grid : Node3D
 {
+    const string KEY_POS = "pos";
+
     [Export]
     float _elementSize;
 
@@ -44,6 +46,7 @@ public sealed partial class Grid : Node3D
             for (var w = 0; w < width; ++w)
             {
                 var node = this.AddNode<Node3D>($"grid_row{h:00}_col{w:00}");
+                node.SetMeta(KEY_POS, new Vector2(h, w));
                 node.Position = new Vector3(w * _elementSize, 0f, h * _elementSize);
                 _grid[h * width + w] = node;
             }
@@ -53,4 +56,5 @@ public sealed partial class Grid : Node3D
     public Node3D GetGridNodeAtIndex(int index) => _grid[index];
     public Node3D GetGridNodeAtPosition(int x, int y) => _grid[y * _width + x];
     public Vector3 GetGridCenter() => new Vector3(_width * _elementSize * 0.5f, 0f, _height * _elementSize * 0.5f);
+    public Vector2 GetGridNodePositionAtIndex(int index) => GetGridNodeAtIndex(index).GetMeta(KEY_POS).AsVector2();
 }
