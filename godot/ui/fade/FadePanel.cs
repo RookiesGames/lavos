@@ -1,15 +1,12 @@
 using Godot;
 using Lavos.Utils.Automation;
-using System;
 using System.Threading.Tasks;
 
 namespace Lavos.UI;
 
 public sealed partial class FadePanel : ColorRect
 {
-    [Export] bool Faded;
-    [Export] double FadeInDuration = 1;
-    [Export] double FadeOutDuration = 1;
+    [Export] FadePanelResource Config;
 
     readonly IStateMachine _stateMachine = new StateMachine(null);
     IState _fadeInState;
@@ -19,10 +16,10 @@ public sealed partial class FadePanel : ColorRect
 
     public override void _Ready()
     {
-        this.SetAlpha(Faded ? 1f : 0f);
-        MouseFilter = Faded ? MouseFilterEnum.Stop : MouseFilterEnum.Ignore;
-        _fadeInState = new FadeInState(this, FadeInDuration);
-        _fadeOutState = new FadeOutState(this, FadeOutDuration);
+        this.SetAlpha(Config.Faded ? 1f : 0f);
+        MouseFilter = Config.Faded ? MouseFilterEnum.Stop : MouseFilterEnum.Ignore;
+        _fadeInState = new FadeInState(this, Config.FadeInDuration);
+        _fadeOutState = new FadeOutState(this, Config.FadeOutDuration);
         //
         NodeTree.PinNodeByType<FadePanel>(this);
     }
@@ -38,12 +35,12 @@ public sealed partial class FadePanel : ColorRect
     public async Task FadeIn()
     {
         _stateMachine.ChangeState(_fadeInState);
-        await Task.Delay((int)(FadeInDuration * 1000));
+        await Task.Delay((int)(Config.FadeInDuration * 1000));
     }
 
     public async Task FadeOut()
     {
         _stateMachine.ChangeState(_fadeOutState);
-        await Task.Delay((int)(FadeOutDuration * 1000));
+        await Task.Delay((int)(Config.FadeOutDuration * 1000));
     }
 }
