@@ -18,6 +18,7 @@ internal sealed class FadeInState : BaseFadeState, IState
         _timer = 0;
         _panel.SetAlpha(1);
         _panel.MouseFilter = Control.MouseFilterEnum.Stop;
+        _panel.Visible = true;
     }
 
     void IState.Update(double delta)
@@ -34,7 +35,10 @@ internal sealed class FadeInState : BaseFadeState, IState
         }
     }
 
-    void IState.Exit() { }
+    void IState.Exit()
+    {
+        _panel.Visible = false;
+    }
 
     #endregion
 }

@@ -17,6 +17,7 @@ public sealed partial class FadePanel : ColorRect
     public override void _Ready()
     {
         this.SetAlpha(Config.Faded ? 1f : 0f);
+        Visible = Config.Faded;
         MouseFilter = Config.Faded ? MouseFilterEnum.Stop : MouseFilterEnum.Ignore;
         _fadeInState = new FadeInState(this, Config.FadeInDuration);
         _fadeOutState = new FadeOutState(this, Config.FadeOutDuration);
