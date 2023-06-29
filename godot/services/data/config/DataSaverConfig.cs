@@ -1,9 +1,12 @@
+using Godot;
 using Lavos.Dependency;
 
 namespace Lavos.Services.Data;
 
 public sealed partial class DataSaverConfig : Config
 {
+    [Export] DataSaver[] _dataSavers;
+
     public override void Configure(IDependencyBinder binder)
     {
         binder.Bind<IDataSaverService, DataSaverService>();
@@ -11,6 +14,11 @@ public sealed partial class DataSaverConfig : Config
 
     public override void Initialize(IDependencyResolver resolver)
     {
-        resolver.Resolve<IDataSaverService>();
+        var service = resolver.Resolve<IDataSaverService>();
+        foreach (var saver in _dataSavers)
+        {
+            service.Register(saver);
+        }
+        service.Load();
     }
 }
