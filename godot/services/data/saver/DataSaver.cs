@@ -25,6 +25,8 @@ public abstract class DataSaver : IDataSaver
         _isDirty = true;
     }
 
+    public Variant GetData(string key) => Data.GetOrDefault(key);
+
     public void CleanData()
     {
         Data.Clear();
