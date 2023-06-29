@@ -25,6 +25,7 @@ public static class GodotDictionaryExtensions
         if (dic.ContainsKey(key))
         {
             dic[key] = value;
+            return;
         }
         //
         dic.Add(key, value);
