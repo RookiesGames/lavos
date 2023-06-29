@@ -5,16 +5,17 @@ namespace Lavos.Utils.Extensions;
 
 public static class AudioStreamPlayerExtensions
 {
+    const float OffsetDb = 20;
     const float MaximimDb = 0;
-    const float MinimumDb = -80;
-    const float OffsetDb = 80;
+    const float MinimumDb = -1 * OffsetDb;
 
     readonly static Math.Range _volume = new(0f, 0f, 1f);
 
     public static void SetVolume(this AudioStreamPlayer player, float value)
     {
         _volume.Value = value;
-        player.VolumeDb = Mathf.Lerp(MinimumDb, MaximimDb, _volume.Value);
+        var db = Mathf.Lerp(MinimumDb, MaximimDb, _volume.Value);
+        player.VolumeDb = db <= MinimumDb ? float.MinValue : db;
     }
 
     public static float GetVolume(this AudioStreamPlayer player)
