@@ -3,7 +3,7 @@ using Godot.Collections;
 
 namespace Lavos.Services.Data;
 
-public abstract class DataSaver : IDataSaver
+public abstract partial class DataSaver : Resource, IDataSaver
 {
     #region IDataSaver
 
