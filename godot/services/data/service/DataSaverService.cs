@@ -60,6 +60,7 @@ sealed partial class DataSaverService
             Log.Error(Tag, $"Failed to open file {path}");
             return;
         }
+        Log.Debug(Tag, $"Loading data saver: {file.GetPathAbsolute()}");
         //
         var content = file.GetAsText();
         file.Close();
