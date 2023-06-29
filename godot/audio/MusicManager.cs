@@ -46,6 +46,7 @@ public sealed partial class MusicManager : Node
     {
         _source = this.AddNode<AudioStreamPlayer>("MusicSource");
         _masterAudio = NodeTree.GetPinnedNodeByType<MasterAudio>();
+        OnVolumeChanged();
     }
 
     public void PlayStream(AudioStream stream, Effect effect = Effect.Instant)
