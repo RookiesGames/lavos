@@ -10,7 +10,7 @@ public abstract class DataSaver : IDataSaver
     bool _isDirty = false;
     public bool IsDirty => _isDirty;
 
-    public string DataFile => "data";
+    public abstract string DataFile { get; }
     public Dictionary<string, Variant> Data { get; } = new();
 
     public void LoadData(Dictionary<string, Variant> data)
