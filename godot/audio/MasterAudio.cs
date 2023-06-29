@@ -1,55 +1,55 @@
 using Godot;
+using Lavos.Dependency;
+using Lavos.Services.Data;
 using System;
 
 namespace Lavos.Audio;
 
 public sealed partial class MasterAudio : Node
 {
+    AudioDataSaver _dataSaver;
+
     public static event Action VolumeChanged;
 
-    readonly Math.Range _masterVolume = new(value: 1f, min: 0f, max: 1f);
     public float MasterVolume
     {
-        get => _masterVolume.Value;
+        get => _dataSaver.MasterVolume;
         set
         {
-            if (_masterVolume.Value == value) { return; }
-            //
-            _masterVolume.Value = value;
+            _dataSaver.MasterVolume = ClampValue(value);
             VolumeChanged?.Invoke();
         }
     }
 
-    readonly Math.Range _musicVolume = new(value: 1f, min: 0f, max: 1f);
-    public float MasterMusicVolume => _musicVolume.Value * _masterVolume.Value;
+    public float MasterMusicVolume => _dataSaver.MusicVolume * _dataSaver.MasterVolume;
     public float MusicVolume
     {
-        get => _musicVolume.Value;
+        get => _dataSaver.MusicVolume;
         set
         {
-            if (_musicVolume.Value == value) { return; }
-            //
-            _musicVolume.Value = value;
+            _dataSaver.MusicVolume = ClampValue(value);
             VolumeChanged?.Invoke();
         }
     }
 
-    readonly Math.Range _soundVolume = new(value: 1f, min: 0f, max: 1f);
-    public float MasterSoundVolume => _soundVolume.Value * _masterVolume.Value;
+    public float MasterSoundVolume => _dataSaver.SoundVolume * _dataSaver.MasterVolume;
     public float SoundVolume
     {
-        get => _soundVolume.Value;
+        get => _dataSaver.SoundVolume;
         set
         {
-            if (_soundVolume.Value == value) { return; }
-            //
-            _soundVolume.Value = value;
+            _dataSaver.SoundVolume = ClampValue(value);
             VolumeChanged?.Invoke();
         }
     }
 
-    public override void _EnterTree()
+    float ClampValue(float value) => Mathf.Clamp(value, 0f, 1f);
+
+    public override void _Ready()
     {
+        var service = ServiceLocator.Locate<IDataSaverService>();
+        _dataSaver = service.GetDataSaver<AudioDataSaver>();
+        //
         NodeTree.PinNodeByType<MasterAudio>(this);
     }
 

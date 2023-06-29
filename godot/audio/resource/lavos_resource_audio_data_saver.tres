@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="AudioDataSaver" load_steps=2 format=3 uid="uid://cxwyi4jwh3ls4"]
+
+[ext_resource type="Script" path="res://lavos/audio/saver/AudioDataSaver.cs" id="1_bid2t"]
+
+[resource]
+script = ExtResource("1_bid2t")
