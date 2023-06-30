@@ -45,14 +45,14 @@ public sealed class StackStateMachine : IStackStateMachine
                     }
                 case StackStatePhase.Exiting:
                     {
-                        peek.Exit();
                         peek.Phase = StackStatePhase.Popped;
+                        peek.Exit();
                         break;
                     }
                 case StackStatePhase.Popping:
                     {
-                        peek.Pause();
                         peek.Phase = StackStatePhase.Exiting;
+                        peek.Pause();
                         break;
                     }
                 case StackStatePhase.Pushing:
@@ -60,14 +60,14 @@ public sealed class StackStateMachine : IStackStateMachine
                         peek.StatePushed += OnStatePushed;
                         peek.StatePopped += OnStatePopped;
                         //
-                        peek.Enter();
                         peek.Phase = StackStatePhase.Resuming;
+                        peek.Enter();
                         break;
                     }
                 case StackStatePhase.Resuming:
                     {
-                        peek.Resume();
                         peek.Phase = StackStatePhase.Running;
+                        peek.Resume();
                         break;
                     }
                 case StackStatePhase.Running:
@@ -77,8 +77,8 @@ public sealed class StackStateMachine : IStackStateMachine
                     }
                 case StackStatePhase.Pausing:
                     {
-                        peek.Pause();
                         peek.Phase = StackStatePhase.Paused;
+                        peek.Pause();
                         break;
                     }
                 case StackStatePhase.Paused:
