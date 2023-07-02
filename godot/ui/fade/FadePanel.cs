@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace Lavos.UI;
 
+[GlobalClass]
 public sealed partial class FadePanel : ColorRect
 {
     [Export] FadePanelResource Config;
