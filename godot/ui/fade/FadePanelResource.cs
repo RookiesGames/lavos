@@ -2,6 +2,7 @@ using Godot;
 
 namespace Lavos.UI;
 
+[GlobalClass]
 public sealed partial class FadePanelResource : Resource
 {
     [Export] bool _faded;
