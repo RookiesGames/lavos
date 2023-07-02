@@ -2,6 +2,7 @@ using Godot;
 
 namespace Lavos.Scene;
 
+[GlobalClass]
 public sealed partial class SceneTransition : Node
 {
     [Export] PackedScene _scene;
