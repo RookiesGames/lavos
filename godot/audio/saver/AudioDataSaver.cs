@@ -12,27 +12,19 @@ public sealed partial class AudioDataSaver : DataSaver
 
     public override string DataFile => "audio_data";
 
-    public AudioDataSaver()
-    {
-        // Defaults
-        MasterVolume = 1f;
-        MusicVolume = 1f;
-        SoundVolume = 1f;
-    }
-
     public float MasterVolume
     {
-        get => GetData(MasterVolumeKey).AsFloat();
+        get => Data.GetOrDefault(MasterVolumeKey, Variant.CreateFrom(1f)).AsFloat();
         set => SaveData(MasterVolumeKey, value);
     }
     public float MusicVolume
     {
-        get => GetData(MusicVolumeKey).AsFloat();
+        get => Data.GetOrDefault(MusicVolumeKey, Variant.CreateFrom(1f)).AsFloat();
         set => SaveData(MusicVolumeKey, value);
     }
     public float SoundVolume
     {
-        get => GetData(SoundVolumeKey).AsFloat();
+        get => Data.GetOrDefault(SoundVolumeKey, Variant.CreateFrom(1f)).AsFloat();
         set => SaveData(SoundVolumeKey, value);
     }
 }
