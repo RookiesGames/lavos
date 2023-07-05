@@ -55,8 +55,6 @@ sealed partial class DataSaverService
         Log.Debug(Tag, $"Loading data saver: {file.GetPathAbsolute()}");
         //
         var content = file.GetAsText();
-        file.Close();
-        //
         using var json = new Json();
         var parseResult = json.Parse(content);
         if (parseResult == Error.Ok)
