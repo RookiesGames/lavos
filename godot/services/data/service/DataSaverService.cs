@@ -40,14 +40,6 @@ sealed partial class DataSaverService
         Godot.DirAccess.RemoveAbsolute(dir.GetCurrentDir());
     }
 
-    public void Load()
-    {
-        foreach (var dataSaver in _dataSavers)
-        {
-            Load(dataSaver);
-        }
-    }
-
     public void Load(IDataSaver saver)
     {
         var path = System.IO.Path.Combine(SavePath, saver.DataFile);
@@ -72,20 +64,6 @@ sealed partial class DataSaverService
             var data = new Godot.Collections.Dictionary<string, Variant>((Godot.Collections.Dictionary)json.Data);
             saver.LoadData(data);
         }
-    }
-
-    public void Save()
-    {
-        foreach (var dataSaver in _dataSavers)
-        {
-            if (dataSaver.IsDirty)
-            {
-                Save(dataSaver);
-                dataSaver.ClearFlag();
-            }
-        }
-        //
-        _timer = 0f;
     }
 
     public void Save(IDataSaver saver)
@@ -127,5 +105,18 @@ sealed partial class DataSaverService
         }
 
         Save();
+        _timer = 0f;
+    }
+
+    private void Save()
+    {
+        foreach (var dataSaver in _dataSavers)
+        {
+            if (dataSaver.IsDirty)
+            {
+                Save(dataSaver);
+                dataSaver.ClearFlag();
+            }
+        }
     }
 }

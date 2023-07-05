@@ -27,25 +27,9 @@ sealed class DummyDataSaverService : IDataSaverService
         Log.Debug(Tag, "Data removed");
     }
 
-    public void Load()
-    {
-        foreach (var dataSaver in _dataSavers)
-        {
-            Load(dataSaver);
-        }
-    }
-
     public void Load(IDataSaver saver)
     {
         Log.Debug(Tag, $"File {saver.DataFile} loaded");
-    }
-
-    public void Save()
-    {
-        foreach (var dataSaver in _dataSavers)
-        {
-            Save(dataSaver);
-        }
     }
 
     public void Save(IDataSaver saver)

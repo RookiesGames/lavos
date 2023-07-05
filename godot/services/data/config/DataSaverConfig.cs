@@ -19,6 +19,5 @@ public sealed partial class DataSaverConfig : Config
         {
             service.Register(saver);
         }
-        service.Load();
     }
 }
