@@ -1,4 +1,5 @@
 using Godot;
+using Lavos.Core;
 
 namespace Lavos.Nodes;
 
@@ -35,20 +36,20 @@ public sealed partial class Grid : Node3D
         this.RemoveChildren();
     }
 
-    public void GenerateGrid(int width, int height)
+    public void GenerateGrid(Dimensions dimensions)
     {
-        _width = width;
-        _height = height;
-        _grid = new Node3D[width * height];
+        _width = dimensions.Width;
+        _height = dimensions.Height;
+        _grid = new Node3D[dimensions.Width * dimensions.Height];
         //
-        for (var h = 0; h < height; ++h)
+        for (var h = 0; h < dimensions.Height; ++h)
         {
-            for (var w = 0; w < width; ++w)
+            for (var w = 0; w < dimensions.Width; ++w)
             {
                 var node = this.AddNode<Node3D>($"grid_row{h:00}_col{w:00}");
                 node.SetMeta(KEY_POS, new Vector2(h, w));
                 node.Position = new Vector3(w * _elementSize, 0f, h * _elementSize);
-                _grid[h * width + w] = node;
+                _grid[h * dimensions.Width + w] = node;
             }
         }
     }
