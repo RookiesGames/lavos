@@ -5,11 +5,13 @@ import os
 
 const (
 	project_dir   = 'project'
+
 	// Commands
 	command_help  = 'help'
 	command_build = 'build'
 	command_copy  = 'copy'
 	command_clean = 'clean'
+
 	// Arguments
 	arg_all       = 'all'
 	arg_fa        = 'FirebaseAnalytics'
@@ -24,18 +26,17 @@ fn do_job(cb JobFn) {
 	defer {
 		chdir(wd) or {}
 	}
-	cb() or { println('Failed to execute job.\n{err}') }
+	cb() or { println('Failed to execute job.\n${err}') }
 }
 
 fn check_arg(arg string) ! {
 	if arg != arg_all && arg !in projects {
-		println('Unrecognized argument. Possible values are: {arg_all}, {arg_fa}, {arg_fc}')
+		println('Unrecognized argument. Possible values are: ${arg_all}, ${arg_fa}, ${arg_fc}')
 		return
 	}
 }
 
 //
-
 fn cmd_clean(cmd cli.Command) ! {
 	job := fn () ! {
 		clean_builds()!
@@ -45,17 +46,20 @@ fn cmd_clean(cmd cli.Command) ! {
 
 fn clean_builds() ! {
 	println('~> Cleaning previous builds')
+
 	//
 	wd := os.dir(@FILE)
-	chdir('$wd/project')!
+	chdir('${wd}/project')!
+
 	//
 	cmd := './gradlew clean'
-	print('\t~> Running command {cmd}...')
+	print('\t~> Running command ${cmd}...')
 	mut res := execute(cmd)
 	if res.exit_code != 0 {
 		println(' ❌')
-		return error('$res.output')
+		return error('${res.output}')
 	}
+
 	//
 	println(' ✅')
 }
@@ -63,6 +67,7 @@ fn clean_builds() ! {
 fn cmd_copy(cmd cli.Command) ! {
 	arg := cmd.args[0]
 	check_arg(arg)!
+
 	//
 	job := fn [arg] () ! {
 		copy_builds(arg)!
@@ -72,11 +77,12 @@ fn cmd_copy(cmd cli.Command) ! {
 
 fn copy_builds(option string) ! {
 	println('~> Copy build output')
+
 	// Copy output to folders
 	if option == arg_all {
 		for proj in projects {
 			copy_output(proj) or {
-				println('{err}')
+				println('${err}')
 				continue
 			}
 		}
@@ -87,29 +93,33 @@ fn copy_builds(option string) ! {
 
 fn copy_output(proj string) ! {
 	wd := os.dir(@FILE)
-	src := '$wd/project/{proj}/build/outputs/aar/{proj}-release.aar'
-	dst := '$wd/godot/{proj}.aar'
+	src := '${wd}/project/${proj}/build/outputs/aar/${proj}-release.aar'
+	dst := '${wd}/godot/${proj}.aar'
+
 	//
 	if !is_file(src) {
-		println('\t~> File {src} not found')
+		println('\t~> File ${src} not found')
 		return
 	}
+
 	//
-	print('\t~> Copying output of {proj}')
+	print('\t~> Copying output of ${proj}')
 	cp(src, dst) or {
 		println(' ❌')
-		return error('Failed to copy from {src} to {dst}')
+		return error('Failed to copy from ${src} to ${dst}')
 	}
 	println(' ✅')
-	println('\t\tfrom: {src}')
-	println('\t\tto: {dst}')
+	println('\t\tfrom: ${src}')
+	println('\t\tto: ${dst}')
+
 	//
-	gdap := '$wd/godot/{proj}.gdap'
-	print('\t~> Checking for GDAP file in {gdap}')
-	if !is_file('{gdap}') {
+	gdap := '${wd}/godot/${proj}.gdap'
+	print('\t~> Checking for GDAP file in ${gdap}')
+	if !is_file('${gdap}') {
 		println(' ❌')
-		return error('Misisng {gdap} file')
+		return error('Misisng ${gdap} file')
 	}
+
 	//
 	println(' ✅')
 }
@@ -117,6 +127,7 @@ fn copy_output(proj string) ! {
 fn cmd_build(cmd cli.Command) ! {
 	arg := cmd.args[0]
 	check_arg(arg)!
+
 	//
 	build_job := fn [arg] () ! {
 		start_builds(arg)!
@@ -126,9 +137,11 @@ fn cmd_build(cmd cli.Command) ! {
 
 fn start_builds(option string) ! {
 	println('~> Starting build jobs')
+
 	//
 	wd := os.dir(@FILE)
-	chdir('$wd/project')!
+	chdir('${wd}/project')!
+
 	//
 	mut failure := false
 	if option == arg_all {
@@ -140,25 +153,28 @@ fn start_builds(option string) ! {
 			build_project(option) or { failure = true }
 		} else {
 			failure = true
-			println('Project {option} not recognized')
+			println('Project ${option} not recognized')
 		}
 	}
+
 	//
 	if failure {
 		return error('Error when building projects. Aborting...')
 	}
+
 	//
 	println('~> Builds completed!')
 }
 
 fn build_project(proj string) ! {
-	cmd := './gradlew build :{proj}:assembleRelease'
-	print('\t~> Running command {cmd}...')
+	cmd := './gradlew build :${proj}:assembleRelease'
+	print('\t~> Running command ${cmd}...')
 	res := execute(cmd)
 	if res.exit_code != 0 {
 		println(' ❌')
-		return error('{res.output}')
+		return error('${res.output}')
 	}
+
 	//
 	println(' ✅')
 }
