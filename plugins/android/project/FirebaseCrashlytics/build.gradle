@@ -21,17 +21,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
+    kotlin {
+        jvmToolchain(11)
     }
     namespace 'eu.novuloj.firebasecrashlytics'
 }
 
 dependencies {
-    compileOnly files("../libs/godot-lib.3.4.4.stable.mono.release.aar")
+    compileOnly files("../libs/godot-lib.4.1.stable.template_release.aar")
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.7'
     implementation 'com.google.firebase:firebase-crashlytics-ndk:18.3.7'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
