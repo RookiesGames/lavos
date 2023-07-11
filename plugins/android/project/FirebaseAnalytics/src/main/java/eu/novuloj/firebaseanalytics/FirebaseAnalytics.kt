@@ -1,6 +1,7 @@
 package eu.novuloj.firebaseanalytics
 
 import android.os.Bundle
+import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -14,7 +15,7 @@ class FirebaseAnalytics(godot: Godot) : GodotPlugin(godot) {
     private val pluginName = "FirebaseAnalytics"
     private lateinit var analytics: FirebaseAnalytics
 
-    @Nullable
+    @NonNull
     override fun getPluginName(): String = pluginName
 
     @UsedByGodot
