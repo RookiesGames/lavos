@@ -13,7 +13,6 @@ const (
 	command_clean = 'clean'
 
 	// Arguments
-	arg_all       = 'all'
 	arg_fa        = 'FirebaseAnalytics'
 	arg_fc        = 'FirebaseCrashlytics'
 	projects      = [arg_fa, arg_fc]
@@ -30,9 +29,11 @@ fn do_job(cb JobFn) {
 }
 
 fn check_arg(arg string) ! {
-	if arg != arg_all && arg !in projects {
-		println('Unrecognized argument. Possible values are: ${arg_all}, ${arg_fa}, ${arg_fc}')
+	if arg.is_blank() {
 		return
+	}
+	if arg !in projects {
+		error('Unrecognized argument. Possible values are: ${arg_fa}, ${arg_fc}')
 	}
 }
 
@@ -79,7 +80,7 @@ fn copy_builds(option string) ! {
 	println('~> Copy build output')
 
 	// Copy output to folders
-	if option == arg_all {
+	if option.is_blank() {
 		for proj in projects {
 			copy_output(proj) or {
 				println('${err}')
@@ -125,9 +126,8 @@ fn copy_output(proj string) ! {
 }
 
 fn cmd_build(cmd cli.Command) ! {
-	arg := cmd.args[0]
+	arg := if cmd.args.len > 0 { cmd.args[0] } else { '' }
 	check_arg(arg)!
-
 	//
 	build_job := fn [arg] () ! {
 		start_builds(arg)!
@@ -144,7 +144,7 @@ fn start_builds(option string) ! {
 
 	//
 	mut failure := false
-	if option == arg_all {
+	if option.is_blank() {
 		for proj in projects {
 			build_project(proj) or { failure = true }
 		}
@@ -206,11 +206,10 @@ fn main() {
 			cli.Command{
 				name: 'build'
 				usage: '<target>'
-				description: 'Build target Android package'
+				description: 'Build target Android package. Possible values: ${projects}'
 				execute: fn (cmd cli.Command) ! {
 					cmd_build(cmd)!
 				}
-				required_args: 1
 			},
 		]
 	}
