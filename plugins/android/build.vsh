@@ -28,13 +28,13 @@ fn do_job(cb JobFn) {
 	cb() or { println('Failed to execute job.\n${err}') }
 }
 
-fn check_arg(arg string) ! {
-	if arg.is_blank() {
-		return
-	}
-	if arg !in projects {
+fn check_arg(cmd cli.Command) !string {
+	arg := if cmd.args.len > 0 { cmd.args[0] } else { '' }
+	if !arg.is_blank() && arg !in projects {
 		error('Unrecognized argument. Possible values are: ${arg_fa}, ${arg_fc}')
 	}
+	//
+	return arg
 }
 
 //
@@ -47,11 +47,9 @@ fn cmd_clean(cmd cli.Command) ! {
 
 fn clean_builds() ! {
 	println('~> Cleaning previous builds')
-
 	//
 	wd := os.dir(@FILE)
 	chdir('${wd}/project')!
-
 	//
 	cmd := './gradlew clean'
 	print('\t~> Running command ${cmd}...')
@@ -60,16 +58,12 @@ fn clean_builds() ! {
 		println(' ❌')
 		return error('${res.output}')
 	}
-
 	//
 	println(' ✅')
 }
 
 fn cmd_copy(cmd cli.Command) ! {
-	arg := cmd.args[0]
-	check_arg(arg)!
-
-	//
+	arg := check_arg(cmd)!
 	job := fn [arg] () ! {
 		copy_builds(arg)!
 	}
@@ -78,7 +72,6 @@ fn cmd_copy(cmd cli.Command) ! {
 
 fn copy_builds(option string) ! {
 	println('~> Copy build output')
-
 	// Copy output to folders
 	if option.is_blank() {
 		for proj in projects {
@@ -126,9 +119,7 @@ fn copy_output(proj string) ! {
 }
 
 fn cmd_build(cmd cli.Command) ! {
-	arg := if cmd.args.len > 0 { cmd.args[0] } else { '' }
-	check_arg(arg)!
-	//
+	arg := check_arg(cmd)!
 	build_job := fn [arg] () ! {
 		start_builds(arg)!
 	}
@@ -137,11 +128,9 @@ fn cmd_build(cmd cli.Command) ! {
 
 fn start_builds(option string) ! {
 	println('~> Starting build jobs')
-
 	//
 	wd := os.dir(@FILE)
 	chdir('${wd}/project')!
-
 	//
 	mut failure := false
 	if option.is_blank() {
@@ -156,12 +145,10 @@ fn start_builds(option string) ! {
 			println('Project ${option} not recognized')
 		}
 	}
-
 	//
 	if failure {
 		return error('Error when building projects. Aborting...')
 	}
-
 	//
 	println('~> Builds completed!')
 }
@@ -201,7 +188,6 @@ fn main() {
 				execute: fn (cmd cli.Command) ! {
 					cmd_copy(cmd)!
 				}
-				required_args: 1
 			},
 			cli.Command{
 				name: 'build'
