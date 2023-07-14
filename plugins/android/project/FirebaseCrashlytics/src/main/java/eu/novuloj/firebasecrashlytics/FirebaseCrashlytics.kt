@@ -61,10 +61,5 @@ class FirebaseCrashlytics(godot: Godot) : GodotPlugin(godot) {
     fun setUserId(identifier: String) = crashlytics.setUserId(identifier)
 
     @UsedByGodot
-    fun crash(): Boolean {
-        if (true) {
-            throw RuntimeException("From LavosPlugins")
-        }
-        return false
-    }
+    fun crash(): Boolean = throw RuntimeException("From $pluginName")
 }

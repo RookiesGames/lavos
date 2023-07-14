@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
+    namespace 'eu.novuloj.firebasecrashlytics'
     compileSdk 33
 
     defaultConfig {
         minSdk 21
         targetSdk 33
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
 
@@ -27,7 +27,6 @@ android {
     kotlin {
         jvmToolchain(11)
     }
-    namespace 'eu.novuloj.firebasecrashlytics'
 }
 
 dependencies {
