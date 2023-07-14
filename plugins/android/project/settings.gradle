@@ -9,3 +9,4 @@ rootProject.name = "LavosPlugins"
 include ':app'
 include ':FirebaseCrashlytics'
 include ':FirebaseAnalytics'
+include ':GoogleBilling'
