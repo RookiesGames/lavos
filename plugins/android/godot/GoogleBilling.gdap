@@ -1,0 +1,7 @@
+[config]
+name="GoogleBilling"
+binary_type="local"
+binary="GoogleBilling.aar"
+
+[dependencies]
+remote=["com.android.billingclient:billing-ktx:6.0.1"]

@@ -15,7 +15,8 @@ const (
 	// Arguments
 	arg_fa        = 'FirebaseAnalytics'
 	arg_fc        = 'FirebaseCrashlytics'
-	projects      = [arg_fa, arg_fc]
+	arg_gb        = 'GoogleBilling'
+	projects      = [arg_fa, arg_fc, arg_gb]
 )
 
 type JobFn = fn () !
