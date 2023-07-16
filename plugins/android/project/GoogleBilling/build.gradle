@@ -30,7 +30,7 @@ android {
 }
 
 dependencies {
-    compileOnly files("../libs/godot-lib.4.1.stable.template_release.aar")
+    compileOnly files("../libs/godot-lib.aar")
     implementation "com.android.billingclient:billing-ktx:6.0.1"
 
     implementation 'androidx.core:core-ktx:1.10.1'

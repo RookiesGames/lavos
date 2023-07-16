@@ -30,7 +30,7 @@ android {
 }
 
 dependencies {
-    compileOnly files("../libs/godot-lib.4.1.stable.template_release.aar")
+    compileOnly files("../libs/godot-lib.aar")
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.7'
     implementation 'com.google.firebase:firebase-crashlytics-ndk:18.3.7'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
