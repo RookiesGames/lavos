@@ -50,7 +50,19 @@ class ironSource(godot: Godot) : GodotPlugin(godot) {
     }
 
     @UsedByGodot
-    fun verify() = IntegrationHelper.validateIntegration(godot.requireContext())
+    fun launchTestSuite(appKey: String) {
+        IronSource.setMetaData("is_test_suite", "enable")
+        IronSource.init(
+            godot.requireContext(),
+            appKey,
+            InitializationListener {
+                Log.d(pluginName, "Initialization complete")
+                IntegrationHelper.validateIntegration(godot.requireContext())
+                //
+                Log.i(pluginName, "Starting test suite...")
+                IronSource.launchTestSuite(godot.requireContext());
+            })
+    }
 
     @UsedByGodot
     fun gdpr(consented: Boolean) = IronSource.setConsent(consented)
