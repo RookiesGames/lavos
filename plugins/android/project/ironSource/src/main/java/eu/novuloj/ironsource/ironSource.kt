@@ -40,6 +40,7 @@ class ironSource(godot: Godot) : GodotPlugin(godot) {
             appKey,
             InitializationListener {
                 Log.d(pluginName, "Initialization complete")
+                IntegrationHelper.validateIntegration(godot.requireContext())
             },
             IronSource.AD_UNIT.REWARDED_VIDEO,
             IronSource.AD_UNIT.INTERSTITIAL,
