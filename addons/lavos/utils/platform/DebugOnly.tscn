@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://lavos/utils/platform/DebugOnly.cs" type="Script" id=1]
+[ext_resource path="res://addons/rookies/lavos/utils/platform/DebugOnly.cs" type="Script" id=1]
 
 [node name="DebugOnly" type="Node"]
 script = ExtResource( 1 )
