@@ -5,7 +5,7 @@ import os
 
 const (
 	godot_project            = 'project.godot'
-	symlink_lavos            = 'lavos'
+	symlink_rookies          = 'rookies'
 	symlink_script_templates = 'script_templates'
 )
 
@@ -41,9 +41,8 @@ fn cmd_clean(cmd cli.Command) ! {
 	check_path(path)!
 	//
 	println('~> Cleaning project...')
-	remove_symlink('${path}/${symlink_lavos}')!
 	remove_symlink('${path}/${symlink_script_templates}')!
-	remove_symlink('${path}/addons/${symlink_lavos}')!
+	remove_symlink('${path}/addons/${symlink_rookies}')!
 	remove_symlink('${path}/android/plugins')!
 	// remove_symlink('$path/ios/plugins')!
 	println('~> Cleaning complete!')
@@ -75,14 +74,10 @@ fn cmd_link(cmd cli.Command) ! {
 	//
 	println('~> Creating links...')
 	lavoswd := os.getwd()
-	// lavos source
-	create_symlink('${lavoswd}/lavos/godot', '${path}/addons/${symlink_lavos}')!
+	// lavos source/addons
+	create_symlink('${lavoswd}/lavos/addons', '${path}/addons/${symlink_rookies}')!
 	// script templates
 	create_symlink('${lavoswd}/lavos/${symlink_script_templates}', '${path}/${symlink_script_templates}')!
-	// addons
-	experimental_path := '${path}/addons/experimental'
-	create_path(experimental_path)!
-	create_symlink('${lavoswd}/lavos/addons', '${experimental_path}/${symlink_lavos}')!
 	// plugins
 	create_path('${path}/android')!
 	create_symlink('${lavoswd}/lavos/plugins/android/godot', '${path}/android/plugins')!
