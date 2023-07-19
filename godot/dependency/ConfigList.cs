@@ -2,6 +2,7 @@ using Godot;
 
 namespace Lavos.Dependency;
 
+[GlobalClass]
 public sealed partial class ConfigList : Config
 {
     [Export] Config[] Configs;

@@ -50,7 +50,7 @@ fn cmd_clean(cmd cli.Command) ! {
 }
 
 fn remove_symlink(link string) ! {
-	if is_file(link) {
+	if is_file(link) || is_link(link) {
 		print('\t~> Removing symlink ${link}')
 		rm(link) or {
 			println(' ❌')
@@ -58,7 +58,7 @@ fn remove_symlink(link string) ! {
 		}
 		//
 		println(' ✅')
-	} else if is_dir(link) || is_link(link) {
+	} else if is_dir(link) {
 		print('\t~> Removing symlink ${link}')
 		rmdir(link) or {
 			println(' ❌')
@@ -76,12 +76,13 @@ fn cmd_link(cmd cli.Command) ! {
 	println('~> Creating links...')
 	lavoswd := os.getwd()
 	// lavos source
-	create_symlink('${lavoswd}/lavos/godot', '${path}/${symlink_lavos}')!
+	create_symlink('${lavoswd}/lavos/godot', '${path}/addons/${symlink_lavos}')!
 	// script templates
 	create_symlink('${lavoswd}/lavos/${symlink_script_templates}', '${path}/${symlink_script_templates}')!
 	// addons
-	create_path('${path}/addons')!
-	create_symlink('${lavoswd}/lavos/addons', '${path}/addons/${symlink_lavos}')!
+	experimental_path := '${path}/addons/experimental'
+	create_path(experimental_path)!
+	create_symlink('${lavoswd}/lavos/addons', '${experimental_path}/${symlink_lavos}')!
 	// plugins
 	create_path('${path}/android')!
 	create_symlink('${lavoswd}/lavos/plugins/android/godot', '${path}/android/plugins')!

@@ -3,6 +3,7 @@ using Lavos.Dependency;
 
 namespace Lavos.Input;
 
+[GlobalClass]
 public sealed partial class InputConfig : Config
 {
     [Export] bool EnableKeyboard = false;

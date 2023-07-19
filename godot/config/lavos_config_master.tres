@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=5 format=3 uid="uid://ykimvvof07ql"]
+[gd_resource type="Resource" script_class="ConfigList" load_steps=5 format=3 uid="uid://ykimvvof07ql"]
 
 [ext_resource type="Script" path="res://lavos/dependency/ConfigList.cs" id="1"]
 [ext_resource type="Resource" uid="uid://dyoybynxq4vqu" path="res://lavos/config/lavos_config_processor.tres" id="1_j7vev"]
