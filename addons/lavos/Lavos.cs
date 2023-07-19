@@ -7,7 +7,8 @@ namespace Lavos;
 [Tool]
 public sealed partial class Lavos : EditorPlugin
 {
-    const string Path = "res://addons/lavos/";
+    const string LavosPath = "res://addons/lavos/";
+
     public override void _EnterTree()
     {
         //var script = GD.Load<Script>($"{Path}/ui/{nameof(ClickButton)}.cs");
@@ -17,7 +18,7 @@ public sealed partial class Lavos : EditorPlugin
 
     public override void _ExitTree()
     {
-        RemoveCustomType(nameof(ClickButton));
+        //RemoveCustomType(nameof(ClickButton));
     }
 }
 
