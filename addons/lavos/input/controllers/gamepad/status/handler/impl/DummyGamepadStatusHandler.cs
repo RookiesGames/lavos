@@ -12,7 +12,7 @@ sealed partial class DummyGamepadStatusHandler
 
     void IGamepadStatusHandler.UnregisterListener(IGamepadStatusListener listener) { }
 
-    bool IGamepadStatusHandler.IsGamepadConnected(Lavos.Input.GamepadDevice device) { return false; }
+    bool IGamepadStatusHandler.IsGamepadConnected(GamepadDevice device) { return false; }
 
     #endregion IGamepadStatusHandler
 }
