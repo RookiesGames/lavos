@@ -380,26 +380,26 @@ using Godot;
 using Lavos.Input;
 using System.Collections.Generic;
 
-public class GamepadConfig
-    : IGamepadInputConfig
+public class GamepadConfig : IGamepadInputConfig
 {
-    IReadOnlyCollection<GamepadAxis> IGamepadInputConfig.Axis => _axis;
-    readonly HashSet<GamepadAxis> _axis = new HashSet<GamepadAxis>()
+    IReadOnlyCollection<JoyAxis> IGamepadInputConfig.Axis => _axis;
+    readonly HashSet<JoyAxis> _axis = new()
     {
-        GamepadAxis.LeftStick, GamepadAxis.RightStick,
-        GamepadAxis.LeftTrigger, GamepadAxis.RightTrigger
+        JoyAxis.LeftX, JoyAxis.LeftY,
+        JoyAxis.RightX, JoyAxis.RightY,
+        JoyAxis.LeftTrigger, JoyAxis.RightTrigger
     };
 
-    IReadOnlyCollection<GamepadButtons> IGamepadInputConfig.Buttons => _buttons;
-    readonly HashSet<GamepadButtons> _buttons = new HashSet<GamepadButtons>()
+    IReadOnlyCollection<JoyButton> IGamepadInputConfig.Buttons => _buttons;
+    readonly HashSet<JoyButton> _buttons = new()
     {
-        GamepadButtons.South, 
-        GamepadButtons.East, 
-        GamepadButtons.West, 
-        GamepadButtons.North,
+        JoyButton.A, 
+        JoyButton.B, 
+        JoyButton.X, 
+        JoyButton.Y,
     };
 
-    InputAction IGamepadInputConfig.GetActionState(GamepadButtons button)
+    InputAction IGamepadInputConfig.GetActionState(JoyButton button)
     {
         if (_buttons.Contains(button) == false)
         {
@@ -408,10 +408,10 @@ public class GamepadConfig
         //
         switch (button)
         {
-            case GamepadButtons.South: return InputAction.South;
-            case GamepadButtons.East: return InputAction.East;
-            case GamepadButtons.West: return InputAction.West;
-            case GamepadButtons.North: return InputAction.North;
+            case JoyButton.A: return InputAction.South;
+            case JoyButton.B: return InputAction.East;
+            case JoyButton.X: return InputAction.West;
+            case JoyButton.Y: return InputAction.North;
             //
             default: return InputAction.Unkwnon;
         }
@@ -426,14 +426,22 @@ public class GamepadConfig
         //
         switch (axis)
         {
-            case GamepadAxis.LeftStick: return InputAction.LeftStick;
-            case GamepadAxis.RightStick: return InputAction.RightStick;
+            case JoyAxis.LeftX:
+            case JoyAxis.LeftY: 
+                {
+                    return InputAction.LeftStick;
+                }
+            case JoyAxis.RightX:
+            case JoyAxis.RightY: 
+                {
+                    return InputAction.RightStick;
+                }
             //
             default: return InputAction.Unkwnon;
         }
     }
 
-    InputAction IGamepadInputConfig.GetTriggerState(GamepadAxis trigger, float pressure)
+    InputAction IGamepadInputConfig.GetTriggerState(JoyAxis trigger, float pressure)
     {
         if (_axis.Contains(trigger) == false)
         {
@@ -448,8 +456,8 @@ public class GamepadConfig
         //
         switch (trigger)
         {
-            case GamepadAxis.LeftTrigger: return InputAction.LeftTrigger;
-            case GamepadAxis.RightTrigger: return InputAction.RightTrigger;
+            case JoyAxis.LeftTrigger: return InputAction.LeftTrigger;
+            case JoyAxis.RightTrigger: return InputAction.RightTrigger;
             //
             default: return InputAction.Unkwnon;
         }
