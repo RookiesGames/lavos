@@ -43,7 +43,7 @@ public sealed partial class MasterAudio : Node
         }
     }
 
-    float ClampValue(float value) => Mathf.Clamp(value, 0f, 1f);
+    static float ClampValue(float value) => Mathf.Clamp(value, 0f, 1f);
 
     public override void _Ready()
     {

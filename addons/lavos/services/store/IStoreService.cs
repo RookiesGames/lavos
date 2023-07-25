@@ -4,5 +4,4 @@ namespace Lavos.Services.Store;
 
 public interface IStoreService : IService
 {
-
 }

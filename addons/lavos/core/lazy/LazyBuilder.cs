@@ -15,7 +15,7 @@ public struct LazyBuilder<T> where T : class
         _instance = null;
     }
 
-    T Build()
+    readonly T Build()
     {
         return (_constructor == null)
                     ? Activator.CreateInstance<T>()

@@ -49,16 +49,16 @@ public sealed partial class MusicManager : Node
         OnVolumeChanged();
     }
 
-    public void PlayStream(AudioStream stream, Effect effect = Effect.Instant)
+    public Task PlayStream(AudioStream stream, Effect effect = Effect.Instant)
     {
         _source.Stream = stream;
         //
         switch (effect)
         {
-            case Effect.Instant: PlayStream(); return;
-            case Effect.FadeIn: FadeIn(); return;
-            case Effect.FadeOut: FadeOut(); return;
-            default: return;
+            case Effect.Instant: PlayStream(); return Task.CompletedTask;
+            case Effect.FadeIn: return FadeIn();
+            case Effect.FadeOut: return FadeOut();
+            default: return Task.CompletedTask;
         }
     }
 
