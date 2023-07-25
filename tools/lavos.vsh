@@ -75,6 +75,7 @@ fn cmd_link(cmd cli.Command) ! {
 	println('~> Creating links...')
 	lavoswd := os.getwd()
 	// lavos source/addons
+	create_path('${path}/addons')!
 	create_symlink('${lavoswd}/lavos/addons', '${path}/addons/${symlink_rookies}')!
 	// script templates (BROKEN as of Godot 4.1.1)
 	// create_symlink('${lavoswd}/lavos/${symlink_script_templates}', '${path}/${symlink_script_templates}')!
