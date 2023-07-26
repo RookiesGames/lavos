@@ -20,4 +20,14 @@ sealed class LavosPlugin
     {
         return _object.Call(method, args).AsBool();
     }
+
+    public string CallString(string method, params Variant[] args)
+    {
+        return _object.Call(method, args).AsString();
+    }
+
+    public string[] CallStringArray(string method, params Variant[] args)
+    {
+        return _object.Call(method, args).AsStringArray();
+    }
 }
