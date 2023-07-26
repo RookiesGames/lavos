@@ -31,6 +31,7 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
     private lateinit var productDetailsList: List<ProductDetails>
     private lateinit var subscriptionDetailsList: List<ProductDetails>
 
+    private var purchaseProgress = PurchaseProgress.None
     private lateinit var pendingPurchases: List<Purchase>
     private lateinit var pendingConsumables: List<String>
 
@@ -43,10 +44,13 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
             PurchasesUpdatedListener { billingResult, purchases ->
                 if (billingResult.responseCode != BillingResponseCode.OK) {
                     Log.d(pluginName, "Purchase failed. Error: ${billingResult.responseCode}")
+                    purchaseProgress = PurchaseProgress.Error
                 } else if (purchases == null) {
                     Log.d(pluginName, "No purchase detected")
+                    purchaseProgress = PurchaseProgress.None
                 } else {
                     // Do nothing?
+                    purchaseProgress = PurchaseProgress.Completed
                 }
             }
         //
@@ -115,6 +119,12 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
     fun hasProducts(): Boolean = productDetailsList.isNotEmpty()
 
     @UsedByGodot
+    fun getProducts(): Array<String> {
+        val array = productDetailsList.map { it.productId }
+        return array.toTypedArray()
+    }
+
+    @UsedByGodot
     fun queryProducts(productIds: Array<String>) {
         productDetailsList = emptyList()
         //
@@ -126,6 +136,12 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
 
     @UsedByGodot
     fun hasSubscriptions(): Boolean = subscriptionDetailsList.isNotEmpty()
+
+    @UsedByGodot
+    fun getSubscriptions(): Array<String> {
+        val array = subscriptionDetailsList.map { it.productId }
+        return array.toTypedArray()
+    }
 
     @UsedByGodot
     fun querySubscriptions(productIds: Array<String>) {
@@ -143,16 +159,16 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
         productDetailsList.find { it.productId == id }!!
 
     @UsedByGodot
-    fun getProductDescription(id: String): String = getProduct(id).description
+    fun getProductTitle(id: String): String = getProduct(id).title
 
     @UsedByGodot
     fun getProductName(id: String): String = getProduct(id).name
 
     @UsedByGodot
-    fun getProductType(id: String): String = getProduct(id).productType
+    fun getProductDescription(id: String): String = getProduct(id).description
 
     @UsedByGodot
-    fun getProductTitle(id: String): String = getProduct(id).title
+    fun getProductType(id: String): String = getProduct(id).productType
 
     // One Time Offer Details
 
@@ -172,13 +188,23 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
 
     // Subscription Offer Details
 
-    private fun getSubscriptionOfferDetails(id: String): List<ProductDetails.SubscriptionOfferDetails> = getProduct(id).subscriptionOfferDetails!!
+    private fun getSubscriptionOfferDetails(id: String): List<ProductDetails.SubscriptionOfferDetails> =
+        getProduct(id).subscriptionOfferDetails!!
 
     // Purchasing flow
 
     @UsedByGodot
+    fun purchaseInProgress(): Boolean = purchaseProgress == PurchaseProgress.InProgress
+
+    @UsedByGodot
+    fun getPurchaseStatus(): Int = purchaseProgress.id
+
+    @UsedByGodot
     fun purchaseProduct(id: String): Boolean {
-        val activity = godot.activity
+        if (purchaseInProgress()) {
+            Log.d(pluginName, "Purchase in progress")
+            return false
+        }
         val product = getProduct(id)
         //
         val productDetailsParamsList = listOf(
