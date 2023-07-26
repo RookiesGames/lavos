@@ -7,60 +7,60 @@ namespace Lavos.Plugins.Firebase.Crashlytics;
 sealed class FirebaseCrashlytics : ICrashService
 {
     const string PluginName = "FirebaseCrashlytics";
-    readonly LavosPlugin _plugin;
+    readonly LavosPlugin Plugin;
 
     public FirebaseCrashlytics()
     {
-        Assert.IsTrue(Engine.HasSingleton(PluginName), $"Missing plugins {PluginName}");
-        _plugin = new LavosPlugin(Engine.GetSingleton(PluginName));
+        Assert.IsTrue(Engine.HasSingleton(PluginName), $"Missing plugin {PluginName}");
+        Plugin = new LavosPlugin(Engine.GetSingleton(PluginName));
     }
 
     public void Initialise()
     {
-        _plugin.CallVoid("init");
+        Plugin.CallVoid("init");
     }
 
     #region ICrashService
 
     public void EnableCollection(bool enable)
     {
-        _plugin.CallVoid("setCrashlyticsCollectionEnabled", enable);
+        Plugin.CallVoid("setCrashlyticsCollectionEnabled", enable);
     }
 
     public bool CheckForUnsentReports()
     {
-        return _plugin.CallBool("checkForUnsentReports");
+        return Plugin.CallBool("checkForUnsentReports");
     }
 
     public void SendUnsentReports()
     {
-        _plugin.CallVoid("sendUnsentReports");
+        Plugin.CallVoid("sendUnsentReports");
     }
 
     public void DeleteUnsentReports()
     {
-        _plugin.CallVoid("deleteUnsentReports");
+        Plugin.CallVoid("deleteUnsentReports");
     }
 
     public bool DidCrashOnPreviousExecution()
     {
-        return _plugin.CallBool("didCrashOnPreviousExecution");
+        return Plugin.CallBool("didCrashOnPreviousExecution");
     }
 
     public void Log(string message)
     {
-        _plugin.CallVoid("log", message);
+        Plugin.CallVoid("log", message);
     }
 
     public void LogException(Exception e)
     {
         var exception = $"{e.GetType()} | {e.Message}";
-        _plugin.CallVoid("recordException", exception);
+        Plugin.CallVoid("recordException", exception);
     }
 
     public void SetUserId(string id)
     {
-        _plugin.CallVoid("setUserId", id);
+        Plugin.CallVoid("setUserId", id);
     }
 
     public void SetCustomKey(string key, Variant value)
@@ -68,13 +68,13 @@ sealed class FirebaseCrashlytics : ICrashService
         var method = string.Empty;
         switch (value.VariantType)
         {
-            case Variant.Type.Int: _plugin.CallVoid("setCustomKeyI", key, value); return;
-            case Variant.Type.Float: _plugin.CallVoid("setCustomKeyF", key, value); return;
-            case Variant.Type.Bool: _plugin.CallVoid("setCustomKeyB", key, value); return;
-            case Variant.Type.String: _plugin.CallVoid("setCustomKeyS", key, value); return;
+            case Variant.Type.Int: Plugin.CallVoid("setCustomKeyI", key, value); return;
+            case Variant.Type.Float: Plugin.CallVoid("setCustomKeyF", key, value); return;
+            case Variant.Type.Bool: Plugin.CallVoid("setCustomKeyB", key, value); return;
+            case Variant.Type.String: Plugin.CallVoid("setCustomKeyS", key, value); return;
             default:
                 {
-                    _plugin.CallVoid("setCustomKeyS", key, "TypeNotSupported");
+                    Plugin.CallVoid("setCustomKeyS", key, "TypeNotSupported");
                     Console.Log.Error(nameof(FirebaseCrashlytics), "Unhandled custom type");
                     return;
                 }
@@ -84,7 +84,7 @@ sealed class FirebaseCrashlytics : ICrashService
     public void NativeCrash()
     {
 #if DEBUG
-        _plugin.CallVoid("crash");
+        Plugin.CallVoid("crash");
 #endif
     }
 

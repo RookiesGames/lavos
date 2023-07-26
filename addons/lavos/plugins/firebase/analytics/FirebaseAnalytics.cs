@@ -7,51 +7,51 @@ namespace Lavos.Plugins.Firebase.Analytics;
 sealed class FirebaseAnalytics : IAnalyticsService
 {
     const string PluginName = "FirebaseAnalytics";
-    readonly LavosPlugin _plugin;
+    readonly LavosPlugin Plugin;
 
     public FirebaseAnalytics()
     {
-        Assert.IsTrue(Engine.HasSingleton(PluginName), $"Missing plugins {PluginName}");
-        _plugin = new LavosPlugin(Engine.GetSingleton(PluginName));
+        Assert.IsTrue(Engine.HasSingleton(PluginName), $"Missing plugin {PluginName}");
+        Plugin = new LavosPlugin(Engine.GetSingleton(PluginName));
     }
 
     public void Initialise()
     {
-        _plugin.CallVoid("init");
+        Plugin.CallVoid("init");
     }
 
     public void EnableCollection(bool enable)
     {
-        _plugin.CallVoid("setAnalyticsCollectionEnabled", enable);
+        Plugin.CallVoid("setAnalyticsCollectionEnabled", enable);
     }
 
     public void SetDefaultParameters(Dictionary<string, Godot.Variant> parameters)
     {
-        _plugin.CallVoid("setDefaultEventParameters", parameters);
+        Plugin.CallVoid("setDefaultEventParameters", parameters);
     }
 
     public void LogEvent(string name)
     {
-        _plugin.CallVoid("logEvent");
+        Plugin.CallVoid("logEvent");
     }
 
     public void LogEvent(string name, Dictionary<string, Godot.Variant> parameters)
     {
-        _plugin.CallVoid("logEvent", name, parameters);
+        Plugin.CallVoid("logEvent", name, parameters);
     }
 
     public void ResetData()
     {
-        _plugin.CallVoid("resetAnalyticsData");
+        Plugin.CallVoid("resetAnalyticsData");
     }
 
     public void SetUserId(string id)
     {
-        _plugin.CallVoid("setUserId", id);
+        Plugin.CallVoid("setUserId", id);
     }
 
     public void SetUserProperty(string name, string value)
     {
-        _plugin.CallVoid("setUserProperty", name, value);
+        Plugin.CallVoid("setUserProperty", name, value);
     }
 }
