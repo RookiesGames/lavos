@@ -4,30 +4,17 @@ namespace Lavos.Plugins;
 
 sealed class LavosPlugin
 {
-    readonly GodotObject _object;
+    readonly GodotObject GO;
 
     public LavosPlugin(GodotObject obj)
     {
-        _object = obj;
+        GO = obj;
     }
 
-    public void CallVoid(string method, params Variant[] args)
-    {
-        _object.Call(method, args);
-    }
-
-    public bool CallBool(string method, params Variant[] args)
-    {
-        return _object.Call(method, args).AsBool();
-    }
-
-    public string CallString(string method, params Variant[] args)
-    {
-        return _object.Call(method, args).AsString();
-    }
-
-    public string[] CallStringArray(string method, params Variant[] args)
-    {
-        return _object.Call(method, args).AsStringArray();
-    }
+    public void CallVoid(string method, params Variant[] args) => GO.Call(method, args);
+    public bool CallBool(string method, params Variant[] args) => GO.Call(method, args).AsBool();
+    public int CallInt(string method, params Variant[] args) => GO.Call(method, args).AsInt32();
+    public float CallFloat(string method, params Variant[] args) => GO.Call(method, args).AsFloat();
+    public string CallString(string method, params Variant[] args) => GO.Call(method, args).AsString();
+    public string[] CallStringArray(string method, params Variant[] args) => GO.Call(method, args).AsStringArray();
 }
