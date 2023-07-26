@@ -11,12 +11,12 @@ sealed class LavosPlugin
         _object = obj;
     }
 
-    public void CallVoid(string method, params Godot.Variant[] args)
+    public void CallVoid(string method, params Variant[] args)
     {
         _object.Call(method, args);
     }
 
-    public bool CallBool(string method, params Godot.Variant[] args)
+    public bool CallBool(string method, params Variant[] args)
     {
         return _object.Call(method, args).AsBool();
     }
