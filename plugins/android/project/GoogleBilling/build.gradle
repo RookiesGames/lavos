@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'eu.novuloj.googlebilling'
+    namespace 'eu.rookies.google.billing'
     compileSdk 33
 
     defaultConfig {

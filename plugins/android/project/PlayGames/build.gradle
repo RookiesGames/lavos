@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'eu.rookies.ironsource'
+    namespace 'eu.rookies.google.playgames'
     compileSdk 33
 
     defaultConfig {
@@ -31,10 +31,7 @@ android {
 
 dependencies {
     compileOnly files("../libs/godot-lib.aar")
-    implementation 'com.ironsource.sdk:mediationsdk:7.3.1.1'
-    implementation 'com.google.android.gms:play-services-appset:16.0.2'
-    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
-    implementation 'com.google.android.gms:play-services-basement:18.2.0'
+    implementation "com.google.android.gms:play-services-games-v2:17.0.0"
 
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'eu.novuloj.firebaseanalytics'
+    namespace 'eu.rookies.google.firebase.analytics'
     compileSdk 33
 
     defaultConfig {

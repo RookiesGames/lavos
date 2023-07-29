@@ -18,5 +18,5 @@ public interface IStoreService : IService
     StoreProduct GetProduct(string id);
 
     Task<PurchaseResult> PurchaseProduct(string id);
-    void QueryPurchases();
+    Task<IReadOnlyList<StoreProduct>> QueryPurchases();
 }
