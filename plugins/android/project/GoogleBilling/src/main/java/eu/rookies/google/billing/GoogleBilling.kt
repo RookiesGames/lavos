@@ -170,41 +170,18 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
 
     // Product Details
 
-    private fun getProduct(id: String): ProductDetails =
-        productDetailsList.find { it.productId == id }!!
+    private fun getProductInternal(id: String): ProductDetails? =
+        productDetailsList.find { it.productId == id }
 
     @UsedByGodot
-    fun getProductTitle(id: String): String = getProduct(id).title
-
-    @UsedByGodot
-    fun getProductName(id: String): String = getProduct(id).name
-
-    @UsedByGodot
-    fun getProductDescription(id: String): String = getProduct(id).description
-
-    @UsedByGodot
-    fun getProductType(id: String): String = getProduct(id).productType
-
-    // One Time Offer Details
-
-    private fun getOneTimeOfferDetails(id: String): ProductDetails.OneTimePurchaseOfferDetails =
-        getProduct(id).oneTimePurchaseOfferDetails!!
-
-    @UsedByGodot
-    fun getProductFormattedPrice(id: String): String = getOneTimeOfferDetails(id).formattedPrice
-
-    @UsedByGodot
-    fun getProductPriceCurrencyCode(id: String): String =
-        getOneTimeOfferDetails(id).priceCurrencyCode
-
-    @UsedByGodot
-    fun getProductPriceAmount(id: String): Float =
-        getOneTimeOfferDetails(id).priceAmountMicros.toFloat()
-
-    // Subscription Offer Details
-
-    private fun getSubscriptionOfferDetails(id: String): List<ProductDetails.SubscriptionOfferDetails> =
-        getProduct(id).subscriptionOfferDetails!!
+    fun getProduct(id: String): String {
+        val product = getProductInternal(id)
+        return if (product != null) {
+            ProductHelper.toJson(product).toString()
+        } else {
+            ""
+        }
+    }
 
     // Purchasing flow
 
@@ -220,7 +197,11 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
             Log.d(pluginName, "Purchase in progress")
             return false
         }
-        val product = getProduct(id)
+        val product = getProductInternal(id)
+        if (product == null) {
+            Log.e(pluginName, "Product $id not found")
+            return false
+        }
         //
         val productDetailsParamsList = listOf(
             BillingFlowParams.ProductDetailsParams.newBuilder()

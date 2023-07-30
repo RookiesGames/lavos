@@ -82,17 +82,9 @@ sealed class GoogleBilling : IStoreService
     public StoreProduct GetProduct(string id)
     {
         var arg = Variant.CreateFrom(id);
-        return new StoreProduct()
-        {
-            Id = id,
-            Title = Plugin.CallString("getProductTitle", arg),
-            Name = Plugin.CallString("getProductName", arg),
-            Description = Plugin.CallString("getProductDescription", arg),
-            Type = Plugin.CallString("getProductType", arg),
-            FormattedPrice = Plugin.CallString("getProductFormattedPrice", arg),
-            CurrencyCode = Plugin.CallString("getProductPriceCurrencyCode", arg),
-            Price = Plugin.CallFloat("getProductPriceAmount", arg),
-        };
+        var product = Plugin.CallString("getProduct", arg);
+        // TODO
+        return null;
     }
 
     public async Task<PurchaseResult> PurchaseProduct(string id)

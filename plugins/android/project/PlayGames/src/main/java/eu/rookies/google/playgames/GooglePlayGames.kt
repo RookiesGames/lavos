@@ -15,6 +15,7 @@ import com.google.android.gms.games.PlayGames
 import com.google.android.gms.games.PlayGamesSdk;
 import com.google.android.gms.games.Player
 import com.google.android.gms.games.PlayerBuffer
+import com.google.android.gms.games.PlayerStatsClient
 import com.google.android.gms.games.PlayersClient
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
@@ -25,6 +26,7 @@ class GooglePlayGames(godot: Godot) : GodotPlugin(godot) {
 
     private var isSignedIn: Boolean = false
     private var player: Player? = null
+    private var playerStats: String = ""
 
     private var fetchFriendsStatus = FetchFriendsStatus.Completed
     private var friends: MutableList<String> = mutableListOf()
@@ -33,6 +35,7 @@ class GooglePlayGames(godot: Godot) : GodotPlugin(godot) {
     private lateinit var gamesPlayerClient: PlayersClient
     private lateinit var gamesAchievementsClient: AchievementsClient
     private lateinit var gamesLeaderboardsClient: LeaderboardsClient
+    private lateinit var gamesPlayerStatsClient: PlayerStatsClient
 
     override fun getPluginName(): String = pluginName
 
@@ -44,31 +47,12 @@ class GooglePlayGames(godot: Godot) : GodotPlugin(godot) {
         gamesPlayerClient = PlayGames.getPlayersClient(godot.requireActivity())
         gamesAchievementsClient = PlayGames.getAchievementsClient(godot.requireActivity())
         gamesLeaderboardsClient = PlayGames.getLeaderboardsClient(godot.requireActivity())
+        gamesPlayerStatsClient = PlayGames.getPlayerStatsClient(godot.requireActivity())
         //
-        gamesSignInClient.isAuthenticated.addOnCompleteListener { authResult ->
-            if (!authResult.isSuccessful) {
-                Log.d(
-                    pluginName,
-                    "Auth failed: ${authResult.exception?.message}"
-                )
-                return@addOnCompleteListener
-            }
-            //
-            Log.d(
-                pluginName,
-                "Auth completed"
-            )
-            isSignedIn = authResult.result.isAuthenticated
+        registerForSignInChanges { isSignedIn ->
             if (isSignedIn) {
-                // Get current player
-                gamesPlayerClient.currentPlayer.addOnCompleteListener { playerResult ->
-                    if (playerResult.isSuccessful) {
-                        player = playerResult.result
-                        Log.d(pluginName, "Current player fetched")
-                    } else {
-                        player = null
-                        Log.d(pluginName, "Failed to fetch current player")
-                    }
+                loadCurrentPlayer {
+                    loadPlayerStats()
                 }
             }
         }
@@ -83,6 +67,22 @@ class GooglePlayGames(godot: Godot) : GodotPlugin(godot) {
     @UsedByGodot
     fun isSignedIn(): Boolean = isSignedIn
 
+    private fun registerForSignInChanges(action: (signedIn: Boolean) -> Unit) {
+        gamesSignInClient.isAuthenticated.addOnCompleteListener { authResult ->
+            if (!authResult.isSuccessful) {
+                Log.d(pluginName, "Auth failed")
+                if (authResult.exception != null) {
+                    Log.e(pluginName, "${authResult.exception!!.message}")
+                }
+                return@addOnCompleteListener
+            }
+            //
+            Log.d(pluginName, "Auth completed")
+            isSignedIn = authResult.result.isAuthenticated
+            action(isSignedIn)
+        }
+    }
+
     /////////////////
     // Player
 
@@ -90,8 +90,28 @@ class GooglePlayGames(godot: Godot) : GodotPlugin(godot) {
     fun getPlayer(): String = if (player != null) {
         PlayerHelper.toJson(player!!).toString()
     } else {
-        "<no_player>"
+        ""
     }
+
+    private fun loadCurrentPlayer(action: () -> Unit) {
+        gamesPlayerClient.currentPlayer.addOnCompleteListener { playerResult ->
+            if (playerResult.isSuccessful) {
+                player = playerResult.result
+                Log.d(pluginName, "Current player fetched")
+                //
+                action()
+            } else {
+                player = null
+                Log.d(pluginName, "Failed to fetch current player")
+            }
+        }
+    }
+
+    /////////////////
+    // Friends
+
+    @UsedByGodot
+    fun getFetchFriendsStatus(): Int = fetchFriendsStatus.id
 
     @UsedByGodot
     fun fetchFriends() {
@@ -120,6 +140,21 @@ class GooglePlayGames(godot: Godot) : GodotPlugin(godot) {
                     }
                 pendingIntent.send()
             }
+        }
+    }
+
+    @UsedByGodot
+    fun compareToFriend(id: String) {
+        gamesPlayerClient.getCompareProfileIntent(id).addOnSuccessListener { intent ->
+            var activity = godot.requireActivity()
+                .registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                    if (result.resultCode == Activity.RESULT_OK) {
+                        Log.d(pluginName, "Comparing with friend $id")
+                    } else {
+                        Log.d(pluginName, "Failed to compare with friend. ${result.resultCode}")
+                    }
+                }
+            activity.launch(intent)
         }
     }
 
@@ -180,6 +215,30 @@ class GooglePlayGames(godot: Godot) : GodotPlugin(godot) {
     }
 
     /////////////////
+    // Stats
+
+    @UsedByGodot
+    fun getPlayerStats(): String = playerStats
+
+    private fun loadPlayerStats() {
+        gamesPlayerStatsClient.loadPlayerStats(true).addOnCompleteListener {
+            if (!it.isSuccessful) {
+                Log.d(pluginName, "Failed to get player stats")
+                return@addOnCompleteListener
+            }
+            //
+            val stats = it.result.get()
+            if (stats == null) {
+                Log.e(pluginName, "No stats could be retrieved")
+                return@addOnCompleteListener
+            }
+            //
+            playerStats = StatsHelper.toJson(stats).toString()
+        }
+    }
+
+    /////////////////
     // Cloud save
 
+    
 }
