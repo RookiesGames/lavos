@@ -31,7 +31,9 @@ android {
 
 dependencies {
     compileOnly files("../libs/godot-lib.aar")
-    implementation "com.google.android.gms:play-services-games-v2:17.0.0"
+    implementation 'com.google.android.gms:play-services-games-v2:17.0.0'
+    implementation 'com.google.android.gms:play-services-auth:20.6.0'
+
 
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
