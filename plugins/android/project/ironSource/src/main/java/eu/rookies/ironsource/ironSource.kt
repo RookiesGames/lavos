@@ -78,7 +78,7 @@ class ironSource(godot: Godot) : GodotPlugin(godot) {
     @UsedByGodot
     fun setUserId(id: String) = IronSource.setUserId(id)
 
-    //
+    /////////////
     // Rewarded ads
 
     @UsedByGodot
@@ -103,7 +103,7 @@ class ironSource(godot: Godot) : GodotPlugin(godot) {
     @UsedByGodot
     fun clearPendingRewardedAdEvent(event: String) = RewardedAdsHelper.clearPendingEvent(event)
 
-    //
+    /////////////
     // Interstitials
 
     @UsedByGodot
@@ -131,7 +131,7 @@ class ironSource(godot: Godot) : GodotPlugin(godot) {
     @UsedByGodot
     fun clearPendingInterstitialEvent(event: String) = InterstitialsHelper.clearPendingEvent(event)
 
-    //
+    /////////////
     // Banners
 
     @UsedByGodot

@@ -9,8 +9,8 @@ import com.ironsource.mediationsdk.adunit.adapter.utility.AdInfo
 import com.ironsource.mediationsdk.logger.IronSourceError
 import com.ironsource.mediationsdk.sdk.LevelPlayBannerListener
 import eu.rookies.ironsource.AdInfoHelper
+import eu.rookies.ironsource.EventKeys
 import eu.rookies.ironsource.IronSourceErrorHelper
-import eu.rookies.ironsource.banner.EventKeys
 
 class BannersHelper {
     private val tag = "BannersHelper"
@@ -27,7 +27,7 @@ class BannersHelper {
 
     private val levelPlayBannerListener = object : LevelPlayBannerListener {
         override fun onAdLoaded(adInfo: AdInfo) =
-            addPendingEvent(EventKeys.AD_LOADED, AdInfoHelper.toJson(adInfo).toString())
+            addPendingEvent(EventKeys.AD_READY, AdInfoHelper.toJson(adInfo).toString())
 
         override fun onAdLoadFailed(error: IronSourceError) = addPendingEvent(
             EventKeys.AD_LOAD_FAILED,

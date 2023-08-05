@@ -10,7 +10,7 @@ class AdInfoHelper {
     companion object {
         fun toJson(adInfo: AdInfo): JsonObject {
             return buildJsonObject {
-                putJsonObject("ad_info") {
+                putJsonObject("info") {
                     put("auction_id", adInfo.auctionId)
                     put("ad_unit", adInfo.adUnit)
                     put("country", adInfo.country)

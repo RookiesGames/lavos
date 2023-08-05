@@ -7,6 +7,7 @@ import com.ironsource.mediationsdk.logger.IronSourceError
 import com.ironsource.mediationsdk.model.Placement
 import com.ironsource.mediationsdk.sdk.LevelPlayRewardedVideoListener
 import eu.rookies.ironsource.AdInfoHelper
+import eu.rookies.ironsource.EventKeys
 import eu.rookies.ironsource.IronSourceErrorHelper
 import kotlinx.serialization.json.buildJsonObject
 
@@ -66,7 +67,7 @@ class RewardedAdsHelper {
             IronSource.setLevelPlayRewardedVideoListener(levelPlayRewardedVideoListener)
         }
 
-        //
+        //////////////
         // Interface
 
         fun isRewardedAdAvailable(): Boolean = IronSource.isRewardedVideoAvailable()
@@ -81,7 +82,7 @@ class RewardedAdsHelper {
             return json.toString()
         }
 
-        //
+        ///////////
         // Events
 
         fun hasPendingEvent(key: String): Boolean {
