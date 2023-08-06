@@ -1,5 +1,5 @@
 using Lavos.Dependency;
-using Lavos.Plugins.Firebase.Crashlytics;
+using Lavos.Plugins.Google.Firebase.Crashlytics;
 using Lavos.Utils.Platform;
 
 namespace Lavos.Services.Crash;

@@ -1,5 +1,5 @@
 using Lavos.Dependency;
-using Lavos.Plugins.Firebase.Analytics;
+using Lavos.Plugins.Google.Firebase.Analytics;
 using Lavos.Utils.Platform;
 
 namespace Lavos.Services.Analytics;
