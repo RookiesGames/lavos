@@ -23,4 +23,6 @@ public static class StringExtensions
         }
         return sb.ToString();
     }
+
+    public static string Prefix(this string str, string prefix) => $"{prefix}{str}";
 }
