@@ -9,6 +9,9 @@ const (
 	symlink_script_templates = 'script_templates'
 )
 
+//////////
+// Check
+
 fn cmd_check(cmd cli.Command) ! {
 	path := cmd.args[0]
 	check_project(path)!
@@ -35,6 +38,37 @@ fn check_path(path string) ! {
 		return error('path ${path} does not exist')
 	}
 }
+
+//////////
+// Setup
+
+fn execute_command(msg string, cmd string) ! {
+	print(msg)
+	flush()
+	res := os.execute(cmd)
+	if res.exit_code != 0 {
+		println(' ❌')
+		return error(res.output)
+	}
+	println(' ✅')
+}
+
+fn cmd_setup(cmd cli.Command) ! {
+	path := cmd.args[0]
+	check_path(path)!
+	//
+	println('~> Setting up project...')
+	execute_command('\t~> Initialise submodules', 'git submodule init')!
+	execute_command('\t~> Updating submodules', 'git submodule update --recursive')!
+	//
+	cmd_clean(cmd)!
+	cmd_link(cmd)!
+	//
+	println('~> Setup up complete!')
+}
+
+//////////
+// Clean
 
 fn cmd_clean(cmd cli.Command) ! {
 	path := cmd.args[0]
@@ -67,6 +101,9 @@ fn remove_symlink(link string) ! {
 		println(' ✅')
 	}
 }
+
+/////////
+// Link
 
 fn cmd_link(cmd cli.Command) ! {
 	path := cmd.args[0]
@@ -111,6 +148,9 @@ fn create_path(path string) ! {
 	println(' ✅')
 }
 
+////////
+// CLI
+
 fn main() {
 	mut app := cli.Command{
 		name: 'lavos'
@@ -125,6 +165,15 @@ fn main() {
 				description: 'Check if path is a valid Godot project'
 				execute: fn (cmd cli.Command) ! {
 					cmd_check(cmd)!
+				}
+				required_args: 1
+			},
+			cli.Command{
+				name: 'setup'
+				usage: '<target>'
+				description: 'Setup a Godot project with Lavos'
+				execute: fn (cmd cli.Command) ! {
+					cmd_setup(cmd)!
 				}
 				required_args: 1
 			},
