@@ -1,8 +1,7 @@
 # Install environment
 & "$PSScriptRoot\lavos\tools\env\installEnv.ps1"
 
-if ($? -eq $false)
-{ 
+if ($? -eq $false) { 
     ""
     "Environment installation failed"
     exit
