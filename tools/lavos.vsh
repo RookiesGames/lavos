@@ -32,7 +32,7 @@ fn check_project(path string) ! {
 
 fn check_path(path string) ! {
 	if !os.is_dir(path) {
-		return error('path does not exist')
+		return error('path ${path} does not exist')
 	}
 }
 
