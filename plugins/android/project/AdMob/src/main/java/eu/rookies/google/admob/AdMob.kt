@@ -56,7 +56,7 @@ class AdMob(godot: Godot) : GodotPlugin(godot) {
     fun isInterstitialsReady(): Boolean = InterstitialsHelper.isReady()
 
     @UsedByGodot
-    fun loadInterstitials(id: String) =
+    fun loadInterstitial(id: String) =
         InterstitialsHelper.load(godot.requireContext(), id)
 
     @UsedByGodot
