@@ -3,7 +3,7 @@
 # Variables
 
 # Install environment
-sh ./lavos/tools/installEnv.sh
+sh ./lavos/tools/env/installEnv.sh
 
 # Setup project
 path="$(pwd)/<project_folder>"

@@ -1,5 +1,5 @@
 # Install environment
-& "$PSScriptRoot\lavos\tools\installEnv.ps1"
+& "$PSScriptRoot\lavos\tools\env\installEnv.ps1"
 
 if ($? -eq $false)
 { 
