@@ -13,7 +13,7 @@ import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.UsedByGodot
 
 class ironSource(godot: Godot) : GodotPlugin(godot) {
-    private val pluginName = "GoogleBilling"
+    private val pluginName = "ironSource"
     private val bannerHelper = BannersHelper()
 
     override fun getPluginName(): String = pluginName
@@ -107,13 +107,13 @@ class ironSource(godot: Godot) : GodotPlugin(godot) {
     // Interstitials
 
     @UsedByGodot
-    fun isInterstitialsReady(): Boolean = InterstitialsHelper.isInterstitialsReady()
+    fun isInterstitialReady(): Boolean = InterstitialsHelper.isInterstitialsReady()
 
     @UsedByGodot
-    fun loadInterstitials() = InterstitialsHelper.loadInterstitials()
+    fun loadInterstitial() = InterstitialsHelper.loadInterstitials()
 
     @UsedByGodot
-    fun showInterstitials(placementName: String) =
+    fun showInterstitial(placementName: String) =
         InterstitialsHelper.showInterstitials(placementName)
 
     @UsedByGodot
