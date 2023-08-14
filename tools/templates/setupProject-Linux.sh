@@ -7,4 +7,4 @@ sh ./lavos/tools/env/installEnv.sh
 
 # Setup project
 path="$(pwd)/<project_folder>"
-v run ./lavos/tools/setupProject.vsh -p $path
+v run ./lavos/tools/lavos.vsh -p $path

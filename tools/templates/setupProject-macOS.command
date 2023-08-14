@@ -8,4 +8,4 @@ cd -- "$(dirname "$BASH_SOURCE")"
 
 # Setup project
 path="$(pwd)/<project_folder>"
-v run ./lavos/tools/setupProject.vsh setup "$path"
+v run ./lavos/tools/lavos.vsh setup "$path"
