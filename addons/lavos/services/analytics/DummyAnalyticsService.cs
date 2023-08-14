@@ -4,7 +4,7 @@ namespace Lavos.Services.Analytics;
 
 sealed class DummyAnalyticsService : IAnalyticsService
 {
-    public void Initialise() { }
+    public void Initialize() { }
 
     public void EnableCollection(bool enable) { }
 

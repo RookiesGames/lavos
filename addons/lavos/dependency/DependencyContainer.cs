@@ -50,7 +50,7 @@ public sealed partial class DependencyContainer
         //
         if (lookups.DoesNotContainKey(typeof(I1)))
         {
-            lookups[typeof(I1)] = new List<System.Type>();
+            lookups[typeof(I1)] = new List<Type>();
         }
         lookups[typeof(I1)].Add(typeof(I2));
     }

@@ -6,7 +6,7 @@ namespace Lavos.Services.Store;
 
 public interface IStoreService : IService
 {
-    void Initialise();
+    void Initialize();
 
     bool IsConnected();
     void Connect();

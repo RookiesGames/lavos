@@ -22,6 +22,6 @@ public sealed partial class AnalyticsConfig : Config
     {
         var service = resolver.Resolve<IAnalyticsService>();
         Assert.IsTrue(service != null, $"Type {nameof(IAnalyticsService)} was not resolved");
-        service.Initialise();
+        service.Initialize();
     }
 }

@@ -5,7 +5,7 @@ namespace Lavos.Services.Crash;
 
 sealed class DummyCrashService : ICrashService
 {
-    public void Initialise() { }
+    public void Initialize() { }
 
     public void EnableCollection(bool enable) { }
 

@@ -21,7 +21,7 @@ public sealed partial class ServiceLocator : Node
         return obj;
     }
 
-    public static List<T> LocateAsList<T>() where T : IService
+    public static IReadOnlyList<T> LocateAsList<T>() where T : IService
     {
         var type = typeof(T);
         //

@@ -5,7 +5,7 @@ namespace Lavos.Services.Analytics;
 
 public interface IAnalyticsService : IService
 {
-    void Initialise();
+    void Initialize();
 
     void EnableCollection(bool enable);
 

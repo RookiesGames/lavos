@@ -5,7 +5,7 @@ namespace Lavos.Services.Crash;
 
 public interface ICrashService : IService
 {
-    void Initialise();
+    void Initialize();
 
     void EnableCollection(bool enable);
 

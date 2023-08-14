@@ -22,6 +22,6 @@ public sealed partial class CrashConfig : Config
     {
         var service = resolver.Resolve<ICrashService>();
         Assert.IsTrue(service != null, $"Type {nameof(ICrashService)} was not resolved");
-        service.Initialise();
+        service.Initialize();
     }
 }

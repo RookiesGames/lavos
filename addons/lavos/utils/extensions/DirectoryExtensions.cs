@@ -7,7 +7,7 @@ public static class DirectoryExtensions
 {
     const string Tag = nameof(Godot.DirAccess);
 
-    public static List<string> GetFilesInDirectory(this Godot.DirAccess dir)
+    public static IReadOnlyList<string> GetFilesInDirectory(this Godot.DirAccess dir)
     {
         var error = dir.ListDirBegin();
         if (error != Error.Ok)
