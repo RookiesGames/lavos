@@ -1,9 +1,11 @@
+using Godot;
 using Lavos.Dependency;
 using Lavos.Plugins.Google.Firebase.Crashlytics;
 using Lavos.Utils.Platform;
 
 namespace Lavos.Services.Crash;
 
+[GlobalClass]
 public sealed partial class CrashConfig : Config
 {
     public override void Configure(IDependencyBinder binder)

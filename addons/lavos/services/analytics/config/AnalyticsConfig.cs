@@ -1,10 +1,12 @@
+using Godot;
 using Lavos.Dependency;
 using Lavos.Plugins.Google.Firebase.Analytics;
 using Lavos.Utils.Platform;
 
 namespace Lavos.Services.Analytics;
 
-public sealed partial class AnalyticsConfig : Config
+[GlobalClass]
+public partial class AnalyticsConfig : Config
 {
     public override void Configure(IDependencyBinder binder)
     {
