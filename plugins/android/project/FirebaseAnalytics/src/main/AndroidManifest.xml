@@ -4,6 +4,6 @@
     <application>
         <meta-data
             android:name="org.godotengine.plugin.v1.FirebaseAnalytics"
-            android:value="eu.novuloj.firebaseanalytics.FirebaseAnalytics" />
+            android:value="eu.rookies.google.firebase.analytics.FirebaseAnalytics" />
     </application>
 </manifest>

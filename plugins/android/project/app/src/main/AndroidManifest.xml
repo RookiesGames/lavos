@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LavosPlugins">
         <activity
-            android:name="eu.novuloj.plugins.AppActivity"
+            android:name="eu.rookies.plugins.AppActivity"
             android:exported="false"/>
     </application>
 

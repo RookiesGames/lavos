@@ -4,6 +4,6 @@
     <application>
         <meta-data
             android:name="org.godotengine.plugin.v1.FirebaseCrashlytics"
-            android:value="eu.novuloj.firebasecrashlytics.FirebaseCrashlytics" />
+            android:value="eu.rookies.google.firebase.crashlytics.FirebaseCrashlytics" />
     </application>
 </manifest>

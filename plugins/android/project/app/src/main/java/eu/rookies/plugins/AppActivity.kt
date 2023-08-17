@@ -1,4 +1,4 @@
-package eu.novuloj.plugins
+package eu.rookies.plugins
 
 import android.app.Activity
 
