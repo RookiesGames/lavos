@@ -4,19 +4,22 @@ import cli
 import os
 
 const (
-	project_dir   = 'project'
+	project_dir              = 'project'
 
 	// Commands
-	command_help  = 'help'
-	command_build = 'build'
-	command_copy  = 'copy'
-	command_clean = 'clean'
+	command_help             = 'help'
+	command_build            = 'build'
+	command_copy             = 'copy'
+	command_clean            = 'clean'
 
 	// Arguments
-	arg_fa        = 'FirebaseAnalytics'
-	arg_fc        = 'FirebaseCrashlytics'
-	arg_gb        = 'GoogleBilling'
-	projects      = [arg_fa, arg_fc, arg_gb]
+	arg_firebase_analytics   = 'FirebaseAnalytics'
+	arg_firebase_crashlytics = 'FirebaseCrashlytics'
+	arg_google_billing       = 'GoogleBilling'
+	arg_google_admob         = 'AdMob'
+	arg_ironsource           = 'ironSource'
+	projects                 = [arg_firebase_analytics, arg_firebase_crashlytics, arg_google_billing,
+		arg_google_admob, arg_ironsource]
 )
 
 type JobFn = fn () !
@@ -32,7 +35,7 @@ fn do_job(cb JobFn) {
 fn check_arg(cmd cli.Command) !string {
 	arg := if cmd.args.len > 0 { cmd.args[0] } else { '' }
 	if !arg.is_blank() && arg !in projects {
-		error('Unrecognized argument. Possible values are: ${arg_fa}, ${arg_fc}')
+		error('Unrecognized argument. Possible values are: ${projects}')
 	}
 	//
 	return arg

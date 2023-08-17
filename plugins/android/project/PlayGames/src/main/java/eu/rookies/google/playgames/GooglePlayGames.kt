@@ -1,6 +1,7 @@
 package eu.rookies.google.playgames
 
 import android.app.Activity
+import android.content.Intent
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -52,14 +53,14 @@ class GooglePlayGames(godot: Godot) : GodotPlugin(godot) {
 
     @UsedByGodot
     fun init() {
-        PlayGamesSdk.initialize(godot.requireContext())
+        PlayGamesSdk.initialize(godot.getActivity()!!.applicationContext)
         //
-        gamesSignInClient = PlayGames.getGamesSignInClient(godot.requireActivity())
-        gamesPlayerClient = PlayGames.getPlayersClient(godot.requireActivity())
-        gamesAchievementsClient = PlayGames.getAchievementsClient(godot.requireActivity())
-        gamesLeaderboardsClient = PlayGames.getLeaderboardsClient(godot.requireActivity())
-        gamesPlayerStatsClient = PlayGames.getPlayerStatsClient(godot.requireActivity())
-        gamesSnapshotsClient = PlayGames.getSnapshotsClient(godot.requireActivity())
+        gamesSignInClient = PlayGames.getGamesSignInClient(godot.getActivity()!!)
+        gamesPlayerClient = PlayGames.getPlayersClient(godot.getActivity()!!)
+        gamesAchievementsClient = PlayGames.getAchievementsClient(godot.getActivity()!!)
+        gamesLeaderboardsClient = PlayGames.getLeaderboardsClient(godot.getActivity()!!)
+        gamesPlayerStatsClient = PlayGames.getPlayerStatsClient(godot.getActivity()!!)
+        gamesSnapshotsClient = PlayGames.getSnapshotsClient(godot.getActivity()!!)
         //
         registerForSignInChanges { isSignedIn ->
             if (isSignedIn) {
@@ -143,32 +144,26 @@ class GooglePlayGames(godot: Godot) : GodotPlugin(godot) {
             Log.d(pluginName, "Failed to load friends. ${exception.message}")
             fetchFriendsStatus = FetchFriendsStatus.Failed
             if (exception is FriendsResolutionRequiredException) {
+                val errorRequestCode = 34404
                 val pendingIntent = exception.resolution
-                val activity = godot.requireActivity()
-                    .registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
-                        if (result.resultCode == Activity.RESULT_OK) {
-                            Log.d(pluginName, "Friends Resolution successful")
-                        } else {
-                            Log.d(pluginName, "Friends resolution failed. ${result.resultCode}")
-                        }
-                    }
-                pendingIntent.send()
+                godot.getActivity()!!.startIntentSenderForResult(
+                    pendingIntent.intentSender,
+                    /* requestCode */ errorRequestCode,
+                    /* fillInIntent */ null,
+                    /* flagsMask */ 0,
+                    /* flagsValues */ 0,
+                    /* extraFlags */ 0,
+                    /* options */ null
+                );
             }
         }
     }
 
     @UsedByGodot
     fun compareToFriend(id: String) {
+        val friendsRequestCode = 7413
         gamesPlayerClient.getCompareProfileIntent(id).addOnSuccessListener { intent ->
-            var activity = godot.requireActivity()
-                .registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                    if (result.resultCode == Activity.RESULT_OK) {
-                        Log.d(pluginName, "Comparing with friend $id")
-                    } else {
-                        Log.d(pluginName, "Failed to compare with friend. ${result.resultCode}")
-                    }
-                }
-            activity.launch(intent)
+            godot.getActivity()!!.startActivityForResult(intent, friendsRequestCode)
         }
     }
 
@@ -190,16 +185,9 @@ class GooglePlayGames(godot: Godot) : GodotPlugin(godot) {
 
     @UsedByGodot
     fun showAchievements() {
+        val achievementsRequestCode = 413
         gamesAchievementsClient.achievementsIntent.addOnSuccessListener { intent ->
-            val activity = godot.requireActivity()
-                .registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                    if (result.resultCode == Activity.RESULT_OK) {
-                        Log.d(pluginName, "Showing achievements")
-                    } else {
-                        Log.d(pluginName, "Failed to show achievements. ${result.resultCode}")
-                    }
-                }
-            activity.launch(intent)
+            godot.getActivity()!!.startActivityForResult(intent, achievementsRequestCode)
         }
     }
 
@@ -212,18 +200,9 @@ class GooglePlayGames(godot: Godot) : GodotPlugin(godot) {
 
     @UsedByGodot
     fun showLeaderboards(id: String) {
+        val leaderboardsRequestCode = 13463
         gamesLeaderboardsClient.getLeaderboardIntent(id).addOnSuccessListener { intent ->
-            val activity = godot.requireActivity()
-                .registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                    if (result.resultCode == Activity.RESULT_OK) {
-                        Log.d(pluginName, "Showing leaderboards")
-                    } else {
-                        Log.d(
-                            pluginName, "Failed to show leaderboard. ${result.resultCode}"
-                        )
-                    }
-                }
-            activity.launch(intent)
+            godot.getActivity()!!.startActivityForResult(intent, leaderboardsRequestCode)
         }
     }
 
@@ -257,7 +236,7 @@ class GooglePlayGames(godot: Godot) : GodotPlugin(godot) {
         val options: GoogleSignInOptions =
             GoogleSignInOptions.Builder().requestScopes(SCOPE_APPFOLDER).build()
 
-        val client = GoogleSignIn.getClient(godot.requireActivity(), options)
+        val client = GoogleSignIn.getClient(godot.getActivity()!!, options)
         client.silentSignIn().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Log.d(pluginName, "Successfully connected to cloud storage")
@@ -267,37 +246,27 @@ class GooglePlayGames(godot: Godot) : GodotPlugin(godot) {
         }
     }
 
+    override fun onMainActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
+        if (intent.hasExtra(SnapshotsClient.EXTRA_SNAPSHOT_METADATA)) {
+            val metadata: SnapshotMetadata =
+                intent.getParcelableExtra(SnapshotsClient.EXTRA_SNAPSHOT_METADATA)!!
+            var name = metadata.uniqueName
+            Log.d(pluginName, "$name cloud save selected")
+            // TODO
+        } else if (intent.hasExtra(SnapshotsClient.EXTRA_SNAPSHOT_NEW)) {
+            val unique: String = BigInteger(281, Random()).toString(13)
+            var name = "snapshotTemp-$unique"
+            Log.d(pluginName, "$name cloud save created")
+        }
+    }
+
     @UsedByGodot
     fun showCloudSaves() {
         gamesSnapshotsClient
             .getSelectSnapshotIntent("Saved games", true, true, 5)
             .addOnSuccessListener { intent ->
-                val activity = godot.requireActivity()
-                    .registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                        if (result.resultCode != Activity.RESULT_OK) {
-                            Log.d(pluginName, "Failed to show saved games")
-                            return@registerForActivityResult
-                        }
-                        //
-                        Log.d(pluginName, "Showing saved games")
-                        if (result.data == null) {
-                            Log.e(pluginName, "No intent found")
-                            return@registerForActivityResult
-                        }
-                        //
-                        if (intent.hasExtra(SnapshotsClient.EXTRA_SNAPSHOT_METADATA)) {
-                            val metadata: SnapshotMetadata =
-                                intent.getParcelableExtra(SnapshotsClient.EXTRA_SNAPSHOT_METADATA)!!
-                            var name = metadata.uniqueName
-                            Log.d(pluginName, "$name cloud save selected")
-                            // TODO
-                        } else if (intent.hasExtra(SnapshotsClient.EXTRA_SNAPSHOT_NEW)) {
-                            val unique: String = BigInteger(281, Random()).toString(13)
-                            var name = "snapshotTemp-$unique"
-                            Log.d(pluginName, "$name cloud save created")
-                        }
-                    }
-                activity.launch(intent)
+                val cloudRequestCode = 610
+                godot.getActivity()!!.startActivityForResult(intent, cloudRequestCode)
             }
     }
 

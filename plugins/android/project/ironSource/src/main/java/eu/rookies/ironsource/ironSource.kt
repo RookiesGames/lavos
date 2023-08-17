@@ -21,12 +21,12 @@ class ironSource(godot: Godot) : GodotPlugin(godot) {
     // Activity lifecycle
     override fun onMainResume() {
         super.onMainResume()
-        IronSource.onResume(godot.requireActivity())
+        IronSource.onResume(godot.getActivity()!!)
     }
 
     override fun onMainPause() {
         super.onMainPause()
-        IronSource.onPause(godot.requireActivity())
+        IronSource.onPause(godot.getActivity()!!)
     }
 
     @UsedByGodot
@@ -35,32 +35,32 @@ class ironSource(godot: Godot) : GodotPlugin(godot) {
         RewardedAdsHelper.init()
         //
         IronSource.init(
-            godot.requireContext(),
+            godot.getActivity()!!.applicationContext,
             appKey,
             InitializationListener {
                 Log.d(pluginName, "Initialization complete")
-                IntegrationHelper.validateIntegration(godot.requireContext())
+                IntegrationHelper.validateIntegration(godot.getActivity()!!.applicationContext)
             },
             IronSource.AD_UNIT.REWARDED_VIDEO,
             IronSource.AD_UNIT.INTERSTITIAL,
             IronSource.AD_UNIT.BANNER
         )
         // Track network changes
-        IronSource.shouldTrackNetworkState(godot.requireContext(), true)
+        IronSource.shouldTrackNetworkState(godot.getActivity()!!.applicationContext, true)
     }
 
     @UsedByGodot
     fun launchTestSuite(appKey: String) {
         IronSource.setMetaData("is_test_suite", "enable")
         IronSource.init(
-            godot.requireContext(),
+            godot.getActivity()!!.applicationContext,
             appKey,
             InitializationListener {
                 Log.d(pluginName, "Initialization complete")
-                IntegrationHelper.validateIntegration(godot.requireContext())
+                IntegrationHelper.validateIntegration(godot.getActivity()!!.applicationContext)
                 //
                 Log.i(pluginName, "Starting test suite...")
-                IronSource.launchTestSuite(godot.requireContext());
+                IronSource.launchTestSuite(godot.getActivity()!!.applicationContext);
             })
     }
 
@@ -135,7 +135,7 @@ class ironSource(godot: Godot) : GodotPlugin(godot) {
     // Banners
 
     @UsedByGodot
-    fun createBanner() = bannerHelper.createBanner(godot.requireActivity())
+    fun createBanner() = bannerHelper.createBanner(godot.getActivity()!!)
 
     @UsedByGodot
     fun loadBanner(placementName: String) = bannerHelper.loadBanner(placementName)

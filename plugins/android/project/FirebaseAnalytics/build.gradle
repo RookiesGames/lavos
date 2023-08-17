@@ -33,6 +33,6 @@ dependencies {
     compileOnly files("../libs/godot-lib.aar")
     implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
 
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
 }

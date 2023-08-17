@@ -21,7 +21,7 @@ class AdMob(godot: Godot) : GodotPlugin(godot) {
 
     @UsedByGodot
     fun init() {
-        MobileAds.initialize(godot.requireContext()) { status ->
+        MobileAds.initialize(godot.getActivity()!!.applicationContext) { status ->
             for (entry in status.adapterStatusMap.entries) {
                 Log.d(pluginName, "${entry.key} - ${entry.value}")
             }
@@ -32,7 +32,7 @@ class AdMob(godot: Godot) : GodotPlugin(godot) {
     // Banners
 
     @UsedByGodot
-    fun createBanner(id: String) = BannerHelper.createBanner(godot.requireContext(), id)
+    fun createBanner(id: String) = BannerHelper.createBanner(godot.getActivity()!!.applicationContext, id)
 
     @UsedByGodot
     fun loadBanner() = BannerHelper.loadBanner()
@@ -57,10 +57,10 @@ class AdMob(godot: Godot) : GodotPlugin(godot) {
 
     @UsedByGodot
     fun loadInterstitial(id: String) =
-        InterstitialsHelper.load(godot.requireContext(), id)
+        InterstitialsHelper.load(godot.getActivity()!!.applicationContext, id)
 
     @UsedByGodot
-    fun showInterstitial() = InterstitialsHelper.show(godot.requireActivity())
+    fun showInterstitial() = InterstitialsHelper.show(godot.getActivity()!!)
 
     @UsedByGodot
     fun hasPendingInterstitialEvent(event: String): Boolean =
@@ -80,10 +80,10 @@ class AdMob(godot: Godot) : GodotPlugin(godot) {
     fun isRewardedAdReady(): Boolean = RewardedAdsHelper.isReady()
 
     @UsedByGodot
-    fun loadRewardedAd(id: String) = RewardedAdsHelper.load(godot.requireContext(), id)
+    fun loadRewardedAd(id: String) = RewardedAdsHelper.load(godot.getActivity()!!.applicationContext, id)
 
     @UsedByGodot
-    fun showRewardedAd() = RewardedAdsHelper.show(godot.requireActivity())
+    fun showRewardedAd() = RewardedAdsHelper.show(godot.getActivity()!!)
 
     @UsedByGodot
     fun hasPendingRewardedAdEvent(event: String): Boolean =
