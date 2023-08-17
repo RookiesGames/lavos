@@ -1,0 +1,33 @@
+ext.versions = [
+        androidGradlePlugin: '7.2.1',
+        compileSdk         : 33,
+        // Also update 'platform/android/export/export_plugin.cpp#OPENGL_MIN_SDK_VERSION'
+        minSdk             : 24,
+        // Also update 'platform/android/export/export_plugin.cpp#DEFAULT_TARGET_SDK_VERSION'
+        targetSdk          : 33,
+        buildTools         : '33.0.2',
+        kotlinVersion      : '1.7.0',
+        javaVersion        : 11,
+        // Also update 'platform/android/detect.py#get_ndk_version()' when this is updated.
+        ndkVersion         : '23.2.8568313'
+]
+
+ext.libraries = [
+        androidGradlePlugin: "com.android.tools.build:gradle:$versions.androidGradlePlugin",
+        kotlinGradlePlugin : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlinVersion",
+        kotlinStdLib       : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlinVersion",
+        appCompatLib       : 'androidx.appcompat:appcompat:1.6.1',
+        kotlinxJsonLib     : 'org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.5.1',
+        materialLib        : 'com.google.android.material:material:1.9.0',
+]
+
+ext.firebase = [
+        analyticsVersion  : '21.3.0',
+        crashlyticsVersion: '18.4.0',
+]
+
+ext.firebaseLibraries = [
+        analyticsKtxLib  : "com.google.firebase:firebase-analytics-ktx:$firebase.analyticsVersion",
+        crashlyticsKtxLib: "com.google.firebase:firebase-crashlytics-ktx:$firebase.crashlyticsVersion",
+        crashlyticsNdkLib: "com.google.firebase:firebase-crashlytics-ndk:$firebase.crashlyticsVersion",
+]

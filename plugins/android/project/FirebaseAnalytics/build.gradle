@@ -3,13 +3,15 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+apply from: '../config.gradle'
+
 android {
     namespace 'eu.rookies.google.firebase.analytics'
-    compileSdk 33
-
+    compileSdk versions.compileSdk
+    buildToolsVersion versions.buildTools
     defaultConfig {
-        minSdk 21
-        targetSdk 33
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
 
         consumerProguardFiles "consumer-rules.pro"
     }
@@ -21,18 +23,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility versions.javaVersion
+        targetCompatibility versions.javaVersion
     }
-    kotlin {
-        jvmToolchain(11)
+    kotlinOptions {
+        jvmTarget = versions.javaVersion
     }
 }
 
 dependencies {
     compileOnly files("../libs/godot-lib.aar")
-    implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
+    implementation firebaseLibraries.analyticsKtxLib
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation libraries.kotlinStdLib
+    implementation libraries.appCompatLib
 }
