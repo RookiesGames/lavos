@@ -15,7 +15,7 @@ sealed class FirebaseCrashlytics : ICrashService
         Plugin = new LavosPlugin(Engine.GetSingleton(PluginName));
     }
 
-    public void Initialise()
+    public void Initialize()
     {
         Plugin.CallVoid("init");
     }

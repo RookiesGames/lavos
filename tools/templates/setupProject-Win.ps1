@@ -11,4 +11,4 @@ if ($? -eq $false) {
 $dir = get-location
 $project = "<project_folder>"
 $path = "$dir\$project"
-v run .\lavos\tools\setupProject.vsh -p $path
+v run .\lavos\tools\lavos.vsh -p $path
