@@ -77,62 +77,6 @@ fn clean_builds() ! {
 	println(' ✅')
 }
 
-fn cmd_copy(cmd cli.Command) ! {
-	arg := check_arg(cmd)!
-	job := fn [arg] () ! {
-		copy_builds(arg)!
-	}
-	do_job(job)
-}
-
-fn copy_builds(option string) ! {
-	println('~> Copy build output')
-	// Copy output to folders
-	if option.is_blank() {
-		for proj in projects {
-			copy_output(proj) or {
-				println('${err}')
-				continue
-			}
-		}
-	} else {
-		copy_output(option)!
-	}
-}
-
-fn copy_output(proj string) ! {
-	wd := os.dir(@FILE)
-	src := '${wd}/project/${proj}/build/outputs/aar/${proj}-release.aar'
-	dst := '${wd}/godot/${proj}.aar'
-
-	//
-	if !is_file(src) {
-		println('\t~> File ${src} not found')
-		return
-	}
-
-	//
-	print('\t~> Copying output of ${proj}')
-	cp(src, dst) or {
-		println(' ❌')
-		return error('Failed to copy from ${src} to ${dst}')
-	}
-	println(' ✅')
-	println('\t\tfrom: ${src}')
-	println('\t\tto: ${dst}')
-
-	//
-	gdap := '${wd}/godot/${proj}.gdap'
-	print('\t~> Checking for GDAP file in ${gdap}')
-	if !is_file('${gdap}') {
-		println(' ❌')
-		return error('Misisng ${gdap} file')
-	}
-
-	//
-	println(' ✅')
-}
-
 fn cmd_build(cmd cli.Command) ! {
 	arg := check_arg(cmd)!
 	build_job := fn [arg] () ! {
@@ -194,14 +138,6 @@ fn main() {
 				description: 'Clean previously generated Android builds'
 				execute: fn (cmd cli.Command) ! {
 					cmd_clean(cmd)!
-				}
-			},
-			cli.Command{
-				name: 'copy'
-				usage: '<target>'
-				description: 'Copy generated Android package into the output folder'
-				execute: fn (cmd cli.Command) ! {
-					cmd_copy(cmd)!
 				}
 			},
 			cli.Command{
