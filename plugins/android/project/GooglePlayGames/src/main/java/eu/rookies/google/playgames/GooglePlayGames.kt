@@ -1,9 +1,7 @@
 package eu.rookies.google.playgames
 
-import android.app.Activity
 import android.content.Intent
 import android.util.Log
-import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.drive.Drive.SCOPE_APPFOLDER
@@ -29,7 +27,7 @@ import java.util.Random
 
 
 class GooglePlayGames(godot: Godot) : GodotPlugin(godot) {
-    private val pluginName = "PlayGames"
+    private val pluginName = GooglePlayGames::class.java.simpleName
 
     private var isSignedIn: Boolean = false
     private var player: Player? = null
