@@ -17,12 +17,23 @@ const (
 	arg_firebase_crashlytics = 'FirebaseCrashlytics'
 	arg_google_billing       = 'GoogleBilling'
 	arg_google_admob         = 'AdMob'
+	arg_google_playgames     = 'GooglePlayGames'
 	arg_ironsource           = 'ironSource'
-	projects                 = [arg_firebase_analytics, arg_firebase_crashlytics, arg_google_billing,
-		arg_google_admob, arg_ironsource]
+	projects                 = get_projects()
 )
 
 type JobFn = fn () !
+
+fn get_projects() []string {
+	mut a := []string{}
+	a << arg_firebase_analytics
+	a << arg_firebase_crashlytics
+	a << arg_google_billing
+	a << arg_google_admob
+	a << arg_google_playgames
+	a << arg_ironsource
+	return a
+}
 
 fn do_job(cb JobFn) {
 	wd := getwd()
