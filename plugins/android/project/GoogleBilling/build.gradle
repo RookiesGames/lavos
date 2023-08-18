@@ -29,6 +29,11 @@ android {
     kotlinOptions {
         jvmTarget = versions.javaVersion
     }
+    libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${paths.lavosRoot}/addons/google/billing/lib/android/GoogleBilling.aar"
+        }
+    }
 }
 
 dependencies {

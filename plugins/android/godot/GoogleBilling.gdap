@@ -1,4 +1,0 @@
-[config]
-name="GoogleBilling"
-binary_type="local"
-binary="GoogleBilling.aar"

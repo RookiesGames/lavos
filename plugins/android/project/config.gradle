@@ -12,6 +12,10 @@ ext.versions = [
         ndkVersion         : '23.2.8568313'
 ]
 
+ext.paths = [
+        lavosRoot: '../../../../../../../'
+]
+
 ext.libraries = [
         androidGradlePlugin: "com.android.tools.build:gradle:$versions.androidGradlePlugin",
         kotlinGradlePlugin : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlinVersion",

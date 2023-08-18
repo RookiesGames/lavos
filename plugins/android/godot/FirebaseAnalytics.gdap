@@ -1,4 +1,0 @@
-[config]
-name="FirebaseAnalytics"
-binary_type="local"
-binary="FirebaseAnalytics.aar"

@@ -1,4 +1,0 @@
-[config]
-name="FirebaseCrashlytics"
-binary_type="local"
-binary="FirebaseCrashlytics.aar"
