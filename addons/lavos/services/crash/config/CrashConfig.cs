@@ -10,9 +10,17 @@ public sealed partial class CrashConfig : Config
 {
     public override void Configure(IDependencyBinder binder)
     {
-        if (PlatformUtils.IsAndroid || PlatformUtils.IsiOS)
+        if (PlatformUtils.IsMobile)
         {
-            binder.Bind<ICrashService, FirebaseCrashlytics>();
+            if (FirebaseCrashlytics.IsPluginEnabled())
+            {
+                binder.Bind<ICrashService, FirebaseCrashlytics>();
+            }
+            else
+            {
+                Log.Warn(nameof(CrashConfig), "Firebase Crashlytics plugin not enabled");
+                binder.Bind<ICrashService, DummyCrashService>();
+            }
         }
         else
         {

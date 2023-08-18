@@ -10,9 +10,17 @@ public partial class AnalyticsConfig : Config
 {
     public override void Configure(IDependencyBinder binder)
     {
-        if (PlatformUtils.IsAndroid || PlatformUtils.IsiOS)
+        if (PlatformUtils.IsMobile)
         {
-            binder.Bind<IAnalyticsService, FirebaseAnalytics>();
+            if (FirebaseAnalytics.IsPluginEnabled())
+            {
+                binder.Bind<IAnalyticsService, FirebaseAnalytics>();
+            }
+            else
+            {
+                Log.Warn(nameof(AnalyticsConfig), "Firebase Analytics plugin not enabled");
+                binder.Bind<IAnalyticsService, DummyAnalyticsService>();
+            }
         }
         else
         {

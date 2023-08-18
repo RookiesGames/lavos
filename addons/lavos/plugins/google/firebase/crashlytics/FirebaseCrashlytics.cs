@@ -6,7 +6,7 @@ namespace Lavos.Plugins.Google.Firebase.Crashlytics;
 
 sealed class FirebaseCrashlytics : ICrashService
 {
-    const string PluginName = "FirebaseCrashlytics";
+    const string PluginName = nameof(FirebaseCrashlytics);
     readonly LavosPlugin Plugin;
 
     public FirebaseCrashlytics()
@@ -15,54 +15,21 @@ sealed class FirebaseCrashlytics : ICrashService
         Plugin = new LavosPlugin(Engine.GetSingleton(PluginName));
     }
 
-    public void Initialize()
-    {
-        Plugin.CallVoid("init");
-    }
+    public static bool IsPluginEnabled() => Engine.HasSingleton(PluginName);
 
-    #region ICrashService
-
-    public void EnableCollection(bool enable)
-    {
-        Plugin.CallVoid("setCrashlyticsCollectionEnabled", enable);
-    }
-
-    public bool CheckForUnsentReports()
-    {
-        return Plugin.CallBool("checkForUnsentReports");
-    }
-
-    public void SendUnsentReports()
-    {
-        Plugin.CallVoid("sendUnsentReports");
-    }
-
-    public void DeleteUnsentReports()
-    {
-        Plugin.CallVoid("deleteUnsentReports");
-    }
-
-    public bool DidCrashOnPreviousExecution()
-    {
-        return Plugin.CallBool("didCrashOnPreviousExecution");
-    }
-
-    public void Log(string message)
-    {
-        Plugin.CallVoid("log", message);
-    }
-
+    public void Initialize() => Plugin.CallVoid("init");
+    public void EnableCollection(bool enable) => Plugin.CallVoid("setCrashlyticsCollectionEnabled", enable);
+    public bool CheckForUnsentReports() => Plugin.CallBool("checkForUnsentReports");
+    public void SendUnsentReports() => Plugin.CallVoid("sendUnsentReports");
+    public void DeleteUnsentReports() => Plugin.CallVoid("deleteUnsentReports");
+    public bool DidCrashOnPreviousExecution() => Plugin.CallBool("didCrashOnPreviousExecution");
+    public void Log(string message) => Plugin.CallVoid("log", message);
     public void LogException(Exception e)
     {
         var exception = $"{e.GetType()} | {e.Message}";
         Plugin.CallVoid("recordException", exception);
     }
-
-    public void SetUserId(string id)
-    {
-        Plugin.CallVoid("setUserId", id);
-    }
-
+    public void SetUserId(string id) => Plugin.CallVoid("setUserId", id);
     public void SetCustomKey(string key, Variant value)
     {
         var method = string.Empty;
@@ -87,6 +54,4 @@ sealed class FirebaseCrashlytics : ICrashService
         Plugin.CallVoid("crash");
 #endif
     }
-
-    #endregion ICrashService
 }
