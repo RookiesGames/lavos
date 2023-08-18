@@ -11,7 +11,7 @@ import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.UsedByGodot
 
 class FirebaseAnalytics(godot: Godot) : GodotPlugin(godot) {
-    private val pluginName = "FirebaseAnalytics"
+    private val pluginName = FirebaseAnalytics::class.java.simpleName
     private lateinit var analytics: FirebaseAnalytics
 
     @NonNull

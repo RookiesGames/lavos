@@ -24,7 +24,7 @@ import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.UsedByGodot
 
 class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
-    private val pluginName = "GoogleBilling"
+    private val pluginName = GoogleBilling::class.java.simpleName
 
     private lateinit var billingClient: BillingClient
 

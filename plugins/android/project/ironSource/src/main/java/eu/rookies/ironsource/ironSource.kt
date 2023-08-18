@@ -13,7 +13,7 @@ import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.UsedByGodot
 
 class ironSource(godot: Godot) : GodotPlugin(godot) {
-    private val pluginName = "ironSource"
+    private val pluginName = ironSource::class.java.simpleName
     private val bannerHelper = BannersHelper()
 
     override fun getPluginName(): String = pluginName

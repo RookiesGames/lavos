@@ -9,7 +9,7 @@ import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.UsedByGodot
 
 class FirebaseCrashlytics(godot: Godot) : GodotPlugin(godot) {
-    private val pluginName = "FirebaseCrashlytics"
+    private val pluginName = FirebaseCrashlytics::class.java.simpleName
     private lateinit var crashlytics: FirebaseCrashlytics
 
     @NonNull

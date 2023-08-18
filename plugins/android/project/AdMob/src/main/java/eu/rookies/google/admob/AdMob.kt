@@ -12,7 +12,7 @@ import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.UsedByGodot
 
 class AdMob(godot: Godot) : GodotPlugin(godot) {
-    private var pluginName = "AdMob"
+    private var pluginName = AdMob::class.java.simpleName
 
     private lateinit var bannerAd: AdView
     private var interstitialAd: InterstitialAd? = null
