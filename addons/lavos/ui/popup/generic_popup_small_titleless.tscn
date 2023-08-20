@@ -1,8 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://addons/rookies/lavos/ui/popup/GenericPopup.cs" type="Script" id=1]
-[ext_resource path="res://assets/ui/fonts/title_small_dynamicfont.tres" type="FontFile" id=3]
-[ext_resource path="res://addons/lavos/CustomUI/ui/ClickButton.cs" type="Script" id=4]
 
 [node name="GenericPopupSmall" type="Panel"]
 anchor_right = 1.0
@@ -26,7 +24,6 @@ anchor_bottom = 1.0
 offset_left = 8.0
 offset_right = -9.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = ExtResource( 3 )
 text = "Popup Title"
 align = 1
 valign = 1
@@ -88,7 +85,6 @@ offset_bottom = 36.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Accept"
-script = ExtResource( 4 )
 ButtonType = 1
 
 [node name="VSeparator" type="VSeparator" parent="Buttons/HBoxContainer"]
@@ -103,5 +99,4 @@ offset_bottom = 36.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Decline"
-script = ExtResource( 4 )
 ButtonType = 2
