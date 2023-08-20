@@ -7,7 +7,7 @@ namespace Lavos;
 [Tool]
 public sealed partial class Lavos : EditorPlugin
 {
-    const string LavosPath = "res://addons/lavos/";
+    const string LavosPath = "res://addons/rookies/lavos";
 
     public override void _EnterTree()
     {
