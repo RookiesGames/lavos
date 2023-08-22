@@ -31,7 +31,7 @@ android {
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${paths.lavosRoot}/addons/google/admob/lib/android/AdMob.aar"
+            outputFileName = "${paths.lavosRoot}/addons/google/admob/lib/android/AdMob.${variant.buildType.name}.aar"
         }
     }
 }

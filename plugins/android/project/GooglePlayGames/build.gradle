@@ -31,7 +31,7 @@ android {
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${paths.lavosRoot}/addons/google/playgames/lib/android/GooglePlayGames.aar"
+            outputFileName = "${paths.lavosRoot}/addons/google/playgames/lib/android/GooglePlayGames.${variant.buildType.name}.aar"
         }
     }
 }

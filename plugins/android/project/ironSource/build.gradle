@@ -31,7 +31,7 @@ android {
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${paths.lavosRoot}/addons/ironsource/lib/android/ironSource.aar"
+            outputFileName = "${paths.lavosRoot}/addons/ironsource/lib/android/ironSource.${variant.buildType.name}.aar"
         }
     }
 }

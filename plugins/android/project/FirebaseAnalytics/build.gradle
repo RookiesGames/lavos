@@ -31,7 +31,7 @@ android {
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${paths.lavosRoot}/addons/google/firebase/analytics/lib/android/FirebaseAnalytics.aar"
+            outputFileName = "${paths.lavosRoot}/addons/google/firebase/analytics/lib/android/FirebaseAnalytics.${variant.buildType.name}.aar"
         }
     }
 }

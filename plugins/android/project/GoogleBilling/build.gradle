@@ -31,7 +31,7 @@ android {
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${paths.lavosRoot}/addons/google/billing/lib/android/GoogleBilling.aar"
+            outputFileName = "${paths.lavosRoot}/addons/google/billing/lib/android/GoogleBilling.${variant.buildType.name}.aar"
         }
     }
 }

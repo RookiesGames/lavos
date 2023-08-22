@@ -31,7 +31,7 @@ android {
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${paths.lavosRoot}/addons/google/firebase/crashlytics/lib/android/FirebaseCrashlytics.aar"
+            outputFileName = "${paths.lavosRoot}/addons/google/firebase/crashlytics/lib/android/FirebaseCrashlytics.${variant.buildType.name}.aar"
         }
     }
 }
