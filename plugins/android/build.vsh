@@ -113,16 +113,20 @@ fn start_builds(option string) ! {
 }
 
 fn build_project(proj string) ! {
-	cmd := './gradlew build :${proj}:assembleRelease'
-	print('\t~> Running command ${cmd}...')
-	res := execute(cmd)
-	if res.exit_code != 0 {
-		println(' ❌')
-		return error('${res.output}')
-	}
+	job := fn (cmd string) ! {
+		print('\t~> Running command ${cmd}...')
+		res := execute(cmd)
+		if res.exit_code != 0 {
+			println(' ❌')
+			return error('${res.output}')
+		}
 
+		//
+		println(' ✅')
+	}
 	//
-	println(' ✅')
+	job('./gradlew build :${proj}:assembleDebug')!
+	job('./gradlew build :${proj}:assembleRelease')!
 }
 
 fn main() {
