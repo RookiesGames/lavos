@@ -12,13 +12,13 @@ sealed partial class DataSaverService
     const float SaveTimer = 0.25f;
 
     double _timer = 0;
-    readonly List<IDataSaver> _dataSavers = new();
+    readonly HashSet<IDataSaver> _dataSavers = new();
 
     #region IDataSaverService
 
     public void Register(IDataSaver saver)
     {
-        _dataSavers.PushUnique(saver);
+        _dataSavers.Add(saver);
     }
 
     public void Unregister(IDataSaver saver)
@@ -26,7 +26,18 @@ sealed partial class DataSaverService
         _dataSavers.Remove(saver);
     }
 
-    public T GetDataSaver<T>() where T : IDataSaver => (T)_dataSavers.Find(s => s.GetType() == typeof(T));
+    public T GetDataSaver<T>() where T : IDataSaver 
+    {
+        foreach (var dataSaver in _dataSavers)
+        {
+            if (dataSaver.GetType() == typeof(T))
+            {
+                return (T)dataSaver;
+            }
+        }
+        Assert.Fail($"Could not find data saver of type {typeof(T)}");
+        return default;
+    }
 
     public void CleanData()
     {

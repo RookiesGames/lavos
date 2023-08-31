@@ -6,11 +6,11 @@ sealed class DummyDataSaverService : IDataSaverService
 {
     const string Tag = nameof(DummyDataSaverService);
 
-    readonly List<IDataSaver> _dataSavers = new();
+    readonly HashSet<IDataSaver> _dataSavers = new();
 
     public void Register(IDataSaver saver)
     {
-        _dataSavers.PushUnique(saver);
+        _dataSavers.Add(saver);
         Log.Debug(Tag, $"{saver.DataFile} registered");
     }
 
