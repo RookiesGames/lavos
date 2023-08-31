@@ -9,7 +9,7 @@ sealed partial class MouseInputHandler : Node, IMouseInputHandler
 
     IMouseInputConfig _config;
     readonly HashSet<MouseButton> _pressedButtons = new();
-    readonly List<IMouseInputListener> _listeners = new();
+    readonly HashSet<IMouseInputListener> _listeners = new();
 
     #endregion
 
@@ -23,7 +23,7 @@ sealed partial class MouseInputHandler : Node, IMouseInputHandler
 
     public void RegisterListener(IMouseInputListener listener)
     {
-        _listeners.InsertUnique(listener.Priority, listener);
+        _listeners.Add(listener);
     }
 
     public void UnregisterListener(IMouseInputListener listener)

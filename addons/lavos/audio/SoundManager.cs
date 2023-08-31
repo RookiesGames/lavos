@@ -8,13 +8,13 @@ public sealed partial class SoundManager : Node
     const string Tag = nameof(SoundManager);
 
     MasterAudio _masterAudio;
-    List<AudioStreamPlayer> _sources;
+    HashSet<AudioStreamPlayer> _sources;
     int _simultaniousSounds = 32;
     int _nextAvailable;
 
     public override void _EnterTree()
     {
-        _sources = new List<AudioStreamPlayer>();
+        _sources = new();
     }
 
     public override void _Ready()
@@ -77,11 +77,11 @@ public sealed partial class SoundManager : Node
 
     AudioStreamPlayer FindSource()
     {
-        for (var idx = 0; idx < _sources.Count; ++idx)
+        foreach (var source in _sources)
         {
-            if (!_sources[_nextAvailable].Playing)
+            if (source.Playing == false)
             {
-                return _sources[_nextAvailable];
+                return source;
             }
 
             _nextAvailable = (++_nextAvailable) % _sources.Count;

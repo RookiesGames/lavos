@@ -11,7 +11,7 @@ sealed partial class KeyboardInputHandler
 
     IKeyboardInputConfig _config;
     readonly HashSet<Key> _pressedKeys = new();
-    readonly List<IKeyboardInputListener> _listeners = new();
+    readonly HashSet<IKeyboardInputListener> _listeners = new();
 
     #endregion
 
@@ -25,7 +25,7 @@ sealed partial class KeyboardInputHandler
 
     public void RegisterListener(IKeyboardInputListener listener)
     {
-        _listeners.InsertUnique(listener.Priority, listener);
+        _listeners.Add(listener);
     }
 
     public void UnregisterListener(IKeyboardInputListener listener)

@@ -7,12 +7,12 @@ sealed partial class GamepadStatusHandler
     : Node
     , IGamepadStatusHandler
 {
-    readonly List<IGamepadStatusListener> _listeners = new();
+    readonly HashSet<IGamepadStatusListener> _listeners = new();
 
     const double WAIT_TIME = 0.25f;
     double _timer = WAIT_TIME;
 
-    readonly List<GamepadDevice> _connectedDevices = new();
+    readonly HashSet<GamepadDevice> _connectedDevices = new();
     readonly Dictionary<GamepadDevice, bool> _devicesState = new()
         {
             { GamepadDevice.Gamepad1, false},
@@ -29,7 +29,7 @@ sealed partial class GamepadStatusHandler
 
     void IGamepadStatusHandler.RegisterListener(IGamepadStatusListener listener)
     {
-        _listeners.PushUnique(listener);
+        _listeners.Add(listener);
     }
 
     void IGamepadStatusHandler.UnregisterListener(IGamepadStatusListener listener)

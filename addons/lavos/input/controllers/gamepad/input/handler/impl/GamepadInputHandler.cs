@@ -10,13 +10,13 @@ sealed partial class GamepadInputHandler
 {
     readonly Dictionary<GamepadDevice, GamepadInputNode> _deviceHandlers = new();
     readonly Dictionary<GamepadDevice, IGamepadInputConfig> _configs = new();
-    readonly List<IGamepadInputEventListener> _listeners = new();
+    readonly HashSet<IGamepadInputEventListener> _listeners = new();
 
     #region IGamepadInputHandler
 
     public void RegisterListener(IGamepadInputEventListener listener)
     {
-        _listeners.PushUnique(listener);
+        _listeners.Add(listener);
     }
 
     public void UnregisterListener(IGamepadInputEventListener listener)

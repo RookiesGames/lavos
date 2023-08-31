@@ -34,7 +34,7 @@ public static class NodeExtensions
         return node.GetChildCount() > 0;
     }
 
-    public static void GetNodesInChildren<T>(this Node node, List<T> children) where T : Node
+    public static void GetNodesInChildren<T>(this Node node, HashSet<T> children) where T : Node
     {
         foreach (Node child in node.GetChildren())
         {

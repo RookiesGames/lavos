@@ -7,7 +7,7 @@ public static class DirectoryExtensions
 {
     const string Tag = nameof(Godot.DirAccess);
 
-    public static IReadOnlyList<string> GetFilesInDirectory(this Godot.DirAccess dir)
+    public static IReadOnlySet<string> GetFilesInDirectory(this Godot.DirAccess dir)
     {
         var error = dir.ListDirBegin();
         if (error != Error.Ok)
@@ -15,7 +15,7 @@ public static class DirectoryExtensions
             return null;
         }
         //
-        var list = new List<string>();
+        var set = new HashSet<string>();
         var wd = dir.GetCurrentDir();
         while (true)
         {
@@ -35,11 +35,10 @@ public static class DirectoryExtensions
                 continue;
             }
 #endif
-            list.Add(System.IO.Path.Combine(wd, filename));
+            set.Add(System.IO.Path.Combine(wd, filename));
         }
         //
-        list.Sort();
-        return list;
+        return set;
     }
 
     public static void RemoveDirectory(this Godot.DirAccess dir, string path)
