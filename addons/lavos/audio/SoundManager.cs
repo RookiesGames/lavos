@@ -10,7 +10,6 @@ public sealed partial class SoundManager : Node
     MasterAudio _masterAudio;
     HashSet<AudioStreamPlayer> _sources;
     int _simultaniousSounds = 32;
-    int _nextAvailable;
 
     public override void _EnterTree()
     {
@@ -28,7 +27,6 @@ public sealed partial class SoundManager : Node
 
     AudioStreamPlayer CreateSource()
     {
-        _nextAvailable = _sources.Count;
         var source = this.AddNode<AudioStreamPlayer>($"SoundSource{_sources.Count}");
         source.SetVolume(_masterAudio.MasterSoundVolume);
         _sources.Add(source);
@@ -83,8 +81,6 @@ public sealed partial class SoundManager : Node
             {
                 return source;
             }
-
-            _nextAvailable = (++_nextAvailable) % _sources.Count;
         }
 
         if (_sources.Count < _simultaniousSounds)
