@@ -12,8 +12,8 @@ public sealed partial class DependencyContainer
 {
     Node _nodes;
     readonly Dictionary<Type, Type> bindings = new();
-    readonly Dictionary<Type, List<Type>> lookups = new();
-    readonly Dictionary<Type, object> instances = new();
+    readonly Dictionary<Type, Type> lookups = new();
+    readonly Dictionary<Type, IService> instances = new();
 
     public override void _Ready()
     {
@@ -47,24 +47,19 @@ public sealed partial class DependencyContainer
         Assert.IsTrue(typeof(I1).IsInterface, "Only interfaces can be lookup from");
         Assert.IsTrue(typeof(I2).IsInterface, "Only interfaces can be lookup to");
         Assert.IsTrue(typeof(I2).IsAssignableTo(typeof(I1)), $"Type mismatch - {typeof(I2)} does not inherit from {typeof(I1)}");
-        //
-        if (lookups.DoesNotContainKey(typeof(I1)))
-        {
-            lookups[typeof(I1)] = new List<Type>();
-        }
-        lookups[typeof(I1)].Add(typeof(I2));
+        lookups[typeof(I1)] = typeof(I2);
     }
 
     public void Instance<I, C>(C instance) where I : IService where C : I
     {
         DoBind<I, C>();
-        AddInstance(typeof(C), (object)instance);
+        AddInstance(typeof(C), (IService)instance);
     }
 
     public void Instance<C>(C instance)
     {
         DoBind<C, C>();
-        AddInstance(typeof(C), (object)instance);
+        AddInstance(typeof(C), (IService)instance);
     }
 
     public T Resolve<T>()
@@ -72,7 +67,7 @@ public sealed partial class DependencyContainer
         return (T)FindOrCreateType(typeof(T));
     }
 
-    public object FindOrCreateType(Type type)
+    public IService FindOrCreateType(Type type)
     {
         if (bindings.ContainsKey(type))
         {
@@ -83,7 +78,7 @@ public sealed partial class DependencyContainer
         return LookUpType(type);
     }
 
-    object GetOrCreateInstance(Type type)
+    IService GetOrCreateInstance(Type type)
     {
         if (instances.DoesNotContainKey(type))
         {
@@ -100,17 +95,17 @@ public sealed partial class DependencyContainer
         return instances[type];
     }
 
-    static object CreateInstance(Type type)
+    static IService CreateInstance(Type type)
     {
-        return Activator.CreateInstance(type);
+        return (IService)Activator.CreateInstance(type);
     }
 
-    void AddInstance(Type type, object obj)
+    void AddInstance(Type type, IService obj)
     {
         instances[type] = obj;
     }
 
-    void InjectDependencies(object obj)
+    void InjectDependencies(IService obj)
     {
         var realType = obj.GetType();
 
@@ -143,56 +138,29 @@ public sealed partial class DependencyContainer
         }
     }
 
-    void InjectProperty(PropertyInfo info, object target)
+    void InjectProperty(PropertyInfo info, IService target)
     {
         var value = FindOrCreateType(info.PropertyType);
         info.SetValue(target, value);
     }
 
-    void InjectField(FieldInfo info, object target)
+    void InjectField(FieldInfo info, IService target)
     {
         var value = FindOrCreateType(info.FieldType);
         info.SetValue(target, value);
     }
 
-    object LookUpType(Type type)
+    IService LookUpType(Type type)
     {
         Assert.IsTrue(type.IsInterface, "Only interfaces can be looked up for");
         //
         if (lookups.ContainsKey(type))
         {
-            var list = lookups[type];
-            Assert.IsTrue(list.Count == 1, "Type has more than one lookup. Consider looking up as a list");
-            //
-            var lookupType = list[0];
+            var lookupType = lookups[type];
             return FindOrCreateType(lookupType) ?? LookUpType(lookupType);
         }
         //
         Assert.Fail($"Failed to lookup type {type}");
-        return null;
-    }
-
-    internal List<object> FindList(Type type)
-    {
-        Assert.IsTrue(type.IsInterface, "Only interfaces can be searched for");
-        return LookUpList(type);
-    }
-
-    List<object> LookUpList(Type type)
-    {
-        Assert.IsTrue(type.IsInterface, "Only interfaces can be looked up for");
-        //
-        if (lookups.ContainsKey(type))
-        {
-            var list = lookups[type];
-            var lookupList = new List<object>();
-            foreach (var t in list)
-            {
-                lookupList.Add(FindOrCreateType(t));
-            }
-            return lookupList;
-        }
-        //
         return null;
     }
 }
