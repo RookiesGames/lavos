@@ -1,9 +1,10 @@
 using Godot;
+using Lavos.Utils;
 using System.Collections.Generic;
 
 namespace Lavos.Scene;
 
-public sealed partial class NodeTree : Node
+public sealed partial class NodeTree : NodeSingleton<NodeTree>
 {
     #region Properties
 
@@ -12,16 +13,18 @@ public sealed partial class NodeTree : Node
     readonly static Dictionary<string, Node> _pinnedNodes = new();
     static Dictionary<string, Node> PinnedNodes => _pinnedNodes;
 
-    static NodeTree _node;
-    public static NodeTree Instance => _node;
-
     #endregion
 
     #region Node
 
     public override void _EnterTree()
     {
-        _node = this;
+        Instance = this;
+    }
+
+    public override void _ExitTree()
+    {
+        Instance = null;
     }
 
     #endregion
@@ -30,7 +33,7 @@ public sealed partial class NodeTree : Node
 
     public static void CleanTree()
     {
-        var children = _node.GetChildren();
+        var children = Instance.GetChildren();
         foreach (Node child in children)
         {
             child.RemoveSelf();
