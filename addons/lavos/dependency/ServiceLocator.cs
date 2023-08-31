@@ -21,19 +21,6 @@ public sealed partial class ServiceLocator : Node
         return obj;
     }
 
-    public static IReadOnlyList<T> LocateAsList<T>() where T : IService
-    {
-        var type = typeof(T);
-        //
-        var objs = _container.FindList(type);
-        Assert.IsFalse(objs.Count == 0, $"Could not locate type {typeof(T)}");
-        //
-        var list = new List<T>(objs.Count);
-        objs.ForEach(obj => list.Add((T)obj));
-        //
-        return list;
-    }
-
     public static void Register<I, C>(C instance) where I : IService where C : I
     {
         _container.Instance<I, C>(instance);
