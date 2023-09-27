@@ -11,7 +11,6 @@ public interface IAnalyticsService : IService
 
     void SetDefaultParameters(Dictionary<string, Godot.Variant> parameters);
 
-    void LogEvent(string name);
     void LogEvent(string name, Dictionary<string, Godot.Variant> parameters);
     void ResetData();
 

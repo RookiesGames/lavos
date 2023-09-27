@@ -12,10 +12,17 @@ public sealed partial class FirebaseAnalyticsEditorExportPlugin : EditorExportPl
     {
         return platform is EditorExportPlatformAndroid || platform is EditorExportPlatformIos;
     }
+    public override string[] _GetAndroidLibraries(EditorExportPlatform platform, bool debug)
+    {
+        var aar = $"FirebaseAnalytics.{(debug ? "debug" : "release")}.aar";
+        return new string[] { $"res://addons/rookies/google/firebase/analytics/.bin/android/{aar}" };
+    }
     public override string[] _GetAndroidDependencies(EditorExportPlatform platform, bool debug)
     {
-        Assert.IsTrue(platform is EditorExportPlatformAndroid, "Wrong platform used");
-        return new string[] { "res://addons/rookies/google/firebase/analytics/lib/android/FirebaseAnalytics.aar" };
+        return new string[] {
+            "com.google.firebase:firebase-analytics-ktx:21.3.0",
+            "androidx.appcompat:appcompat:1.6.1",
+            "org.jetbrains.kotlin:kotlin-stdlib:1.7.0" };
     }
 }
 #endif

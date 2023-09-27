@@ -6,9 +6,18 @@ namespace Lavos.Addons.Google.Firebase.Analytics;
 [Tool]
 public sealed partial class FirebaseAnalyticsEditorPlugin : EditorPlugin
 {
-    readonly FirebaseAnalyticsEditorExportPlugin Plugin = new();
+    FirebaseAnalyticsEditorExportPlugin Plugin;
 
-    public override void _EnterTree() => AddExportPlugin(Plugin);
-    public override void _ExitTree() => RemoveExportPlugin(Plugin);
+    public override void _EnterTree()
+    {
+        Plugin = new FirebaseAnalyticsEditorExportPlugin();
+        AddExportPlugin(Plugin);
+    }
+
+    public override void _ExitTree()
+    {
+        RemoveExportPlugin(Plugin);
+        Plugin = null;
+    }
 }
 #endif

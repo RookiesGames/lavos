@@ -14,11 +14,12 @@ public sealed partial class CrashConfig : Config
         {
             if (FirebaseCrashlytics.IsPluginEnabled())
             {
+                Log.Info(nameof(CrashConfig), "Firebase Crashlytics plugin enabled");
                 binder.Bind<ICrashService, FirebaseCrashlytics>();
             }
             else
             {
-                Log.Warn(nameof(CrashConfig), "Firebase Crashlytics plugin not enabled");
+                Log.Warn(nameof(CrashConfig), "Firebase Crashlytics plugin disabled");
                 binder.Bind<ICrashService, DummyCrashService>();
             }
         }

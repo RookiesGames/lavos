@@ -7,13 +7,17 @@ ext.versions = [
         targetSdk          : 33,
         buildTools         : '33.0.2',
         kotlinVersion      : '1.7.0',
-        javaVersion        : 11,
+        javaVersion        : 1.8,
         // Also update 'platform/android/detect.py#get_ndk_version()' when this is updated.
         ndkVersion         : '23.2.8568313'
 ]
 
 ext.paths = [
         lavosRoot: '../../../../../../../'
+]
+
+ext.godotLib = [
+        templateAAR: "../libs/godot-lib.4.2.mono.aar"
 ]
 
 ext.libraries = [

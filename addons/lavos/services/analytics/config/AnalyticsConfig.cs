@@ -14,11 +14,12 @@ public partial class AnalyticsConfig : Config
         {
             if (FirebaseAnalytics.IsPluginEnabled())
             {
+                Log.Info(nameof(AnalyticsConfig), "Firebase Analytics plugin enabled");
                 binder.Bind<IAnalyticsService, FirebaseAnalytics>();
             }
             else
             {
-                Log.Warn(nameof(AnalyticsConfig), "Firebase Analytics plugin not enabled");
+                Log.Warn(nameof(AnalyticsConfig), "Firebase Analytics plugin disabled");
                 binder.Bind<IAnalyticsService, DummyAnalyticsService>();
             }
         }

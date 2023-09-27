@@ -10,7 +10,6 @@ sealed class DummyAnalyticsService : IAnalyticsService
 
     public void SetDefaultParameters(Dictionary<string, Godot.Variant> parameters) { }
 
-    public void LogEvent(string name) { }
     public void LogEvent(string name, Dictionary<string, Godot.Variant> parameters) { }
 
     public void ResetData() { }

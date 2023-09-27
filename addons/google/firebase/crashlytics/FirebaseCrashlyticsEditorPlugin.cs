@@ -6,9 +6,18 @@ namespace Lavos.Addons.Google.Firebase.Crashlytics;
 [Tool]
 public sealed partial class FirebaseCrashlyticsEditorPlugin : EditorPlugin
 {
-    readonly FirebaseCrashlyticsEditorExportPlugin Plugin = new();
+    FirebaseCrashlyticsEditorExportPlugin Plugin;
 
-    public override void _EnterTree() => AddExportPlugin(Plugin);
-    public override void _ExitTree() => RemoveExportPlugin(Plugin);
+    public override void _EnterTree()
+    {
+        Plugin = new FirebaseCrashlyticsEditorExportPlugin();
+        AddExportPlugin(Plugin);
+    }
+
+    public override void _ExitTree()
+    {
+        RemoveExportPlugin(Plugin);
+        Plugin = null;
+    }
 }
 #endif

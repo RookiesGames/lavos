@@ -1,6 +1,10 @@
-package eu.rookies.firebase.crashlytics
+package eu.rookies.google.firebase.crashlytics
 
+import android.app.Activity
+import android.view.View
 import androidx.annotation.NonNull
+import androidx.annotation.Nullable
+import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
@@ -9,7 +13,7 @@ import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.UsedByGodot
 
 class FirebaseCrashlytics(godot: Godot) : GodotPlugin(godot) {
-    private val pluginName = FirebaseCrashlytics::class.java.simpleName
+    private val pluginName = BuildConfig.GODOT_PLUGIN_NAME
     private lateinit var crashlytics: FirebaseCrashlytics
 
     @NonNull
@@ -17,6 +21,7 @@ class FirebaseCrashlytics(godot: Godot) : GodotPlugin(godot) {
 
     @UsedByGodot
     fun init() {
+        FirebaseApp.initializeApp(activity!!.applicationContext)
         crashlytics = Firebase.crashlytics
     }
 

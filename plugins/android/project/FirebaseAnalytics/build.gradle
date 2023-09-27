@@ -5,8 +5,11 @@ plugins {
 
 apply from: '../config.gradle'
 
+String pluginName = "FirebaseAnalytics"
+String pluginPackageName = "eu.rookies.google.firebase.analytics"
+
 android {
-    namespace 'eu.rookies.google.firebase.analytics'
+    namespace pluginPackageName
     compileSdk versions.compileSdk
     buildToolsVersion versions.buildTools
     defaultConfig {
@@ -14,6 +17,11 @@ android {
         targetSdk versions.targetSdk
 
         consumerProguardFiles "consumer-rules.pro"
+
+        manifestPlaceholders["godotPluginName"] = pluginName
+        manifestPlaceholders["godotPluginPackageName"] = pluginPackageName
+        buildConfigField("String", "GODOT_PLUGIN_NAME", "\"${pluginName}\"")
+        setProperty("archivesBaseName", pluginName)
     }
 
     buildTypes {
@@ -31,13 +39,13 @@ android {
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${paths.lavosRoot}/addons/google/firebase/analytics/lib/android/FirebaseAnalytics.${variant.buildType.name}.aar"
+            outputFileName = "${paths.lavosRoot}/addons/google/firebase/analytics/.bin/android/FirebaseAnalytics.${variant.buildType.name}.aar"
         }
     }
 }
 
 dependencies {
-    compileOnly files("../libs/godot-lib.aar")
+    compileOnly files(godotLib.templateAAR)
     implementation firebaseLibraries.analyticsKtxLib
 
     implementation libraries.kotlinStdLib
