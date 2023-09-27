@@ -1,49 +1,69 @@
-
 namespace Lavos.Utils.Platform;
 
 public static class PlatformUtils
 {
-        public static bool IsAndroid =>
+    public static bool IsAndroid =>
 #if GODOT_ANDROID
-            true;
+        true;
 #else
-            false;
+        false;
 #endif
 
-        public static bool IsiOS =>
+    public static bool IsiOS =>
 #if GODOT_IOS
-            true;
+        true;
 #else
-            false;
+        false;
 #endif
 
-        public static bool IsMobile => IsAndroid || IsiOS;
+    public static bool IsMobile => IsAndroid || IsiOS;
 
-        public static bool IsDesktop =>
+    public static bool IsDesktop =>
 #if GODOT_PC
-            true;
+        true;
 #else
-            false;
+        false;
 #endif
 
-        public static bool IsLinux =>
+    public static bool IsLinux =>
 #if GODOT_X11
-            true;
+        true;
 #else
-            false;
+        false;
 #endif
 
-        public static bool IsMacOS =>
+    public static bool IsMacOS =>
 #if GODOT_OSX
-            true;
+        true;
 #else
-            false;
+        false;
 #endif
 
-        public static bool IsWindows =>
+    public static bool IsWindows =>
 #if GODOT_UWP
-            true;
+        true;
 #else
-            false;
+        false;
 #endif
+
+    public static string OS
+    {
+        get
+        {
+            if (IsAndroid)
+                return "android";
+            if (IsiOS)
+                return "ios";
+            if (IsLinux)
+                return "linux";
+            if (IsMacOS)
+                return "macos";
+            if (IsWindows)
+                return "windows";
+            return "unknown";
+        }
+    }
+
+    public static string Arch =>
+        System.Runtime.InteropServices.RuntimeInformation.OSArchitecture.ToString();
 }
