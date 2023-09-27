@@ -10,7 +10,7 @@ public static class Log
     [Conditional("DEBUG")]
     public static void Debug<T>(string tag, T message)
     {
-        GD.Print($"[DEBUG] {tag} | {message}");
+        GD.Print($"[Lavos] | [DEBUG] {tag} | {message}");
     }
 
     [Conditional("DEBUG")]
@@ -21,11 +21,25 @@ public static class Log
 
     #endregion Debug
 
+    #region Info
+
+    public static void Info<T>(string tag, T message)
+    {
+        GD.Print($"[Lavos] | [INFO] {tag} | {message}");
+    }
+
+    public static void Info<T>(T message)
+    {
+        Info<T>("Lavos", message);
+    }
+
+    #endregion Info
+
     #region Warn
 
     public static void Warn<T>(string tag, T message)
     {
-        GD.PushWarning($"[WARNING] {tag} | {message}");
+        GD.PushWarning($"[Lavos] | [WARNING] {tag} | {message}");
     }
 
     public static void Warn<T>(T message)
@@ -39,7 +53,7 @@ public static class Log
 
     public static void Error<T>(string tag, T message)
     {
-        GD.Print($"[ERROR] {tag} | {message}");
+        GD.Print($"[Lavos] | [ERROR] {tag} | {message}");
     }
 
     public static void Error<T>(T message)
