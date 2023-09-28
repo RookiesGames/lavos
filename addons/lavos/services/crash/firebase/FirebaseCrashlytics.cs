@@ -1,5 +1,4 @@
 using Godot;
-using Lavos.Addons;
 using System;
 
 namespace Lavos.Services.Crash.Firebase;
