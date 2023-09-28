@@ -1,9 +1,9 @@
 using Godot;
 using Lavos.Dependency;
-using Lavos.Serivces.Analytics.Firebase;
+using Lavos.Services.Analytics.Firebase;
 using Lavos.Utils.Platform;
 
-namespace Lavos.Services.Analytics;
+namespace Lavos.Services.Analytics.Firebase;
 
 [GlobalClass]
 public partial class AnalyticsConfig : Config

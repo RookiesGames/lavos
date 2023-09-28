@@ -1,19 +1,17 @@
 using Godot;
 using Godot.Collections;
-using Lavos.Addons;
-using Lavos.Services.Analytics;
 
-namespace Lavos.Serivces.Analytics.Firebase;
+namespace Lavos.Services.Analytics.Firebase;
 
 sealed class FirebaseAnalytics : IAnalyticsService
 {
     const string PluginName = nameof(FirebaseAnalytics);
-    readonly LavosAddon Plugin;
+    readonly LavosPlugin Plugin;
 
     public FirebaseAnalytics()
     {
         Assert.IsTrue(IsPluginEnabled(), $"Missing plugin {PluginName}");
-        Plugin = new LavosAddon(Engine.GetSingleton(PluginName));
+        Plugin = new LavosPlugin(Engine.GetSingleton(PluginName));
     }
 
     public static bool IsPluginEnabled() => Engine.HasSingleton(PluginName);

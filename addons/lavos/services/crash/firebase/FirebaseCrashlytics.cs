@@ -7,12 +7,12 @@ namespace Lavos.Services.Crash.Firebase;
 sealed class FirebaseCrashlytics : ICrashService
 {
     const string PluginName = nameof(FirebaseCrashlytics);
-    readonly LavosAddon Plugin;
+    readonly LavosPlugin Plugin;
 
     public FirebaseCrashlytics()
     {
         Assert.IsTrue(Engine.HasSingleton(PluginName), $"Missing plugin {PluginName}");
-        Plugin = new LavosAddon(Engine.GetSingleton(PluginName));
+        Plugin = new LavosPlugin(Engine.GetSingleton(PluginName));
     }
 
     public static bool IsPluginEnabled() => Engine.HasSingleton(PluginName);
