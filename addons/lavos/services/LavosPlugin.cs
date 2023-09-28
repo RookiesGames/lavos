@@ -1,15 +1,12 @@
 using Godot;
 
-namespace Lavos.Plugins;
+namespace Lavos.Services;
 
 sealed class LavosPlugin
 {
     readonly GodotObject GO;
 
-    public LavosPlugin(GodotObject obj)
-    {
-        GO = obj;
-    }
+    public LavosPlugin(GodotObject obj) => GO = obj;
 
     public void CallVoid(string method, params Variant[] args) => GO.Call(method, args);
     public bool CallBool(string method, params Variant[] args) => GO.Call(method, args).AsBool();
