@@ -3,7 +3,7 @@ using Lavos.Dependency;
 using Lavos.Services.Analytics.Firebase;
 using Lavos.Utils.Platform;
 
-namespace Lavos.Services.Analytics.Firebase;
+namespace Lavos.Services.Analytics;
 
 [GlobalClass]
 public partial class AnalyticsConfig : Config
