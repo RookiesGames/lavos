@@ -1,6 +1,6 @@
 using Godot;
 using Lavos.Dependency;
-using Lavos.Plugins.Google.Firebase.Analytics;
+using Lavos.Serivces.Analytics.Firebase;
 using Lavos.Utils.Platform;
 
 namespace Lavos.Services.Analytics;

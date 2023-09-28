@@ -1,6 +1,6 @@
 using Godot;
 using Lavos.Dependency;
-using Lavos.Plugins.Google.Firebase.Crashlytics;
+using Lavos.Services.Crash.Firebase;
 using Lavos.Utils.Platform;
 
 namespace Lavos.Services.Crash;
