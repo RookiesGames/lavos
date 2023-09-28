@@ -1,6 +1,6 @@
 #if TOOLS
 using Godot;
-using Lavos.Plugins.Google.Firebase.Crashlytics;
+using Lavos.Services.Crash.Firebase;
 
 namespace Lavos.Addons.Google.Firebase.Crashlytics;
 
@@ -16,16 +16,16 @@ public sealed partial class FirebaseCrashlyticsEditorExportPlugin : EditorExport
 
     public override string[] _GetAndroidLibraries(EditorExportPlatform platform, bool debug)
     {
-        var aar = $"FirebaseCrashlytics.{(debug ? "debug" : "release")}.aar";
-        return new string[]
+        var aar = $"{_GetName()}.{(debug ? "debug" : "release")}.aar";
+        return new[]
         {
-            $"res://addons/rookies/google/firebase/crashlytics/.bin/android/{aar}"
+            $"{GoogleAddons.Root}/firebase/crashlytics/.bin/android/{aar}"
         };
     }
 
     public override string[] _GetAndroidDependencies(EditorExportPlatform platform, bool debug)
     {
-        return new string[]
+        return new[]
         {
             "com.google.firebase:firebase-analytics-ktx:21.3.0",
             "com.google.firebase:firebase-crashlytics-ktx:18.4.0",
