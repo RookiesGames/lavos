@@ -1,6 +1,6 @@
 #if TOOLS
 using Godot;
-using Lavos.Serivces.Analytics.Firebase;
+using Lavos.Services.Analytics.Firebase;
 
 namespace Lavos.Addons.Google.Firebase.Analytics;
 
