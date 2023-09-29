@@ -5,7 +5,7 @@ using Godot;
 namespace Lavos;
 
 [Tool]
-public sealed partial class Lavos : EditorPlugin
+public sealed partial class LavosEditorPlugin : EditorPlugin
 {
     const string LavosPath = "res://addons/rookies/lavos";
 
