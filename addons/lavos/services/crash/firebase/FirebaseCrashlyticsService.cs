@@ -1,14 +1,15 @@
 using Godot;
 using System;
+using Lavos.Addons.Google;
 
 namespace Lavos.Services.Crash.Firebase;
 
-sealed class FirebaseCrashlytics : ICrashService
+sealed class FirebaseCrashlyticsService : ICrashService
 {
-    const string PluginName = nameof(FirebaseCrashlytics);
+    const string PluginName = GoogleAddons.FirebaseCrashlyticsPluginName;
     readonly LavosPlugin Plugin;
 
-    public FirebaseCrashlytics()
+    public FirebaseCrashlyticsService()
     {
         Assert.IsTrue(Engine.HasSingleton(PluginName), $"Missing plugin {PluginName}");
         Plugin = new LavosPlugin(Engine.GetSingleton(PluginName));
@@ -41,7 +42,7 @@ sealed class FirebaseCrashlytics : ICrashService
             default:
                 {
                     Plugin.CallVoid("setCustomKeyS", key, "TypeNotSupported");
-                    Console.Log.Error(nameof(FirebaseCrashlytics), "Unhandled custom type");
+                    Console.Log.Error(nameof(FirebaseCrashlyticsService), "Unhandled custom type");
                     return;
                 }
         }

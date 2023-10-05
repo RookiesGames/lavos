@@ -12,10 +12,10 @@ public sealed partial class CrashConfig : Config
     {
         if (PlatformUtils.IsMobile)
         {
-            if (FirebaseCrashlytics.IsPluginEnabled())
+            if (FirebaseCrashlyticsService.IsPluginEnabled())
             {
                 Log.Info(nameof(CrashConfig), "Firebase Crashlytics plugin enabled");
-                binder.Bind<ICrashService, FirebaseCrashlytics>();
+                binder.Bind<ICrashService, FirebaseCrashlyticsService>();
             }
             else
             {
