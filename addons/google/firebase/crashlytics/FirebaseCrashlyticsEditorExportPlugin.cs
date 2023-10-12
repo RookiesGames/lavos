@@ -1,6 +1,5 @@
 #if TOOLS
 using Godot;
-using Lavos.Services.Crash.Firebase;
 
 namespace Lavos.Addons.Google.Firebase.Crashlytics;
 
