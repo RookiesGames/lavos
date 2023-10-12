@@ -1,7 +1,7 @@
 
-namespace Lavos.Addons.Google;
+namespace Lavos.Plugins.Google;
 
-public static class GoogleAddons
+public static class GooglePlugins
 {
     public const string Root = "res://addons/rookies/google";
 

@@ -1,12 +1,12 @@
 #if TOOLS
 using Godot;
 
-namespace Lavos.Addons.Google.Firebase.Analytics;
+namespace Lavos.Plugins.Google.Firebase.Analytics;
 
 [Tool]
 public sealed partial class FirebaseAnalyticsEditorExportPlugin : EditorExportPlugin
 {
-    public override string _GetName() => GoogleAddons.FirebaseAnalyticsPluginName;
+    public override string _GetName() => GooglePlugins.FirebaseAnalyticsPluginName;
 
     public override bool _SupportsPlatform(EditorExportPlatform platform)
     {
@@ -18,7 +18,7 @@ public sealed partial class FirebaseAnalyticsEditorExportPlugin : EditorExportPl
         var aar = $"{_GetName()}.{(debug ? "debug" : "release")}.aar";
         return new[]
         {
-            $"{GoogleAddons.Root}/firebase/analytics/.bin/android/{aar}"
+            $"{GooglePlugins.Root}/firebase/analytics/.bin/android/{aar}"
         };
     }
 
