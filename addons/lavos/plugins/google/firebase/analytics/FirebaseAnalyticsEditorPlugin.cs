@@ -1,7 +1,7 @@
 #if TOOLS
 using Godot;
 
-namespace Lavos.Addons.Google.Firebase.Analytics;
+namespace Lavos.Plugins.Google.Firebase.Analytics;
 
 [Tool]
 public sealed partial class FirebaseAnalyticsEditorPlugin : EditorPlugin
