@@ -1,7 +1,7 @@
 #if TOOLS
 using Godot;
 
-namespace Lavos.Plugins.Google.Firebase.Crashlytics;
+namespace Lavos.Addons.Google.Firebase.Crashlytics;
 
 [Tool]
 public sealed partial class FirebaseCrashlyticsEditorPlugin : EditorPlugin

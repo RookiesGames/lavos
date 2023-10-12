@@ -1,9 +1,9 @@
 
-namespace Lavos.Plugins.Google;
+namespace Lavos.Addons.Google;
 
-public static class GooglePlugins
+public static class GoogleAddons
 {
-    public const string Root = "res://addons/rookies/lavos/plugins/google";
+    public const string Root = "res://addons/rookies/google";
 
     public const string FirebaseAnalyticsPluginName = "FirebaseAnalytics";
     public const string FirebaseCrashlyticsPluginName = "FirebaseCrashlytics";
