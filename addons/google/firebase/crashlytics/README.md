@@ -1,4 +1,4 @@
-# Firebase Crashlytics Addon
+# Firebase Crashlytics Plugin
 
 ## Requirements
 

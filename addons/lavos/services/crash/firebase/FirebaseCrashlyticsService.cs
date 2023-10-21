@@ -1,12 +1,12 @@
 using Godot;
 using System;
-using Lavos.Addons.Google;
+using Lavos.Plugins.Google;
 
 namespace Lavos.Services.Crash.Firebase;
 
 sealed class FirebaseCrashlyticsService : ICrashService
 {
-    const string PluginName = GoogleAddons.FirebaseCrashlyticsPluginName;
+    const string PluginName = GooglePlugins.FirebaseCrashlyticsPluginName;
     readonly LavosPlugin Plugin;
 
     public FirebaseCrashlyticsService()
