@@ -4,16 +4,14 @@ import com.google.android.gms.ads.AdError
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.putJsonObject
 
-class AdErrorHelper {
+class ShowAdError {
     companion object {
-        fun toJson(error: AdError): JsonObject {
+        fun toJson(id: String, error: AdError): JsonObject {
             return buildJsonObject {
-                putJsonObject("error") {
-                    put("code", error.code)
-                    put("message", error.message)
-                }
+                put("id", id)
+                put("code", error.code)
+                put("message", error.message)
             }
         }
     }

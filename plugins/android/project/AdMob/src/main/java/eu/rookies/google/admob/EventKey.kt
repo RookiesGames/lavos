@@ -1,7 +1,9 @@
 package eu.rookies.google.admob
 
-enum class EventKeys(val key: String) {
-    AD_READY("ad_ready"),
+enum class EventKey(val key: String) {
+    NONE("none"),
+
+    AD_LOAD_COMPLETED("ad_load_completed"),
     AD_LOAD_FAILED("ad_load_failed"),
 
     AD_OPENED("ad_opened"),
@@ -21,5 +23,9 @@ enum class EventKeys(val key: String) {
     // Banner
     AD_LEFT_APP("ad_left_app"),
     AD_SCREEN_PRESENTED("ad_screen_presented"),
-    AD_SCREEN_DISMISSED("ad_screen_dismissed"),
+    AD_SCREEN_DISMISSED("ad_screen_dismissed");
+
+    companion object {
+        fun from(s: String): EventKey = values().find { it.key == s } ?: NONE
+    }
 }

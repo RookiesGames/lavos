@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <application>
         <meta-data
-            android:name="org.godotengine.plugin.v1.AdMob"
-            android:value="eu.rookies.google.admob.AdMob" />
+            android:name="org.godotengine.plugin.v2.${godotPluginName}"
+            android:value="${godotPluginPackageName}.${godotPluginName}" />
     </application>
 </manifest>

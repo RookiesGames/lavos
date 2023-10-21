@@ -6,16 +6,14 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.putJsonObject
 
-class RewardedAdHelper {
+class RewardedAdInfo {
     companion object {
         fun toJson(ad: RewardedAd): JsonObject {
             return buildJsonObject {
-                putJsonObject("info") {
-                    put("ad_unit", ad.adUnitId)
-                    putJsonObject("reward") {
-                        put("type", ad.rewardItem.type)
-                        put("amount", ad.rewardItem.amount)
-                    }
+                put("id", ad.adUnitId)
+                putJsonObject("reward") {
+                    put("type", ad.rewardItem.type)
+                    put("amount", ad.rewardItem.amount)
                 }
             }
         }

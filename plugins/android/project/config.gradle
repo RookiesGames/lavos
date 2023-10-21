@@ -1,15 +1,12 @@
 ext.versions = [
-        androidGradlePlugin: '7.2.1',
+        androidGradlePlugin: '8.0.2',
         compileSdk         : 33,
-        // Also update 'platform/android/export/export_plugin.cpp#OPENGL_MIN_SDK_VERSION'
         minSdk             : 24,
-        // Also update 'platform/android/export/export_plugin.cpp#DEFAULT_TARGET_SDK_VERSION'
         targetSdk          : 33,
         buildTools         : '33.0.2',
-        kotlinVersion      : '1.7.0',
-        javaVersion        : 1.8,
-        // Also update 'platform/android/detect.py#get_ndk_version()' when this is updated.
-        ndkVersion         : '23.2.8568313'
+        kotlin      : '1.8.20',
+        java        : 17,
+        ndk         : '23.2.8568313'
 ]
 
 ext.paths = [
@@ -20,22 +17,29 @@ ext.godotLib = [
         templateAAR: "../libs/godot-lib.4.2.mono.aar"
 ]
 
-ext.libraries = [
+ext.commonLibraries = [
         androidGradlePlugin: "com.android.tools.build:gradle:$versions.androidGradlePlugin",
-        kotlinGradlePlugin : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlinVersion",
-        kotlinStdLib       : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlinVersion",
+        kotlinGradlePlugin : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin",
+        kotlinStdLib       : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
         appCompatLib       : 'androidx.appcompat:appcompat:1.6.1',
-        kotlinxJsonLib     : 'org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.5.1',
         materialLib        : 'com.google.android.material:material:1.9.0',
 ]
 
-ext.firebase = [
-        analyticsVersion  : '21.3.0',
-        crashlyticsVersion: '18.4.0',
+ext.adMobLibraries = [
+        playServicesAdLib: "com.google.android.gms:play-services-ads:22.2.0"
+]
+
+ext.extraLibraries = [
+        kotlinxJsonLib: 'org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.4.1'
+]
+
+ext.firebaseVersions = [
+        analytics  : '21.3.0',
+        crashlytics: '18.4.0',
 ]
 
 ext.firebaseLibraries = [
-        analyticsKtxLib  : "com.google.firebase:firebase-analytics-ktx:$firebase.analyticsVersion",
-        crashlyticsKtxLib: "com.google.firebase:firebase-crashlytics-ktx:$firebase.crashlyticsVersion",
-        crashlyticsNdkLib: "com.google.firebase:firebase-crashlytics-ndk:$firebase.crashlyticsVersion",
+        analyticsKtxLib  : "com.google.firebase:firebase-analytics-ktx:$firebaseVersions.analytics",
+        crashlyticsKtxLib: "com.google.firebase:firebase-crashlytics-ktx:$firebaseVersions.crashlytics",
+        crashlyticsNdkLib: "com.google.firebase:firebase-crashlytics-ndk:$firebaseVersions.crashlytics",
 ]

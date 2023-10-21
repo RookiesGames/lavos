@@ -25,16 +25,16 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility versions.javaVersion
-        targetCompatibility versions.javaVersion
+        sourceCompatibility versions.java
+        targetCompatibility versions.java
     }
     kotlinOptions {
-        jvmTarget = versions.javaVersion
+        jvmTarget = versions.java
     }
 }
 
 dependencies {
-    implementation libraries.kotlinStdLib
-    implementation libraries.appCompatLib
-    implementation libraries.materialLib
+    implementation commonLibraries.kotlinStdLib
+    implementation commonLibraries.appCompatLib
+    implementation commonLibraries.materialLib
 }

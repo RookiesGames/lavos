@@ -5,8 +5,11 @@ plugins {
 
 apply from: '../config.gradle'
 
+String pluginName = "AdMob"
+String pluginPackageName = "eu.rookies.google.admob"
+
 android {
-    namespace 'eu.rookies.google.admob'
+    namespace pluginPackageName
     compileSdk versions.compileSdk
     buildToolsVersion versions.buildTools
     defaultConfig {
@@ -14,6 +17,11 @@ android {
         targetSdk versions.targetSdk
 
         consumerProguardFiles "consumer-rules.pro"
+
+        manifestPlaceholders["godotPluginName"] = pluginName
+        manifestPlaceholders["godotPluginPackageName"] = pluginPackageName
+        buildConfigField("String", "GODOT_PLUGIN_NAME", "\"${pluginName}\"")
+        setProperty("archivesBaseName", pluginName)
     }
 
     buildTypes {
@@ -23,24 +31,25 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility versions.javaVersion
-        targetCompatibility versions.javaVersion
+        sourceCompatibility versions.java
+        targetCompatibility versions.java
     }
     kotlinOptions {
-        jvmTarget = versions.javaVersion
+        jvmTarget = versions.java
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${paths.lavosRoot}/addons/google/admob/lib/android/AdMob.${variant.buildType.name}.aar"
+            outputFileName = "${paths.lavosRoot}/addons/google/admob/.bin/android/AdMob.${variant.buildType.name}.aar"
         }
     }
 }
 
 dependencies {
-    compileOnly files("../libs/godot-lib.aar")
-    implementation 'com.google.android.gms:play-services-ads:22.2.0'
+    compileOnly files(godotLib.templateAAR)
+    implementation adMobLibraries.playServicesAdLib
 
-    implementation libraries.kotlinStdLib
-    implementation libraries.appCompatLib
-    implementation libraries.kotlinxJsonLib
+    implementation extraLibraries.kotlinxJsonLib
+
+    implementation commonLibraries.kotlinStdLib
+    implementation commonLibraries.appCompatLib
 }

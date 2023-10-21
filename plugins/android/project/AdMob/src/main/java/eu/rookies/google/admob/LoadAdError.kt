@@ -4,16 +4,14 @@ import com.google.android.gms.ads.LoadAdError
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import kotlinx.serialization.json.putJsonObject
 
-class LoadAdErrorHelper {
+class LoadAdError {
     companion object {
-        fun toJson(error: LoadAdError): JsonObject {
+        fun toJson(id: String, error: LoadAdError): JsonObject {
             return buildJsonObject {
-                putJsonObject("error") {
-                    put("code", error.code)
-                    put("message", error.message)
-                }
+                put("id", id)
+                put("code", error.code)
+                put("message", error.message)
             }
         }
     }

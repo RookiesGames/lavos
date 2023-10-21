@@ -1,97 +1,150 @@
 package eu.rookies.google.admob
 
 import android.util.Log
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import eu.rookies.google.admob.banner.BannerHelper
-import eu.rookies.google.admob.interstitials.InterstitialsHelper
-import eu.rookies.google.admob.rewardedads.RewardedAdsHelper
+import eu.rookies.google.admob.banner.BannerPosition
+import eu.rookies.google.admob.banner.Banners
+import eu.rookies.google.admob.interstitials.Interstitials
+import eu.rookies.google.admob.rewardedads.RewardedAds
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.UsedByGodot
 
 class AdMob(godot: Godot) : GodotPlugin(godot) {
     private var pluginName = AdMob::class.java.simpleName
-
-    private lateinit var bannerAd: AdView
-    private var interstitialAd: InterstitialAd? = null
-
     override fun getPluginName(): String = pluginName
 
     @UsedByGodot
     fun init() {
-        MobileAds.initialize(godot.getActivity()!!.applicationContext) { status ->
+        MobileAds.initialize(activity!!.applicationContext) { status ->
             for (entry in status.adapterStatusMap.entries) {
                 Log.d(pluginName, "${entry.key} - ${entry.value}")
             }
         }
     }
 
+    override fun onMainDestroy() {
+        super.onMainDestroy()
+        Banners.destroyBanner()
+    }
+
     /////////////
     // Banners
 
     @UsedByGodot
-    fun createBanner(id: String) = BannerHelper.createBanner(godot.getActivity()!!.applicationContext, id)
+    fun isBannerLoaded(): Boolean = Banners.isLoaded()
 
     @UsedByGodot
-    fun loadBanner() = BannerHelper.loadBanner()
+    fun isBannerShowing(): Boolean = Banners.isShowing()
 
     @UsedByGodot
-    fun destroyBanner() = BannerHelper.destroyBanner()
+    fun setBannerPosition(position: Int) =
+        activity!!.runOnUiThread {
+            Banners.setPosition(BannerPosition.fromInt(position))
+        }
 
     @UsedByGodot
-    fun hasPendingBannerEvent(event: String): Boolean = BannerHelper.hasPendingEvent(event)
+    fun getBannerPosition(): Int = Banners.getPosition().key
 
     @UsedByGodot
-    fun getPendingBannerEvent(event: String): String = BannerHelper.getPendingEvent(event)
+    fun createBanner() {
+        activity!!.runOnUiThread {
+            Banners.createBanner(activity!!, activity!!.applicationContext)
+        }
+    }
 
     @UsedByGodot
-    fun clearPendingBannerEvent(event: String) = BannerHelper.clearPendingEvent(event)
+    fun loadBanner(id: String) {
+        activity!!.runOnUiThread {
+            Banners.loadBanner(id)
+        }
+    }
+
+    @UsedByGodot
+    fun showBanner() {
+        activity!!.runOnUiThread {
+            Banners.show()
+        }
+    }
+
+    @UsedByGodot
+    fun hideBanner() {
+        activity!!.runOnUiThread {
+            Banners.hide()
+        }
+    }
+
+    @UsedByGodot
+    fun destroyBanner() {
+        activity!!.runOnUiThread {
+            Banners.destroyBanner()
+        }
+    }
+
+    @UsedByGodot
+    fun hasPendingBannerEvent(event: String): Boolean = Banners.hasPendingEvent(event)
+
+    @UsedByGodot
+    fun getPendingBannerEvent(event: String): String = Banners.getPendingEvent(event)
+
+    @UsedByGodot
+    fun clearPendingBannerEvent(event: String) = Banners.clearPendingEvent(event)
 
     /////////////
     // Interstitials
 
     @UsedByGodot
-    fun isInterstitialsReady(): Boolean = InterstitialsHelper.isReady()
+    fun isInterstitialsReady(): Boolean = Interstitials.isReady()
 
     @UsedByGodot
-    fun loadInterstitial(id: String) =
-        InterstitialsHelper.load(godot.getActivity()!!.applicationContext, id)
+    fun loadInterstitial(id: String) {
+        activity!!.runOnUiThread {
+            Interstitials.load(activity!!.applicationContext, id)
+        }
+    }
 
     @UsedByGodot
-    fun showInterstitial() = InterstitialsHelper.show(godot.getActivity()!!)
+    fun showInterstitial() {
+        activity!!.runOnUiThread {
+            Interstitials.show(activity!!)
+        }
+    }
 
     @UsedByGodot
-    fun hasPendingInterstitialEvent(event: String): Boolean =
-        InterstitialsHelper.hasPendingEvent(event)
+    fun hasPendingInterstitialEvent(event: String): Boolean = Interstitials.hasPendingEvent(event)
 
     @UsedByGodot
-    fun getPendingInterstitialEvent(event: String): String =
-        InterstitialsHelper.getPendingEvent(event)
+    fun getPendingInterstitialEvent(event: String): String = Interstitials.getPendingEvent(event)
 
     @UsedByGodot
-    fun clearPendingInterstitialEvent(event: String) = InterstitialsHelper.clearPendingEvent(event)
+    fun clearPendingInterstitialEvent(event: String) = Interstitials.clearPendingEvent(event)
 
     /////////////////
     // Rewarded Ads
 
     @UsedByGodot
-    fun isRewardedAdReady(): Boolean = RewardedAdsHelper.isReady()
+    fun isRewardedAdReady(): Boolean = RewardedAds.isReady()
 
     @UsedByGodot
-    fun loadRewardedAd(id: String) = RewardedAdsHelper.load(godot.getActivity()!!.applicationContext, id)
+    fun loadRewardedAd(id: String) {
+        activity!!.runOnUiThread {
+            RewardedAds.load(activity!!.applicationContext, id)
+        }
+    }
 
     @UsedByGodot
-    fun showRewardedAd() = RewardedAdsHelper.show(godot.getActivity()!!)
+    fun showRewardedAd() {
+        activity!!.runOnUiThread {
+            RewardedAds.show(activity!!)
+        }
+    }
 
     @UsedByGodot
-    fun hasPendingRewardedAdEvent(event: String): Boolean =
-        RewardedAdsHelper.hasPendingEvents(event)
+    fun hasPendingRewardedAdEvent(event: String): Boolean = RewardedAds.hasPendingEvents(event)
 
     @UsedByGodot
-    fun getPendingRewardedAdEvent(event: String): String = RewardedAdsHelper.getPendingEvent(event)
+    fun getPendingRewardedAdEvent(event: String): String = RewardedAds.getPendingEvent(event)
 
     @UsedByGodot
-    fun clearPendingRewardedAdEvent(event: String) = RewardedAdsHelper.clearPendingEvent(event)
+    fun clearPendingRewardedAdEvent(event: String) = RewardedAds.clearPendingEvent(event)
 }
