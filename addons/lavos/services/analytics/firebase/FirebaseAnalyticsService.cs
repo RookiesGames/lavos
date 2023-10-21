@@ -1,12 +1,12 @@
 using Godot;
 using Godot.Collections;
-using Lavos.Addons.Google;
+using Lavos.Plugins.Google;
 
 namespace Lavos.Services.Analytics.Firebase;
 
 sealed class FirebaseAnalyticsService : IAnalyticsService
 {
-    const string PluginName = GoogleAddons.FirebaseAnalyticsPluginName;
+    const string PluginName = GooglePlugins.FirebaseAnalyticsPluginName;
     readonly LavosPlugin Plugin;
 
     public FirebaseAnalyticsService()

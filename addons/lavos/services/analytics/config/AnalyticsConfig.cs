@@ -8,31 +8,51 @@ namespace Lavos.Services.Analytics;
 [GlobalClass]
 public partial class AnalyticsConfig : Config
 {
+    const string Tag = nameof(AnalyticsConfig);
+
+    public enum Provider
+    {
+        None,
+        Firebase,
+    }
+
+    [Export] Provider analyticsProvider;
+
     public override void Configure(IDependencyBinder binder)
     {
-        if (PlatformUtils.IsMobile)
+        if (!PlatformUtils.IsMobile)
         {
-            if (FirebaseAnalytics.IsPluginEnabled())
-            {
-                Log.Info(nameof(AnalyticsConfig), "Firebase Analytics plugin enabled");
-                binder.Bind<IAnalyticsService, FirebaseAnalytics>();
-            }
-            else
-            {
-                Log.Warn(nameof(AnalyticsConfig), "Firebase Analytics plugin disabled");
-                binder.Bind<IAnalyticsService, DummyAnalyticsService>();
-            }
+            analyticsProvider = Provider.None;
         }
-        else
+        //
+        switch (analyticsProvider)
         {
-            binder.Bind<IAnalyticsService, DummyAnalyticsService>();
+            case Provider.Firebase:
+                {
+                    if (FirebaseAnalyticsService.IsPluginEnabled())
+                    {
+                        Log.Info(Tag, "Firebase Analytics plugin enabled");
+                        binder.Bind<IAnalyticsService, FirebaseAnalyticsService>();
+                    }
+                    else
+                    {
+                        Log.Warn(Tag, "Firebase Analytics plugin disabled");
+                        goto default;
+                    }
+                    break;
+                }
+            default:
+                {
+                    Log.Info(Tag, "No binding provided");
+                    binder.Bind<IAnalyticsService, DummyAnalyticsService>();
+                    break;
+                }
         }
     }
 
     public override void Initialize(IDependencyResolver resolver)
     {
         var service = resolver.Resolve<IAnalyticsService>();
-        Assert.IsTrue(service != null, $"Type {nameof(IAnalyticsService)} was not resolved");
         service.Initialize();
     }
 }

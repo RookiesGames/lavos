@@ -1,4 +1,4 @@
-# Firebase Analytics Addon
+# Firebase Analytics Plugin
 
 ## Requirements
 

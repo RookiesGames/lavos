@@ -31,11 +31,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility versions.javaVersion
-        targetCompatibility versions.javaVersion
+        sourceCompatibility versions.java
+        targetCompatibility versions.java
     }
     kotlinOptions {
-        jvmTarget = versions.javaVersion
+        jvmTarget = versions.java
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
@@ -48,6 +48,6 @@ dependencies {
     compileOnly files(godotLib.templateAAR)
     implementation firebaseLibraries.analyticsKtxLib
 
-    implementation libraries.kotlinStdLib
-    implementation libraries.appCompatLib
+    implementation commonLibraries.kotlinStdLib
+    implementation commonLibraries.appCompatLib
 }
