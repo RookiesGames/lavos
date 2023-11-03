@@ -1,7 +1,7 @@
 using Lavos.Ads;
 using Lavos.Ads.Banners;
 
-namespace Lavos.Services.Ads;
+namespace Lavos.Services.Ads.Dummy;
 
 sealed class DummyAdsService : IAdsService
 {

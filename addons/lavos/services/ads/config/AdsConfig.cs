@@ -4,6 +4,7 @@ using Lavos.Ads.Interstitials;
 using Lavos.Ads.Rewarded;
 using Lavos.Dependency;
 using Lavos.Services.Ads.AdMob;
+using Lavos.Services.Ads.Dummy;
 using Lavos.Services.Ads.IronSource;
 using Lavos.Utils.Platform;
 
@@ -49,13 +50,13 @@ public sealed partial class AdsConfig : Config
                         binder.Bind<IRewardedAds, RewardedAds>();
                         binder.Bind<IInterstitialAds, InterstitialAds>();
                         binder.Bind<IBannerAds, BannerAds>();
+                        break;
                     }
                     else
                     {
                         Log.Warn(Tag, $"AdMob plugin disabled");
                         goto default;
                     }
-                    break;
                 }
             case Provider.ironSource:
                 {
@@ -66,13 +67,13 @@ public sealed partial class AdsConfig : Config
                         // binder.Bind<IRewardedAds, >();
                         // binder.Bind<IInterstitialAds, >();
                         // binder.Bind<IBannerAds, >();
+                        break;
                     }
                     else
                     {
                         Log.Warn(Tag, $"ironSource plugin disabled");
                         goto default;
                     }
-                    break;
                 }
             default:
                 {

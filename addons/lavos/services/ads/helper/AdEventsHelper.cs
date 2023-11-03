@@ -1,8 +1,8 @@
 using Lavos.Ads;
 
-namespace Lavos.Services.Ads;
+namespace Lavos.Services.Ads.Helper;
 
-public static class AdEventsHelper
+static class AdEventsHelper
 {
     public static string ToString(AdEvent @event)
     {
