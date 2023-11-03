@@ -3,7 +3,7 @@
 
     <application>
         <meta-data
-            android:name="org.godotengine.plugin.v1.PlayGames"
+            android:name="org.godotengine.plugin.v2.PlayGames"
             android:value="eu.rookies.google.playgames.GooglePlayGames" />
     </application>
 </manifest>
