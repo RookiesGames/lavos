@@ -45,11 +45,11 @@ android {
 }
 
 dependencies {
-    compileOnly files(godotLib.templateAAR)
-    implementation adMobLibraries.playServicesAdLib
+    compileOnly files(godot.templateAAR)
+    implementation playServices.ads
 
-    implementation extraLibraries.kotlinxJsonLib
+    implementation extra.kotlinxJsonLib
 
-    implementation commonLibraries.kotlinStdLib
-    implementation commonLibraries.appCompatLib
+    implementation common.kotlinStd
+    implementation common.appCompat
 }

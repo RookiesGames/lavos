@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-    implementation commonLibraries.kotlinStdLib
-    implementation commonLibraries.appCompatLib
-    implementation commonLibraries.materialLib
+    implementation common.kotlinStd
+    implementation common.appCompat
+    implementation common.material
 }

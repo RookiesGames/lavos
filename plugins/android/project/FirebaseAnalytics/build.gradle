@@ -45,9 +45,9 @@ android {
 }
 
 dependencies {
-    compileOnly files(godotLib.templateAAR)
-    implementation firebaseLibraries.analyticsKtxLib
+    compileOnly files(godot.templateAAR)
+    implementation firebase.analyticsKtx
 
-    implementation commonLibraries.kotlinStdLib
-    implementation commonLibraries.appCompatLib
+    implementation common.kotlinStd
+    implementation common.appCompat
 }

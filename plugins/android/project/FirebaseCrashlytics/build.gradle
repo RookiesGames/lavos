@@ -45,11 +45,11 @@ android {
 }
 
 dependencies {
-    compileOnly files(godotLib.templateAAR)
-    implementation firebaseLibraries.crashlyticsKtxLib
-    implementation firebaseLibraries.crashlyticsNdkLib
-    implementation firebaseLibraries.analyticsKtxLib
+    compileOnly files(godot.templateAAR)
+    implementation firebase.crashlyticsKtx
+    implementation firebase.crashlyticsNdk
+    implementation firebase.analyticsKtx
 
-    implementation commonLibraries.kotlinStdLib
-    implementation commonLibraries.appCompatLib
+    implementation common.kotlinStd
+    implementation common.appCompat
 }

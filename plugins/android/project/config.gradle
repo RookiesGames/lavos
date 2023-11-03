@@ -4,33 +4,41 @@ ext.versions = [
         minSdk             : 24,
         targetSdk          : 33,
         buildTools         : '33.0.2',
-        kotlin      : '1.8.20',
-        java        : 17,
-        ndk         : '23.2.8568313'
+        kotlin             : '1.8.20',
+        java               : 17,
+        ndk                : '23.2.8568313'
 ]
 
 ext.paths = [
         lavosRoot: '../../../../../../../'
 ]
 
-ext.godotLib = [
+ext.godot = [
         templateAAR: "../libs/godot-lib.4.2.mono.aar"
 ]
 
-ext.commonLibraries = [
+ext.common = [
         androidGradlePlugin: "com.android.tools.build:gradle:$versions.androidGradlePlugin",
         kotlinGradlePlugin : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin",
-        kotlinStdLib       : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
-        appCompatLib       : 'androidx.appcompat:appcompat:1.6.1',
-        materialLib        : 'com.google.android.material:material:1.9.0',
+        kotlinStd          : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
+        appCompat          : 'androidx.appcompat:appcompat:1.6.1',
+        material           : 'com.google.android.material:material:1.9.0',
 ]
 
-ext.adMobLibraries = [
-        playServicesAdLib: "com.google.android.gms:play-services-ads:22.2.0"
-]
-
-ext.extraLibraries = [
+ext.extra = [
         kotlinxJsonLib: 'org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.4.1'
+]
+
+ext.playServicesVersions = [
+        ads  : '22.2.0',
+        games: '17.0.0',
+        auth : '20.6.0',
+]
+
+ext.playServices = [
+        ads  : "com.google.android.gms:play-services-ads:$playServicesVersions.ads",
+        games: "com.google.android.gms:play-services-games-v2:$playServicesVersions.games",
+        auth : "com.google.android.gms:play-services-auth:$playServicesVersions.auth",
 ]
 
 ext.firebaseVersions = [
@@ -38,8 +46,8 @@ ext.firebaseVersions = [
         crashlytics: '18.4.0',
 ]
 
-ext.firebaseLibraries = [
-        analyticsKtxLib  : "com.google.firebase:firebase-analytics-ktx:$firebaseVersions.analytics",
-        crashlyticsKtxLib: "com.google.firebase:firebase-crashlytics-ktx:$firebaseVersions.crashlytics",
-        crashlyticsNdkLib: "com.google.firebase:firebase-crashlytics-ndk:$firebaseVersions.crashlytics",
+ext.firebase = [
+        analyticsKtx  : "com.google.firebase:firebase-analytics-ktx:$firebaseVersions.analytics",
+        crashlyticsKtx: "com.google.firebase:firebase-crashlytics-ktx:$firebaseVersions.crashlytics",
+        crashlyticsNdk: "com.google.firebase:firebase-crashlytics-ndk:$firebaseVersions.crashlytics",
 ]
