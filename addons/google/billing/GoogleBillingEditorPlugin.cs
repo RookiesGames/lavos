@@ -1,7 +1,7 @@
 #if TOOLS
 using Godot;
 
-namespace Lavos.Addons.Google.Billing;
+namespace Lavos.Plugins.Google.Billing;
 
 [Tool]
 public sealed partial class GoogleBillingEditorPlugin : EditorPlugin

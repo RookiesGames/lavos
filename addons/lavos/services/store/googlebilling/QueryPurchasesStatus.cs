@@ -1,5 +1,5 @@
 
-namespace Lavos.Plugins.Google.GoogleBilling;
+namespace Lavos.Services.GoogleBilling;
 
 enum QueryPurchasesStatus
 {

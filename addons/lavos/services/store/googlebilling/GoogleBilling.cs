@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 
-namespace Lavos.Plugins.Google.GoogleBilling;
+namespace Lavos.Services.GoogleBilling;
 
 sealed class GoogleBilling : IStoreService
 {
@@ -13,10 +13,12 @@ sealed class GoogleBilling : IStoreService
 
     public GoogleBilling()
     {
-        Assert.IsTrue(Engine.HasSingleton(PluginName), $"Missing plugin {PluginName}");
+        Assert.IsTrue(IsPluginEnabled(), $"Missing plugin {PluginName}");
         Plugin = new LavosPlugin(Engine.GetSingleton(PluginName));
     }
 
+    public static bool IsPluginEnabled() => Engine.HasSingleton(PluginName);
+    
     public void Initialize()
     {
         Plugin.CallVoid("init");
@@ -91,7 +93,8 @@ sealed class GoogleBilling : IStoreService
     {
         var arg = Variant.CreateFrom(id);
         var ok = Plugin.CallBool("purchaseProduct", arg);
-        if (!ok) return PurchaseResult.Error;
+        if (!ok)
+            return PurchaseResult.Error;
         //
         PurchaseStatus status;
         do
