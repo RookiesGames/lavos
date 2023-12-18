@@ -1,0 +1,51 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+apply from: '../config.gradle'
+
+String pluginName = "DeviceInfo"
+String pluginPackageName = "eu.rookies.deviceinfo"
+
+android {
+    namespace pluginPackageName
+    compileSdk versions.compileSdk
+    buildToolsVersion versions.buildTools
+    defaultConfig {
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
+
+        consumerProguardFiles "consumer-rules.pro"
+
+        manifestPlaceholders["godotPluginName"] = pluginName
+        manifestPlaceholders["godotPluginPackageName"] = pluginPackageName
+        buildConfigField("String", "GODOT_PLUGIN_NAME", "\"${pluginName}\"")
+        setProperty("archivesBaseName", pluginName)
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility versions.java
+        targetCompatibility versions.java
+    }
+    kotlinOptions {
+        jvmTarget = versions.java
+    }
+    libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${paths.lavosRoot}/addons/common/deviceinfo/.bin/android/DeviceInfo.${variant.buildType.name}.aar"
+        }
+    }
+}
+
+dependencies {
+    compileOnly files(godot.templateAAR)
+    implementation common.kotlinStd
+    implementation common.appCompat
+}

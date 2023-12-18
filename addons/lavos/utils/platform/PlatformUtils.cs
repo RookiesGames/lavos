@@ -2,6 +2,16 @@ namespace Lavos.Utils.Platform;
 
 public static class PlatformUtils
 {
+    public enum Platform
+    {
+        Android,
+        iOS,
+        macOS,
+        Windows,
+        Linux,
+        Unknwon,
+    }
+
     public static bool IsAndroid =>
 #if GODOT_ANDROID
         true;
@@ -66,4 +76,22 @@ public static class PlatformUtils
 
     public static string Arch =>
         System.Runtime.InteropServices.RuntimeInformation.OSArchitecture.ToString();
+
+    public static Platform CurrentPlatform
+    {
+        get
+        {
+            if (IsAndroid)
+                return Platform.Android;
+            if (IsiOS)
+                return Platform.iOS;
+            if (IsLinux)
+                return Platform.Linux;
+            if (IsMacOS)
+                return Platform.macOS;
+            if (IsWindows)
+                return Platform.Windows;
+            return Platform.Unknwon;
+        }
+    }
 }
