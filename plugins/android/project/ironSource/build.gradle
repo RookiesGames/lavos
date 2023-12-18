@@ -5,8 +5,11 @@ plugins {
 
 apply from: '../config.gradle'
 
+String pluginName = "ironSource"
+String pluginPackageName = "eu.rookies.ironsource"
+
 android {
-    namespace 'eu.rookies.ironsource'
+    namespace pluginPackageName
     compileSdk versions.compileSdk
     buildToolsVersion versions.buildTools
     defaultConfig {
@@ -14,6 +17,11 @@ android {
         targetSdk versions.targetSdk
 
         consumerProguardFiles "consumer-rules.pro"
+
+        manifestPlaceholders["godotPluginName"] = pluginName
+        manifestPlaceholders["godotPluginPackageName"] = pluginPackageName
+        buildConfigField("String", "GODOT_PLUGIN_NAME", "\"${pluginName}\"")
+        setProperty("archivesBaseName", pluginName)
     }
 
     buildTypes {
@@ -23,27 +31,27 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility versions.javaVersion
-        targetCompatibility versions.javaVersion
+        sourceCompatibility versions.java
+        targetCompatibility versions.java
     }
     kotlinOptions {
-        jvmTarget = versions.javaVersion
+        jvmTarget = versions.java
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${paths.lavosRoot}/addons/ironsource/lib/android/ironSource.${variant.buildType.name}.aar"
+            outputFileName = "${paths.lavosRoot}/addons/google/admob/.bin/android/ironSource.${variant.buildType.name}.aar"
         }
     }
 }
 
 dependencies {
-    compileOnly files("../libs/godot-lib.aar")
+    compileOnly files(godot.templateAAR)
     implementation 'com.ironsource.sdk:mediationsdk:7.3.1.1'
     implementation 'com.google.android.gms:play-services-appset:16.0.2'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
     implementation 'com.google.android.gms:play-services-basement:18.2.0'
 
-    implementation libraries.kotlinStdLib
-    implementation libraries.appCompatLib
-    implementation libraries.kotlinxJsonLib
+    implementation common.kotlinStd
+    implementation common.appCompat
+    implementation extra.kotlinxJson
 }
