@@ -3,10 +3,10 @@ namespace Lavos.Social;
 
 public sealed class PlayerProfile
 {
-    public string Id { get; }
-    public string Name { get; }
-    public string Title { get; }
-    public LevelInfo LevelInfo { get; }
+    public string Id { get; set; }
+    public string Name { get; set; }
+    public string Title { get; set; }
+    public LevelInfo LevelInfo { get; set; }
     public FriendStatus FriendStatus { get; }
-    public FriendsListVisibility FriendsListVisibility { get; }
+    public FriendsListVisibility friendsListVisibilityStatus { get; }
 }

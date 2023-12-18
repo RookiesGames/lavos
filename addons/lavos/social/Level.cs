@@ -3,7 +3,7 @@ namespace Lavos.Social;
 
 public sealed class Level
 {
-    public int Number { get; }
-    public long MinXP { get; }
-    public long MaxXP { get; }
+    public int Number { get; set; }
+    public long MinXP { get; set; }
+    public long MaxXP { get; set; }
 }
