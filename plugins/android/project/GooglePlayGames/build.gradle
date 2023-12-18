@@ -49,8 +49,7 @@ dependencies {
     implementation playServices.games
     implementation playServices.auth
 
-    implementation extra.kotlinxJsonLib
-
+    implementation extra.kotlinxJson
     implementation common.kotlinStd
     implementation common.appCompat
 }
