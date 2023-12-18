@@ -64,6 +64,24 @@ class GooglePlayGames(godot: Godot) : GodotPlugin(godot) {
         registerForSignInChanges()
     }
 
+    private fun registerForSignInChanges() {
+        gamesSignInClient.isAuthenticated.addOnCompleteListener { taskResult ->
+            if (!taskResult.isSuccessful) {
+                Log.e(pluginName, "isAuthenticated task failed. ${taskResult.exception?.message}")
+                return@addOnCompleteListener
+            }
+            //
+            val result = taskResult.result
+            if (result.isAuthenticated) {
+                Log.d(pluginName, "Auth successful")
+            } else {
+                Log.d(pluginName, "Auth failed")
+            }
+            //
+            onSignInChanges()
+        }
+    }
+
     /////////////////
     // Auth
 
@@ -92,24 +110,6 @@ class GooglePlayGames(godot: Godot) : GodotPlugin(godot) {
             return gamesSignInClient.isAuthenticated.result.isAuthenticated
         }
         return false
-    }
-
-    private fun registerForSignInChanges() {
-        gamesSignInClient.isAuthenticated.addOnCompleteListener { taskResult ->
-            if (!taskResult.isSuccessful) {
-                Log.e(pluginName, "isAuthenticated task failed. ${taskResult.exception?.message}")
-                return@addOnCompleteListener
-            }
-            //
-            val result = taskResult.result
-            if (result.isAuthenticated) {
-                Log.d(pluginName, "Auth successful")
-            } else {
-                Log.d(pluginName, "Auth failed")
-            }
-            //
-            onSignInChanges()
-        }
     }
 
     private fun onSignInChanges() {
