@@ -23,24 +23,25 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility versions.javaVersion
-        targetCompatibility versions.javaVersion
+        sourceCompatibility versions.java
+        targetCompatibility versions.java
     }
     kotlinOptions {
-        jvmTarget = versions.javaVersion
+        jvmTarget = versions.java
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${paths.lavosRoot}/addons/google/billing/lib/android/GoogleBilling.${variant.buildType.name}.aar"
+            outputFileName = "${paths.lavosRoot}/addons/google/billing/.bin/android/GoogleBilling.${variant.buildType.name}.aar"
         }
     }
 }
 
 dependencies {
-    compileOnly files("../libs/godot-lib.aar")
+    compileOnly files(godot.templateAAR)
     implementation "com.android.billingclient:billing-ktx:6.0.1"
 
-    implementation libraries.kotlinStdLib
-    implementation libraries.appCompatLib
-    implementation libraries.kotlinxJsonLib
+    implementation extra.kotlinxJson
+
+    implementation common.kotlinStd
+    implementation common.appCompat
 }
