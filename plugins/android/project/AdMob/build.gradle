@@ -48,7 +48,7 @@ dependencies {
     compileOnly files(godot.templateAAR)
     implementation playServices.ads
 
-    implementation extra.kotlinxJsonLib
+    implementation extra.kotlinxJson
 
     implementation common.kotlinStd
     implementation common.appCompat

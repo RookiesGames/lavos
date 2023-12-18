@@ -3,24 +3,23 @@
 import cli
 import os
 
-const (
-	project_dir              = 'project'
+const project_dir = 'project'
 
-	// Commands
-	command_help             = 'help'
-	command_build            = 'build'
-	command_copy             = 'copy'
-	command_clean            = 'clean'
+// Commands
+const command_help = 'help'
+const command_build = 'build'
+const command_copy = 'copy'
+const command_clean = 'clean'
 
-	// Arguments
-	arg_firebase_analytics   = 'FirebaseAnalytics'
-	arg_firebase_crashlytics = 'FirebaseCrashlytics'
-	arg_google_billing       = 'GoogleBilling'
-	arg_google_admob         = 'AdMob'
-	arg_google_playgames     = 'GooglePlayGames'
-	arg_ironsource           = 'ironSource'
-	projects                 = get_projects()
-)
+// Arguments
+const arg_firebase_analytics = 'FirebaseAnalytics'
+const arg_firebase_crashlytics = 'FirebaseCrashlytics'
+const arg_google_billing = 'GoogleBilling'
+const arg_google_admob = 'AdMob'
+const arg_google_playgames = 'GooglePlayGames'
+const arg_ironsource = 'ironSource'
+const arg_deviceinfo = 'DeviceInfo'
+const projects = get_projects()
 
 type JobFn = fn () !
 

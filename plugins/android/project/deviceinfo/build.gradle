@@ -5,8 +5,8 @@ plugins {
 
 apply from: '../config.gradle'
 
-String pluginName = "ironSource"
-String pluginPackageName = "eu.rookies.ironsource"
+String pluginName = "DeviceInfo"
+String pluginPackageName = "eu.rookies.deviceinfo"
 
 android {
     namespace pluginPackageName
@@ -39,19 +39,13 @@ android {
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${paths.lavosRoot}/addons/google/admob/.bin/android/ironSource.${variant.buildType.name}.aar"
+            outputFileName = "${paths.lavosRoot}/addons/common/deviceinfo/.bin/android/DeviceInfo.${variant.buildType.name}.aar"
         }
     }
 }
 
 dependencies {
     compileOnly files(godot.templateAAR)
-    implementation 'com.ironsource.sdk:mediationsdk:7.3.1.1'
-    implementation 'com.google.android.gms:play-services-appset:16.0.2'
-    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
-    implementation 'com.google.android.gms:play-services-basement:18.2.0'
-
     implementation common.kotlinStd
     implementation common.appCompat
-    implementation extra.kotlinxJson
 }
