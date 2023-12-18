@@ -5,8 +5,11 @@ plugins {
 
 apply from: '../config.gradle'
 
+String pluginName = "GooglePlayGames"
+String pluginPackageName = "eu.rookies.google.playgames"
+
 android {
-    namespace 'eu.rookies.google.playgames'
+    namespace pluginPackageName
     compileSdk versions.compileSdk
     buildToolsVersion versions.buildTools
     defaultConfig {
@@ -14,6 +17,11 @@ android {
         targetSdk versions.targetSdk
 
         consumerProguardFiles "consumer-rules.pro"
+
+        manifestPlaceholders["godotPluginName"] = pluginName
+        manifestPlaceholders["godotPluginPackageName"] = pluginPackageName
+        buildConfigField("String", "GODOT_PLUGIN_NAME", "\"${pluginName}\"")
+        setProperty("archivesBaseName", pluginName)
     }
 
     buildTypes {
@@ -23,25 +31,25 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility versions.javaVersion
-        targetCompatibility versions.javaVersion
+        sourceCompatibility versions.java
+        targetCompatibility versions.java
     }
     kotlinOptions {
-        jvmTarget = versions.javaVersion
+        jvmTarget = versions.java
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${paths.lavosRoot}/addons/google/playgames/lib/android/GooglePlayGames.${variant.buildType.name}.aar"
+            outputFileName = "${paths.lavosRoot}/addons/google/playgames/.bin/android/GooglePlayGames.${variant.buildType.name}.aar"
         }
     }
 }
 
 dependencies {
-    compileOnly files("../libs/godot-lib.aar")
-    implementation 'com.google.android.gms:play-services-games-v2:17.0.0'
-    implementation 'com.google.android.gms:play-services-auth:20.6.0'
+    compileOnly files(godot.templateAAR)
+    implementation playServices.games
+    implementation playServices.auth
 
-    implementation libraries.kotlinStdLib
-    implementation libraries.appCompatLib
-    implementation libraries.kotlinxJsonLib
+    implementation extra.kotlinxJson
+    implementation common.kotlinStd
+    implementation common.appCompat
 }

@@ -11,7 +11,7 @@ sealed class FirebaseCrashlyticsService : ICrashService
 
     public FirebaseCrashlyticsService()
     {
-        Assert.IsTrue(Engine.HasSingleton(PluginName), $"Missing plugin {PluginName}");
+        Assert.IsTrue(IsPluginEnabled(), $"Missing plugin {PluginName}");
         Plugin = new LavosPlugin(Engine.GetSingleton(PluginName));
     }
 

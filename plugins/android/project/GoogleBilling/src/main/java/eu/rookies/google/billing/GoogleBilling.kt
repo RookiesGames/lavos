@@ -59,7 +59,7 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
                 }
             }
         //
-        billingClient = BillingClient.newBuilder(godot.getActivity()!!.applicationContext)
+        billingClient = BillingClient.newBuilder(activity!!.applicationContext)
             .setListener(purchasesUpdatedListener)
             .enablePendingPurchases()
             .build()
@@ -214,7 +214,7 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
             .build()
         //
         val billingResult =
-            billingClient.launchBillingFlow(godot.getActivity()!!, billingFlowParam)
+            billingClient.launchBillingFlow(activity!!, billingFlowParam)
         Log.d(pluginName, "Purchase flow launched with result: ${billingResult.responseCode}")
         //
         return billingResult.responseCode == BillingResponseCode.OK

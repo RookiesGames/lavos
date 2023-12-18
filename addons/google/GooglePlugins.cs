@@ -9,4 +9,6 @@ public static class GooglePlugins
     public const string FirebaseCrashlyticsPluginName = "FirebaseCrashlytics";
 
     public const string AdMobPluginName = "AdMob";
+
+    public const string PlayGamesName = "GooglePlayGames";
 }
