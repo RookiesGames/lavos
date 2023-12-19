@@ -8,7 +8,7 @@ namespace Lavos.Services.Ads.AdMob;
 
 sealed class AdMobAdsService : IAdsService
 {
-    const string PluginName = GooglePlugins.AdMobPluginName;
+    const string PluginName = GooglePlugins.PluginNames.AdMob;
     readonly LavosPlugin Plugin;
 
     public AdMobAdsService()

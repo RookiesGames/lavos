@@ -6,7 +6,7 @@ namespace Lavos.Plugins.Google.Firebase.Crashlytics;
 [Tool]
 public sealed partial class FirebaseCrashlyticsEditorExportPlugin : EditorExportPlugin
 {
-    public override string _GetName() => GooglePlugins.FirebaseCrashlyticsPluginName;
+    public override string _GetName() => GooglePlugins.PluginNames.FirebaseCrashlytics;
 
     public override bool _SupportsPlatform(EditorExportPlatform platform)
     {

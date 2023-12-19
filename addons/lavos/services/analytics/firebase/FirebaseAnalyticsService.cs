@@ -6,7 +6,7 @@ namespace Lavos.Services.Analytics.Firebase;
 
 sealed class FirebaseAnalyticsService : IAnalyticsService
 {
-    const string PluginName = GooglePlugins.FirebaseAnalyticsPluginName;
+    const string PluginName = GooglePlugins.PluginNames.FirebaseAnalytics;
     readonly LavosPlugin Plugin;
 
     public FirebaseAnalyticsService()
