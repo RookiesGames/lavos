@@ -3,7 +3,7 @@
 
     <application>
         <meta-data
-            android:name="org.godotengine.plugin.v2.GoogleBilling"
-            android:value="eu.rookies.google.billing.GoogleBilling" />
+            android:name="org.godotengine.plugin.v2.${godotPluginName}"
+            android:value="${godotPluginPackageName}.${godotPluginName}" />
     </application>
 </manifest>

@@ -5,8 +5,11 @@ plugins {
 
 apply from: '../config.gradle'
 
+String pluginName = "GoogleBilling"
+String pluginPackageName = "eu.rookies.google.billing"
+
 android {
-    namespace 'eu.rookies.google.billing'
+    namespace pluginPackageName
     compileSdk versions.compileSdk
     buildToolsVersion versions.buildTools
     defaultConfig {
@@ -14,6 +17,11 @@ android {
         targetSdk versions.targetSdk
 
         consumerProguardFiles "consumer-rules.pro"
+
+        manifestPlaceholders["godotPluginName"] = pluginName
+        manifestPlaceholders["godotPluginPackageName"] = pluginPackageName
+        buildConfigField("String", "GODOT_PLUGIN_NAME", "\"${pluginName}\"")
+        setProperty("archivesBaseName", pluginName)
     }
 
     buildTypes {
@@ -38,7 +46,7 @@ android {
 
 dependencies {
     compileOnly files(godot.templateAAR)
-    implementation "com.android.billingclient:billing-ktx:6.0.1"
+    implementation billing.billingKtx
 
     implementation extra.kotlinxJson
 

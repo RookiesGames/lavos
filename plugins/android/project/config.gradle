@@ -34,7 +34,6 @@ ext.playServicesVersions = [
         games: '17.0.0',
         auth : '20.6.0',
 ]
-
 ext.playServices = [
         ads  : "com.google.android.gms:play-services-ads:$playServicesVersions.ads",
         games: "com.google.android.gms:play-services-games-v2:$playServicesVersions.games",
@@ -45,9 +44,15 @@ ext.firebaseVersions = [
         analytics  : '21.3.0',
         crashlytics: '18.4.0',
 ]
-
 ext.firebase = [
         analyticsKtx  : "com.google.firebase:firebase-analytics-ktx:$firebaseVersions.analytics",
         crashlyticsKtx: "com.google.firebase:firebase-crashlytics-ktx:$firebaseVersions.crashlytics",
         crashlyticsNdk: "com.google.firebase:firebase-crashlytics-ndk:$firebaseVersions.crashlytics",
+]
+
+ext.billingVersions = [
+        billing: '6.0.1',
+]
+ext.billing = [
+        billingKtx: "com.android.billingclient:billing-ktx:$billingVersions.billing",
 ]
