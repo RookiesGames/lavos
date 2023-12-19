@@ -6,7 +6,7 @@ namespace Lavos.Plugins.Google.PlayGames;
 [Tool]
 public sealed partial class GooglePlayGamesEditorExportPlugin : EditorExportPlugin
 {
-    public override string _GetName() => GooglePlugins.PlayGamesName;
+    public override string _GetName() => GooglePlugins.PluginNames.PlayGames;
 
     public override bool _SupportsPlatform(EditorExportPlatform platform)
     {

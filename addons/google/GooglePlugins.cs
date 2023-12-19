@@ -5,10 +5,12 @@ public static class GooglePlugins
 {
     public const string Root = "res://addons/rookies/google";
 
-    public const string FirebaseAnalyticsPluginName = "FirebaseAnalytics";
-    public const string FirebaseCrashlyticsPluginName = "FirebaseCrashlytics";
-
-    public const string AdMobPluginName = "AdMob";
-
-    public const string PlayGamesName = "GooglePlayGames";
+    public struct PluginNames
+    {
+        public const string FirebaseAnalytics = "FirebaseAnalytics";
+        public const string FirebaseCrashlytics = "FirebaseCrashlytics";
+        public const string AdMob = "AdMob";
+        public const string PlayGames = "GooglePlayGames";
+        public const string GoogleBilling = "GoogleBilling";
+    }
 }

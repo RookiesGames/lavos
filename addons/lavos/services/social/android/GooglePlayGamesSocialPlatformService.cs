@@ -6,7 +6,7 @@ namespace Lavos.Services.SocialPlatform.Android;
 
 sealed class GooglePlayGamesSocialPlatformService : ISocialPlatformService
 {
-    const string PluginName = GooglePlugins.PlayGamesName;
+    const string PluginName = GooglePlugins.PluginNames.PlayGames;
     readonly LavosPlugin Plugin;
 
     public GooglePlayGamesSocialPlatformService()

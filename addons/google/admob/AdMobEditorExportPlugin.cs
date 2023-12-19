@@ -6,7 +6,7 @@ namespace Lavos.Plugins.Google.AdMob;
 [Tool]
 public sealed partial class AdMobEditorExportPlugin : EditorExportPlugin
 {
-    public override string _GetName() => GooglePlugins.AdMobPluginName;
+    public override string _GetName() => GooglePlugins.PluginNames.AdMob;
 
     public override bool _SupportsPlatform(EditorExportPlatform platform)
     {

@@ -6,7 +6,7 @@ namespace Lavos.Services.Crash.Firebase;
 
 sealed class FirebaseCrashlyticsService : ICrashService
 {
-    const string PluginName = GooglePlugins.FirebaseCrashlyticsPluginName;
+    const string PluginName = GooglePlugins.PluginNames.FirebaseCrashlytics;
     readonly LavosPlugin Plugin;
 
     public FirebaseCrashlyticsService()

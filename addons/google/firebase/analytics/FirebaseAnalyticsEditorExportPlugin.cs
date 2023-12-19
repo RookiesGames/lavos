@@ -6,7 +6,7 @@ namespace Lavos.Plugins.Google.Firebase.Analytics;
 [Tool]
 public sealed partial class FirebaseAnalyticsEditorExportPlugin : EditorExportPlugin
 {
-    public override string _GetName() => GooglePlugins.FirebaseAnalyticsPluginName;
+    public override string _GetName() => GooglePlugins.PluginNames.FirebaseAnalytics;
 
     public override bool _SupportsPlatform(EditorExportPlatform platform)
     {
