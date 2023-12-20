@@ -2,7 +2,6 @@ package eu.rookies.google.billing
 
 import android.util.Log
 import androidx.annotation.NonNull
-import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.billingclient.api.BillingClient.ProductType
@@ -18,7 +17,6 @@ import com.android.billingclient.api.PurchasesResponseListener
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
-import com.android.billingclient.api.acknowledgePurchase
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.UsedByGodot
@@ -63,13 +61,18 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
             .setListener(purchasesUpdatedListener)
             .enablePendingPurchases()
             .build()
+        //
+        connect()
     }
 
-    @UsedByGodot
-    fun isConnected(): Boolean = billingClient.isReady
+    override fun onMainDestroy() {
+        super.onMainDestroy()
+        billingClient.endConnection()
+    }
 
-    @UsedByGodot
-    fun connect() {
+    private fun isConnected(): Boolean = billingClient.isReady
+
+    private fun connect() {
         val billingClientStateListener = object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingResponseCode.OK) {
@@ -84,16 +87,16 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
 
             override fun onBillingServiceDisconnected() {
                 Log.d(pluginName, "Billing service disconnected")
+                billingClient.startConnection(this)
             }
         }
         //
         billingClient.startConnection(billingClientStateListener)
     }
 
-    @UsedByGodot
-    fun disconnect() = billingClient.endConnection()
-
+    //////////////////
     // Product query
+    //////////////////
 
     private fun queryDetails(
         type: String,
@@ -124,12 +127,6 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
     fun getQueryProductsStatus(): Int = queryProductsStatus.id
 
     @UsedByGodot
-    fun getProducts(): Array<String> {
-        val array = productDetailsList.map { it.productId }
-        return array.toTypedArray()
-    }
-
-    @UsedByGodot
     fun queryProductsDetails(productIds: Array<String>) {
         queryProductsStatus = QueryProductsStatus.InProgress
         productDetailsList = emptyList()
@@ -145,13 +142,26 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
     }
 
     @UsedByGodot
-    fun getQuerySubscriptionsStatus(): Int = querySubscriptionsStatus.id
-
-    @UsedByGodot
-    fun getSubscriptions(): Array<String> {
-        val array = subscriptionDetailsList.map { it.productId }
+    fun getProducts(): Array<String> {
+        val array = productDetailsList.map { ProductHelper.toJson(it).toString() }
         return array.toTypedArray()
     }
+
+    private fun getProductInternal(id: String): ProductDetails? =
+        productDetailsList.find { it.productId == id }
+
+    @UsedByGodot
+    fun getProduct(id: String): String {
+        val product = getProductInternal(id)
+        return if (product != null) {
+            ProductHelper.toJson(product).toString()
+        } else {
+            ""
+        }
+    }
+
+    @UsedByGodot
+    fun getQuerySubscriptionsStatus(): Int = querySubscriptionsStatus.id
 
     @UsedByGodot
     fun querySubscriptionsDetails(productIds: Array<String>) {
@@ -168,14 +178,18 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
         }
     }
 
-    // Product Details
+    @UsedByGodot
+    fun getSubscriptions(): Array<String> {
+        val array = subscriptionDetailsList.map { ProductHelper.toJson(it).toString() }
+        return array.toTypedArray()
+    }
 
-    private fun getProductInternal(id: String): ProductDetails? =
-        productDetailsList.find { it.productId == id }
+    private fun getSubscriptionInternal(id: String): ProductDetails? =
+        subscriptionDetailsList.find { it.productId == id }
 
     @UsedByGodot
-    fun getProduct(id: String): String {
-        val product = getProductInternal(id)
+    fun getSubscription(id: String): String {
+        val product = getSubscriptionInternal(id)
         return if (product != null) {
             ProductHelper.toJson(product).toString()
         } else {
@@ -183,6 +197,7 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
         }
     }
 
+    ////////////////////
     // Purchasing flow
 
     @UsedByGodot
@@ -320,7 +335,7 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
             if (billingResult.responseCode == BillingResponseCode.OK) {
                 purchase = getPurchase(token)
                 if (purchase != null) {
-                    pendingConsumables = purchase!!.products;
+                    pendingConsumables = purchase!!.products
                     // Remove purchase from pending list
                     pendingPurchases.filter { purchase -> purchase.purchaseToken != token }
                 }
@@ -333,8 +348,9 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
 
     // Non-consumables & Subscriptions
 
+    /*
     @UsedByGodot
-    suspend fun acknowledgePurchase(token: String): Boolean {
+    fun acknowledgePurchase(token: String): Boolean {
         var purchase = getPurchase(token)
         if (purchase == null) {
             Log.d(pluginName, "No purchase with token $token could be found")
@@ -355,4 +371,5 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
         var billingResult = billingClient.acknowledgePurchase(acknowledgePurchaseParams)
         return billingResult.responseCode == BillingResponseCode.OK
     }
+    */
 }
