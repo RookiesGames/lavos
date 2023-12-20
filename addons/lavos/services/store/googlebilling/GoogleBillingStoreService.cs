@@ -3,43 +3,29 @@ using Lavos.Services.Store;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using Lavos.Utils;
 
 namespace Lavos.Services.GoogleBilling;
 
-sealed class GoogleBilling : IStoreService
+sealed class GoogleBillingStoreService : IStoreService
 {
     const string PluginName = "GoogleBilling";
     readonly LavosPlugin Plugin;
 
-    public GoogleBilling()
+    List<StoreProduct> _products = new();
+    List<StoreProduct> _subscriptions = new();
+
+    public GoogleBillingStoreService()
     {
         Assert.IsTrue(IsPluginEnabled(), $"Missing plugin {PluginName}");
         Plugin = new LavosPlugin(Engine.GetSingleton(PluginName));
     }
 
     public static bool IsPluginEnabled() => Engine.HasSingleton(PluginName);
-    
-    public void Initialize()
-    {
-        Plugin.CallVoid("init");
-    }
 
-    public bool IsConnected()
-    {
-        return Plugin.CallBool("isConnected");
-    }
+    public void Initialize() => Plugin.CallVoid("init");
 
-    public void Connect()
-    {
-        Plugin.CallVoid("connect");
-    }
-
-    public void Disconnect()
-    {
-        Plugin.CallVoid("disconnect");
-    }
-
-    public async Task<IReadOnlyList<StoreProduct>> QueryProducts(IReadOnlyList<string> ids)
+    public async Task<List<StoreProduct>> QueryProducts(IReadOnlyList<string> ids)
     {
         var args = Variant.CreateFrom(ids.ToArray());
         Plugin.CallVoid("queryProductsDetails", args);
@@ -51,16 +37,30 @@ sealed class GoogleBilling : IStoreService
             status = (QueryProductsStatus)Plugin.CallInt("getQueryProductsStatus");
         } while (status == QueryProductsStatus.InProgress);
         //
-        var list = new List<StoreProduct>();
-        foreach (var id in Plugin.CallStringArray("getProducts"))
+        var products = Plugin.CallStringArray("getProducts");
+        foreach (var product in products)
         {
-            list.Add(GetProduct(id));
+            var storeProduct = JsonHelper.Deserialize<StoreProduct>(product);
+            _products.Add(storeProduct);
         }
         //
-        return list;
+        return _products;
     }
 
-    public async Task<IReadOnlyList<StoreProduct>> QuerySubscriptions(IReadOnlyList<string> ids)
+    public StoreProduct GetProduct(string id)
+    {
+        var storeProduct = _products.Find(product => product.Id == id);
+        if (storeProduct != null)
+        {
+            return storeProduct;
+        }
+        //
+        var arg = Variant.CreateFrom(id);
+        var product = Plugin.CallString("getProduct", arg);
+        return JsonHelper.Deserialize<StoreProduct>(product);
+    }
+
+    public async Task<List<StoreProduct>> QuerySubscriptions(IReadOnlyList<string> ids)
     {
         var args = Variant.CreateFrom(ids.ToArray());
         Plugin.CallVoid("querySubscriptionsDetails", args);
@@ -72,21 +72,27 @@ sealed class GoogleBilling : IStoreService
             status = (QuerySubscriptionsStatus)Plugin.CallInt("getQuerySubscriptionsStatus");
         } while (status == QuerySubscriptionsStatus.InProgress);
         //
-        var list = new List<StoreProduct>();
-        foreach (var id in Plugin.CallStringArray("getSubscriptions"))
+        var products = Plugin.CallStringArray("getSubscriptions");
+        foreach (var product in products)
         {
-            list.Add(GetProduct(id));
+            var storeProduct = JsonHelper.Deserialize<StoreProduct>(product);
+            _subscriptions.Add(storeProduct);
         }
         //
-        return list;
+        return _subscriptions;
     }
 
-    public StoreProduct GetProduct(string id)
+    public StoreProduct GetSubscription(string id)
     {
+        var storeProduct = _subscriptions.Find(product => product.Id == id);
+        if (storeProduct != null)
+        {
+            return storeProduct;
+        }
+        //
         var arg = Variant.CreateFrom(id);
-        var product = Plugin.CallString("getProduct", arg);
-        // TODO
-        return null;
+        var product = Plugin.CallString("getSubscription", arg);
+        return JsonHelper.Deserialize<StoreProduct>(product);
     }
 
     public async Task<PurchaseResult> PurchaseProduct(string id)
@@ -113,7 +119,7 @@ sealed class GoogleBilling : IStoreService
     }
 
     // TODO: Verify purchase flow, query-consume-acknowledge
-    public async Task<IReadOnlyList<StoreProduct>> QueryPurchases()
+    public async Task<List<StoreProduct>> QueryPurchases()
     {
         Plugin.CallVoid("queryPurchases");
         //
