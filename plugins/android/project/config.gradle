@@ -51,7 +51,7 @@ ext.firebase = [
 ]
 
 ext.billingVersions = [
-        billing: '6.0.1',
+        billing: '6.1.0',
 ]
 ext.billing = [
         billingKtx: "com.android.billingclient:billing-ktx:$billingVersions.billing",
