@@ -13,7 +13,7 @@ public sealed partial class GoogleBillingExportEditorPlugin : EditorExportPlugin
         return platform is EditorExportPlatformAndroid;
     }
 
-    public override string [] _GetAndroidLibraries(EditorExportPlatform platform, bool debug)
+    public override string[] _GetAndroidLibraries(EditorExportPlatform platform, bool debug)
     {
         var aar = $"{_GetName()}.{(debug ? "debug" : "release")}.aar";
         return new string[]
@@ -24,11 +24,16 @@ public sealed partial class GoogleBillingExportEditorPlugin : EditorExportPlugin
 
     public override string[] _GetAndroidDependencies(EditorExportPlatform platform, bool debug)
     {
-        return new[] 
+        return new[]
         {
             "com.android.billingclient:billing-ktx:6.0.1",
             "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.4.1"
         };
+    }
+
+    public override string _GetAndroidManifestElementContents(EditorExportPlatform platform, bool debug)
+    {
+        return "\t<uses-permission android:name=\"com.android.vending.BILLING\" />\n";
     }
 }
 #endif
