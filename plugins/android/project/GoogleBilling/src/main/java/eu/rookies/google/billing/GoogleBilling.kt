@@ -2,6 +2,8 @@ package eu.rookies.google.billing
 
 import android.util.Log
 import androidx.annotation.NonNull
+import com.android.billingclient.api.AcknowledgePurchaseParams
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.billingclient.api.BillingClient.ProductType
@@ -34,6 +36,8 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
 
     private var purchaseProgressStatus = PurchaseProgressStatus.None
     private var queryPurchaseStatus = QueryPurchaseStatus.None
+    private var consumePurchaseStatus = ConsumeStatus.None
+    private var acknowledgePurchaseStatus = AcknowledgePurchaseStatus.None
 
     private lateinit var pendingPurchases: MutableList<Purchase>
     private lateinit var pendingConsumables: List<String>
@@ -235,6 +239,7 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
         return billingResult.responseCode == BillingResponseCode.OK
     }
 
+    //////////////
     // Purchases
 
     @UsedByGodot
@@ -248,7 +253,7 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
         type: String,
         action: (BillingResult, List<Purchase>) -> Unit
     ) {
-        var queryPurchasesParams = QueryPurchasesParams.newBuilder()
+        val queryPurchasesParams = QueryPurchasesParams.newBuilder()
             .setProductType(type)
             .build()
         //
@@ -299,77 +304,97 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
     private fun getPurchase(token: String): Purchase? =
         pendingPurchases.find { purchase -> purchase.purchaseToken == token }
 
+    ////////////////
     // Consumables
 
     @UsedByGodot
-    fun hasPendingConsumables(): Boolean = pendingConsumables.isNotEmpty()
+    fun getConsumePurchaseStatus(): Int = consumePurchaseStatus.id
 
     @UsedByGodot
     fun getPendingConsumables(): Array<String> {
         val array = pendingConsumables.toTypedArray()
         pendingConsumables = emptyList()
+        consumePurchaseStatus = ConsumeStatus.None
         return array
     }
 
     @UsedByGodot
-    fun consumePurchase(token: String): Boolean {
+    fun consumePurchase(token: String): Int {
         var purchase = getPurchase(token)
         if (purchase == null) {
             Log.d(pluginName, "No purchase with token $token could be found")
-            return false
+            consumePurchaseStatus = ConsumeStatus.Error
+            return consumePurchaseStatus.id
         }
         if (purchase.purchaseState != PurchaseState.PURCHASED) {
             Log.d(pluginName, "Purchase currently in state ${purchase.purchaseState}")
-            return false
+            consumePurchaseStatus = ConsumeStatus.Error
+            return consumePurchaseStatus.id
         }
         //
         val consumeParams = ConsumeParams.newBuilder()
             .setPurchaseToken(token)
             .build()
         //
-        val consumeResponseListener = ConsumeResponseListener { billingResult, token ->
+        val consumeResponseListener = ConsumeResponseListener { billingResult, consumedToken ->
             Log.d(
                 pluginName,
                 "Consume purchase completed with result: ${billingResult.responseCode}"
             )
             if (billingResult.responseCode == BillingResponseCode.OK) {
-                purchase = getPurchase(token)
+                purchase = getPurchase(consumedToken)
                 if (purchase != null) {
-                    pendingConsumables = purchase!!.products
                     // Remove purchase from pending list
                     pendingPurchases.filter { purchase -> purchase.purchaseToken != token }
+                    pendingConsumables = purchase!!.products
                 }
+                consumePurchaseStatus = ConsumeStatus.Completed
             }
         }
         //
         billingClient.consumeAsync(consumeParams, consumeResponseListener)
-        return true
+        consumePurchaseStatus = ConsumeStatus.InProgress
+        return consumePurchaseStatus.id
     }
 
-    // Non-consumables & Subscriptions
-
-    /*
     @UsedByGodot
-    fun acknowledgePurchase(token: String): Boolean {
+    fun getAcknowledgePurchaseStatus(): Int = acknowledgePurchaseStatus.id
+
+    @UsedByGodot
+    fun acknowledgePurchase(token: String) {
+        acknowledgePurchaseStatus = AcknowledgePurchaseStatus.None
+        //
         var purchase = getPurchase(token)
         if (purchase == null) {
             Log.d(pluginName, "No purchase with token $token could be found")
-            return false
+            acknowledgePurchaseStatus = AcknowledgePurchaseStatus.Error
+            return
         }
         if (purchase.purchaseState != PurchaseState.PURCHASED) {
             Log.d(pluginName, "Purchase currently in state ${purchase.purchaseState}")
-            return false
+            acknowledgePurchaseStatus = AcknowledgePurchaseStatus.Error
+            return
         }
         if (purchase.isAcknowledged) {
-            return true
+            acknowledgePurchaseStatus = AcknowledgePurchaseStatus.Completed
+            return
         }
         //
         val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
             .setPurchaseToken(token)
             .build()
+        val acknowledgePurchaseResponseListener = AcknowledgePurchaseResponseListener {
+            if (it.responseCode == BillingResponseCode.OK) {
+                acknowledgePurchaseStatus = AcknowledgePurchaseStatus.Completed
+            } else {
+                acknowledgePurchaseStatus = AcknowledgePurchaseStatus.Error
+            }
+        }
         //
-        var billingResult = billingClient.acknowledgePurchase(acknowledgePurchaseParams)
-        return billingResult.responseCode == BillingResponseCode.OK
+        acknowledgePurchaseStatus = AcknowledgePurchaseStatus.InProgress
+        billingClient.acknowledgePurchase(
+            acknowledgePurchaseParams,
+            acknowledgePurchaseResponseListener
+        )
     }
-    */
 }

@@ -1,7 +1,7 @@
 
-namespace Lavos.Services.GoogleBilling;
+namespace Lavos.Services.Store;
 
-enum QueryPurchasesStatus
+public enum QuerySubscriptionsStatus
 {
     None = 0,
     InProgress = 1,

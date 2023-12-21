@@ -14,6 +14,7 @@ sealed class GoogleBillingStoreService : IStoreService
 
     List<StoreProduct> _products = new();
     List<StoreProduct> _subscriptions = new();
+    List<string> _tokens = new();
 
     public GoogleBillingStoreService()
     {
@@ -25,7 +26,9 @@ sealed class GoogleBillingStoreService : IStoreService
 
     public void Initialize() => Plugin.CallVoid("init");
 
-    public async Task<List<StoreProduct>> QueryProducts(IReadOnlyList<string> ids)
+    #region Query
+
+    public async Task<QueryProductsStatus> QueryProducts(IReadOnlyList<string> ids)
     {
         var args = Variant.CreateFrom(ids.ToArray());
         Plugin.CallVoid("queryProductsDetails", args);
@@ -37,6 +40,13 @@ sealed class GoogleBillingStoreService : IStoreService
             status = (QueryProductsStatus)Plugin.CallInt("getQueryProductsStatus");
         } while (status == QueryProductsStatus.InProgress);
         //
+        if (status == QueryProductsStatus.Error)
+        {
+            Log.Error(PluginName, "Failed to query products");
+            return status;
+        }
+        //
+        _products.Clear();
         var products = Plugin.CallStringArray("getProducts");
         foreach (var product in products)
         {
@@ -44,23 +54,22 @@ sealed class GoogleBillingStoreService : IStoreService
             _products.Add(storeProduct);
         }
         //
-        return _products;
+        return status;
     }
+
+    public List<StoreProduct> GetProducts() => _products;
 
     public StoreProduct GetProduct(string id)
     {
         var storeProduct = _products.Find(product => product.Id == id);
-        if (storeProduct != null)
-        {
-            return storeProduct;
-        }
+        if (storeProduct != null) return storeProduct;
         //
         var arg = Variant.CreateFrom(id);
-        var product = Plugin.CallString("getProduct", arg);
-        return JsonHelper.Deserialize<StoreProduct>(product);
+        var productStr = Plugin.CallString("getProduct", arg);
+        return JsonHelper.Deserialize<StoreProduct>(productStr);
     }
 
-    public async Task<List<StoreProduct>> QuerySubscriptions(IReadOnlyList<string> ids)
+    public async Task<QuerySubscriptionsStatus> QuerySubscriptions(IReadOnlyList<string> ids)
     {
         var args = Variant.CreateFrom(ids.ToArray());
         Plugin.CallVoid("querySubscriptionsDetails", args);
@@ -72,6 +81,13 @@ sealed class GoogleBillingStoreService : IStoreService
             status = (QuerySubscriptionsStatus)Plugin.CallInt("getQuerySubscriptionsStatus");
         } while (status == QuerySubscriptionsStatus.InProgress);
         //
+        if (status == QuerySubscriptionsStatus.Error)
+        {
+            Log.Error(PluginName, "Failed to query subscriptions");
+            return status;
+        }
+        //
+        _subscriptions.Clear();
         var products = Plugin.CallStringArray("getSubscriptions");
         foreach (var product in products)
         {
@@ -79,28 +95,30 @@ sealed class GoogleBillingStoreService : IStoreService
             _subscriptions.Add(storeProduct);
         }
         //
-        return _subscriptions;
+        return status;
     }
+
+    public List<StoreProduct> GetSubscriptions() => _subscriptions;
 
     public StoreProduct GetSubscription(string id)
     {
         var storeProduct = _subscriptions.Find(product => product.Id == id);
-        if (storeProduct != null)
-        {
-            return storeProduct;
-        }
+        if (storeProduct != null) return storeProduct;
         //
         var arg = Variant.CreateFrom(id);
         var product = Plugin.CallString("getSubscription", arg);
         return JsonHelper.Deserialize<StoreProduct>(product);
     }
 
+    #endregion Query
+
+    #region Purchase
+
     public async Task<PurchaseResult> PurchaseProduct(string id)
     {
         var arg = Variant.CreateFrom(id);
         var ok = Plugin.CallBool("purchaseProduct", arg);
-        if (!ok)
-            return PurchaseResult.Error;
+        if (!ok) return PurchaseResult.Error;
         //
         PurchaseStatus status;
         do
@@ -119,7 +137,7 @@ sealed class GoogleBillingStoreService : IStoreService
     }
 
     // TODO: Verify purchase flow, query-consume-acknowledge
-    public async Task<List<StoreProduct>> QueryPurchases()
+    public async Task<QueryPurchasesStatus> QueryPurchases()
     {
         Plugin.CallVoid("queryPurchases");
         //
@@ -130,12 +148,73 @@ sealed class GoogleBillingStoreService : IStoreService
             status = (QueryPurchasesStatus)Plugin.CallInt("getQueryPurchasesStatus");
         } while (status == QueryPurchasesStatus.InProgress);
         //
-        var list = new List<StoreProduct>();
-        foreach (var id in Plugin.CallStringArray("getPendingPurchases"))
+        if (status == QueryPurchasesStatus.Error)
         {
-            list.Add(GetProduct(id));
+            Log.Error(PluginName, "Failed to query purchases");
+            return status;
         }
         //
-        return list;
+        _tokens = Plugin.CallStringArray("getPendingPurchases").ToList();
+        return status;
     }
+
+    public List<string> GetPendingPurchases() => _tokens;
+
+    #endregion Purchase
+
+    #region Consume
+
+    public async Task<ConsumePurchaseStatus> ConsumePurchase(string token)
+    {
+        var arg = Variant.CreateFrom(token);
+        Plugin.CallVoid("consumePurchase", arg);
+        //
+        ConsumePurchaseStatus status;
+        do
+        {
+            await Task.Delay(100);
+            status = (ConsumePurchaseStatus)Plugin.CallInt("getConsumePurchaseStatus");
+        } while (status == ConsumePurchaseStatus.InProgress);
+        //
+        if (status == ConsumePurchaseStatus.Error)
+        {
+            Log.Error(PluginName, $"Failed to consume purchase. Token: {token}");
+            return status;
+        }
+        //
+        var products = Plugin.CallStringArray("getPendingConsumables");
+        foreach (var product in products)
+        {
+            // TODO
+            Log.Info(PluginName, $"{product} consume");
+        }
+        //
+        await AcknowledgePurchase(token);
+        //
+        return status;
+    }
+
+    async Task<bool> AcknowledgePurchase(string token)
+    {
+        var arg = Variant.CreateFrom(token);
+        Plugin.CallVoid("acknowledgePurchase", arg);
+        //
+        AcknowledgePurchaseStatus status;
+        do
+        {
+            await Task.Delay(100);
+            status = (AcknowledgePurchaseStatus)Plugin.CallInt("getAcknowledgePurchaseStatus");
+        } while (status == AcknowledgePurchaseStatus.InProgress);
+        //        
+        if (status == AcknowledgePurchaseStatus.Error)
+        {
+            Log.Error(PluginName, $"Failed to acknowledge purchase. Token: {token}");
+            return false;
+        }
+        //
+        Log.Debug($"Purchase acknowledged. Token: {token}");
+        return true;
+    }
+
+    #endregion Consume
 }

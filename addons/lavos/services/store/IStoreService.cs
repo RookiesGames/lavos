@@ -1,4 +1,6 @@
 using Lavos.Dependency;
+using Lavos.Services.GoogleBilling;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,12 +10,17 @@ public interface IStoreService : IService
 {
     void Initialize();
 
-    Task<List<StoreProduct>> QueryProducts(IReadOnlyList<string> ids);
+    Task<QueryProductsStatus> QueryProducts(IReadOnlyList<string> ids);
+    List<StoreProduct> GetProducts();
     StoreProduct GetProduct(string id);
 
-    Task<List<StoreProduct>> QuerySubscriptions(IReadOnlyList<string> ids);
+    Task<QuerySubscriptionsStatus> QuerySubscriptions(IReadOnlyList<string> ids);
+    List<StoreProduct> GetSubscriptions();
     StoreProduct GetSubscription(string id);
 
     Task<PurchaseResult> PurchaseProduct(string id);
-    Task<List<StoreProduct>> QueryPurchases();
+    Task<QueryPurchasesStatus> QueryPurchases();
+    List<string> GetPendingPurchases();
+
+    Task<ConsumePurchaseStatus> ConsumePurchase(string token);
 }
