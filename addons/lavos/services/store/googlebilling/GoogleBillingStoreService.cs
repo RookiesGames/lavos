@@ -189,7 +189,11 @@ sealed class GoogleBillingStoreService : IStoreService
             Log.Info(PluginName, $"{product} consume");
         }
         //
-        await AcknowledgePurchase(token);
+        var acknowledged = await AcknowledgePurchase(token);
+        if (!acknowledged)
+        {
+            Log.Error(PluginName, $"Failed to acknowledge purchase. Token: {token}");
+        }
         //
         return status;
     }
