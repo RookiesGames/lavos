@@ -14,3 +14,4 @@ data_*/
 
 # macOS
 .DS_Store
+plugins/android/build
