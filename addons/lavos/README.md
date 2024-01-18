@@ -1,34 +1,56 @@
-# lavos
-Godot shared code
+# Lavos Addons
 
-# Index
+Addons providing shared functionality, common tools and other
+
+## Index
 
 1. [Requirements](#requirements)
-1. [Installation](#install)
+1. [Install](#install)
+1. [Functionality](#functionality)
 
 ---
 
-# Requirements
+## Requirements
 
-* Godot 3.4.4 or earlier
-* V compiler, [link](vlang.io)
+* Godot 4.x
+* .NET8 or newer
 
-# Install
+## Install
 
-Follow these instructions to install C# support and necessary dependencies
+Follow these instructions to install C# support and necessary dependencies.
 
-## Fedora
+## Functionality
 
-dnf install dotnet-sdk-3.1
+### Ads
 
-## VSCode
+### Audio
 
-First, the C# project needs to be created.
-Navigate in the top bar to `Project > Tools > C#` aand select `Create Project`.
+### Config
 
-VSCode has a `C# Tools for Godot` extensions that adds a fair number of improvements. Install it directly from the `Extensions` tab.
+### Console
 
-There are some .NET dependencies that are needed for the editor to work properly.
-Run these commands in the root of your Godot project: 
-* `dotnet add package Godot.NET.Sdk --version 3.3.0`
-* `dotnet add package Newtonsoft.Json --version 13.0.1`
+### Core
+
+### Debug
+
+### Dependency
+
+### Input
+
+### Math
+
+### Nodes
+
+### Physics
+
+### Scene
+
+[Readme.md](./scene/README.md)
+
+### Services
+
+### Social
+
+### UI
+
+### Utils
