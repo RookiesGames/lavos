@@ -1,7 +1,7 @@
 
 namespace Lavos.Services.Store;
 
-public enum QueryPurchasesStatus
+enum QueryPendingPurchasesStatus
 {
     None = 0,
     InProgress = 1,

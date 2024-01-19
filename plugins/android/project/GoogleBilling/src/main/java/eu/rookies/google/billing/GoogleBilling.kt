@@ -40,7 +40,6 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
     private var acknowledgePurchaseStatus = AcknowledgePurchaseStatus.None
 
     private lateinit var pendingPurchases: MutableList<Purchase>
-    private lateinit var pendingConsumables: List<String>
 
     @NonNull
     override fun getPluginName(): String = pluginName
@@ -49,15 +48,14 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
     fun init() {
         val purchasesUpdatedListener =
             PurchasesUpdatedListener { billingResult, purchases ->
-                if (billingResult.responseCode != BillingResponseCode.OK) {
-                    Log.d(pluginName, "Purchase failed. Error: ${billingResult.responseCode}")
-                    purchaseProgressStatus = PurchaseProgressStatus.Error
+                purchaseProgressStatus = if (billingResult.responseCode != BillingResponseCode.OK) {
+                    Log.e(pluginName, "Purchase failed. ${billingResult.debugMessage}")
+                    PurchaseProgressStatus.Error
                 } else if (purchases == null) {
-                    Log.d(pluginName, "No purchase detected")
-                    purchaseProgressStatus = PurchaseProgressStatus.None
+                    Log.e(pluginName, "No purchase detected")
+                    PurchaseProgressStatus.None
                 } else {
-                    // Do nothing?
-                    purchaseProgressStatus = PurchaseProgressStatus.Completed
+                    PurchaseProgressStatus.Completed
                 }
             }
         //
@@ -79,18 +77,14 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
     private fun connect() {
         val billingClientStateListener = object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingResponseCode.OK) {
-                    Log.d(pluginName, "Billing service connected")
-                } else {
-                    Log.d(
-                        pluginName,
-                        "Billing service connection failed. Error: ${billingResult.responseCode}"
-                    )
+                if (billingResult.responseCode != BillingResponseCode.OK) {
+                    val msg =
+                        "Billing service connection failed. ${billingResult.debugMessage}"
+                    Log.e(pluginName, msg)
                 }
             }
 
             override fun onBillingServiceDisconnected() {
-                Log.d(pluginName, "Billing service disconnected")
                 billingClient.startConnection(this)
             }
         }
@@ -122,7 +116,6 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
             .build()
         //
         billingClient.queryProductDetailsAsync(params) { billingResult, detailsList ->
-            Log.d(pluginName, "Query of $type finished with result: $billingResult")
             action(billingResult, detailsList)
         }
     }
@@ -140,6 +133,10 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
                 productDetailsList = productList
                 queryProductsStatus = QueryProductsStatus.Completed
             } else {
+                Log.e(
+                    pluginName,
+                    "Failed to query product details. ${billingResult.debugMessage}"
+                )
                 queryProductsStatus = QueryProductsStatus.Error
             }
         }
@@ -177,6 +174,10 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
                 subscriptionDetailsList = subscriptionList
                 querySubscriptionsStatus = QuerySubscriptionsStatus.Completed
             } else {
+                Log.e(
+                    pluginName,
+                    "Failed to query subs details. ${billingResult.debugMessage}"
+                )
                 querySubscriptionsStatus = QuerySubscriptionsStatus.Error
             }
         }
@@ -205,18 +206,16 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
     // Purchasing flow
 
     @UsedByGodot
-    fun purchaseInProgress(): Boolean = purchaseProgressStatus == PurchaseProgressStatus.InProgress
-
-    @UsedByGodot
     fun getPurchaseStatus(): Int = purchaseProgressStatus.id
 
     @UsedByGodot
     fun purchaseProduct(id: String): Boolean {
-        if (purchaseInProgress()) {
+        if (purchaseProgressStatus == PurchaseProgressStatus.InProgress) {
             Log.d(pluginName, "Purchase in progress")
             return false
         }
-        val product = getProductInternal(id)
+        val product =
+            getProductInternal(id)
         if (product == null) {
             Log.e(pluginName, "Product $id not found")
             return false
@@ -234,22 +233,50 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
         //
         val billingResult =
             billingClient.launchBillingFlow(activity!!, billingFlowParam)
-        Log.d(pluginName, "Purchase flow launched with result: ${billingResult.responseCode}")
+        //
+        return billingResult.responseCode == BillingResponseCode.OK
+    }
+
+    @UsedByGodot
+    fun purchaseSubscription(id: String, offerToken: String): Boolean {
+        if (purchaseProgressStatus == PurchaseProgressStatus.InProgress) {
+            Log.d(pluginName, "Purchase in progress")
+            return false
+        }
+        val product = getSubscriptionInternal(id)
+        if (product == null) {
+            Log.e(pluginName, "Subscription $id not found")
+            return false
+        }
+        //
+        val productDetailsParamsList = listOf(
+            BillingFlowParams.ProductDetailsParams.newBuilder()
+                .setProductDetails(product)
+                .setOfferToken(offerToken)
+                .build()
+        )
+        //
+        val billingFlowParam = BillingFlowParams.newBuilder()
+            .setProductDetailsParamsList(productDetailsParamsList)
+            .build()
+        //
+        val billingResult =
+            billingClient.launchBillingFlow(activity!!, billingFlowParam)
         //
         return billingResult.responseCode == BillingResponseCode.OK
     }
 
     //////////////
-    // Purchases
+    // Pending Purchases
 
     @UsedByGodot
     fun getPendingPurchases(): Array<String> =
-        pendingPurchases.map { purchase -> purchase.purchaseToken }.toTypedArray()
+        pendingPurchases.map { purchase -> purchase.originalJson }.toTypedArray()
 
     @UsedByGodot
     fun getQueryPurchasesStatus(): Int = queryPurchaseStatus.id
 
-    private fun queryPurchases(
+    private fun doQueryPurchases(
         type: String,
         action: (BillingResult, List<Purchase>) -> Unit
     ) {
@@ -258,10 +285,6 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
             .build()
         //
         val purchasesResponseListener = PurchasesResponseListener { billingResult, purchases ->
-            Log.d(
-                pluginName,
-                "Query purchases completed with result: ${billingResult.responseCode}"
-            )
             action(billingResult, purchases)
         }
         //
@@ -271,32 +294,27 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
     @UsedByGodot
     fun queryPurchases() {
         pendingPurchases = mutableListOf()
-        var step = 0
-        fun completeQuery() {
-            step++
-            queryPurchaseStatus = if (step == 2) {
-                QueryPurchaseStatus.Completed
-            } else {
-                queryPurchaseStatus
-            }
-        }
-        //
         queryPurchaseStatus = QueryPurchaseStatus.InProgress
         //
-        queryPurchases(ProductType.INAPP) { iapBillingResult, iapPurchases ->
+        doQueryPurchases(ProductType.INAPP) { iapBillingResult, iapPurchases ->
             if (iapBillingResult.responseCode == BillingResponseCode.OK) {
                 pendingPurchases.addAll(iapPurchases)
-                completeQuery()
             } else {
+                Log.e(pluginName, "Failed to query INAPPs. ${iapBillingResult.debugMessage}")
                 queryPurchaseStatus = QueryPurchaseStatus.Error
             }
-        }
-        queryPurchases(ProductType.SUBS) { subsBillingResult, subsPurchases ->
-            if (subsBillingResult.responseCode == BillingResponseCode.OK) {
-                pendingPurchases.addAll(subsPurchases)
-                completeQuery()
-            } else {
-                queryProductsStatus = QueryProductsStatus.Error
+            //
+            doQueryPurchases(ProductType.SUBS) { subsBillingResult, subsPurchases ->
+                if (subsBillingResult.responseCode == BillingResponseCode.OK) {
+                    pendingPurchases.addAll(subsPurchases)
+                    queryPurchaseStatus = QueryPurchaseStatus.Completed
+                } else {
+                    Log.e(
+                        pluginName,
+                        "Failed to query SUBs. Error ${subsBillingResult.debugMessage}"
+                    )
+                    queryProductsStatus = QueryProductsStatus.Error
+                }
             }
         }
     }
@@ -311,23 +329,15 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
     fun getConsumePurchaseStatus(): Int = consumePurchaseStatus.id
 
     @UsedByGodot
-    fun getPendingConsumables(): Array<String> {
-        val array = pendingConsumables.toTypedArray()
-        pendingConsumables = emptyList()
-        consumePurchaseStatus = ConsumeStatus.None
-        return array
-    }
-
-    @UsedByGodot
     fun consumePurchase(token: String): Int {
         var purchase = getPurchase(token)
         if (purchase == null) {
-            Log.d(pluginName, "No purchase with token $token could be found")
+            Log.e(pluginName, "No purchase with token $token could be found")
             consumePurchaseStatus = ConsumeStatus.Error
             return consumePurchaseStatus.id
         }
         if (purchase.purchaseState != PurchaseState.PURCHASED) {
-            Log.d(pluginName, "Purchase currently in state ${purchase.purchaseState}")
+            Log.e(pluginName, "Purchase currently in state ${purchase.purchaseState}")
             consumePurchaseStatus = ConsumeStatus.Error
             return consumePurchaseStatus.id
         }
@@ -337,23 +347,16 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
             .build()
         //
         val consumeResponseListener = ConsumeResponseListener { billingResult, consumedToken ->
-            Log.d(
-                pluginName,
-                "Consume purchase completed with result: ${billingResult.responseCode}"
-            )
-            if (billingResult.responseCode == BillingResponseCode.OK) {
-                purchase = getPurchase(consumedToken)
-                if (purchase != null) {
-                    // Remove purchase from pending list
-                    pendingPurchases.filter { purchase -> purchase.purchaseToken != token }
-                    pendingConsumables = purchase!!.products
-                }
-                consumePurchaseStatus = ConsumeStatus.Completed
+            consumePurchaseStatus = if (billingResult.responseCode == BillingResponseCode.OK) {
+                ConsumeStatus.Completed
+            } else {
+                Log.e(pluginName, "Failed to consume purchase. ${billingResult.debugMessage}")
+                ConsumeStatus.Error
             }
         }
         //
-        billingClient.consumeAsync(consumeParams, consumeResponseListener)
         consumePurchaseStatus = ConsumeStatus.InProgress
+        billingClient.consumeAsync(consumeParams, consumeResponseListener)
         return consumePurchaseStatus.id
     }
 
@@ -364,17 +367,19 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
     fun acknowledgePurchase(token: String) {
         acknowledgePurchaseStatus = AcknowledgePurchaseStatus.None
         //
-        var purchase = getPurchase(token)
+        val purchase = getPurchase(token)
         if (purchase == null) {
-            Log.d(pluginName, "No purchase with token $token could be found")
+            Log.e(pluginName, "No purchase found to acknowledge. $token")
             acknowledgePurchaseStatus = AcknowledgePurchaseStatus.Error
             return
         }
+        //
         if (purchase.purchaseState != PurchaseState.PURCHASED) {
-            Log.d(pluginName, "Purchase currently in state ${purchase.purchaseState}")
+            Log.e(pluginName, "Purchase currently in state ${purchase.purchaseState}")
             acknowledgePurchaseStatus = AcknowledgePurchaseStatus.Error
             return
         }
+        //
         if (purchase.isAcknowledged) {
             acknowledgePurchaseStatus = AcknowledgePurchaseStatus.Completed
             return
@@ -383,13 +388,19 @@ class GoogleBilling(godot: Godot) : GodotPlugin(godot) {
         val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
             .setPurchaseToken(token)
             .build()
-        val acknowledgePurchaseResponseListener = AcknowledgePurchaseResponseListener {
-            if (it.responseCode == BillingResponseCode.OK) {
-                acknowledgePurchaseStatus = AcknowledgePurchaseStatus.Completed
-            } else {
-                acknowledgePurchaseStatus = AcknowledgePurchaseStatus.Error
+        val acknowledgePurchaseResponseListener =
+            AcknowledgePurchaseResponseListener { billingResult ->
+                acknowledgePurchaseStatus =
+                    if (billingResult.responseCode == BillingResponseCode.OK) {
+                        AcknowledgePurchaseStatus.Completed
+                    } else {
+                        Log.e(
+                            pluginName,
+                            "Failed to acknowledged purchase. ${billingResult.debugMessage}"
+                        )
+                        AcknowledgePurchaseStatus.Error
+                    }
             }
-        }
         //
         acknowledgePurchaseStatus = AcknowledgePurchaseStatus.InProgress
         billingClient.acknowledgePurchase(

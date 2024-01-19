@@ -1,7 +1,7 @@
 
 namespace Lavos.Services.Store;
 
-public enum AcknowledgePurchaseStatus
+enum AcknowledgePurchaseStatus
 {
     None = 0,
     InProgress,

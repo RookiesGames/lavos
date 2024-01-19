@@ -1,6 +1,7 @@
 using Godot;
 using Lavos.Services.Store;
 using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 using System.Linq;
 using Lavos.Utils;
@@ -9,6 +10,8 @@ namespace Lavos.Services.GoogleBilling;
 
 sealed class GoogleBillingStoreService : IStoreService
 {
+    public event Action<Purchase> ProductPurchased;
+
     const string PluginName = "GoogleBilling";
     readonly LavosPlugin Plugin;
 
@@ -118,7 +121,10 @@ sealed class GoogleBillingStoreService : IStoreService
     {
         var arg = Variant.CreateFrom(id);
         var ok = Plugin.CallBool("purchaseProduct", arg);
-        if (!ok) return PurchaseResult.Error;
+        if (!ok)
+        {
+            return PurchaseResult.Error;
+        }
         //
         PurchaseStatus status;
         do
@@ -126,6 +132,11 @@ sealed class GoogleBillingStoreService : IStoreService
             await Task.Delay(100);
             status = (PurchaseStatus)Plugin.CallInt("getPurchaseStatus");
         } while (status == PurchaseStatus.InProgress);
+        //
+        if (status == PurchaseStatus.Error)
+        {
+            return PurchaseResult.Error;
+        }
         //
         return status switch
         {
@@ -136,37 +147,109 @@ sealed class GoogleBillingStoreService : IStoreService
         };
     }
 
-    // TODO: Verify purchase flow, query-consume-acknowledge
-    public async Task<QueryPurchasesStatus> QueryPurchases()
+    public async Task<PurchaseResult> PurchaseSubscription(string id, OfferDetails offer)
     {
-        Plugin.CallVoid("queryPurchases");
+        var argId = Variant.CreateFrom(id);
+        var argOfferToken = Variant.CreateFrom(offer.Token);
+        var ok = Plugin.CallBool("purchaseSubscription", argId, argOfferToken);
+        if (!ok)
+        {
+            return PurchaseResult.Error;
+        }
         //
-        QueryPurchasesStatus status;
+        PurchaseStatus status;
         do
         {
             await Task.Delay(100);
-            status = (QueryPurchasesStatus)Plugin.CallInt("getQueryPurchasesStatus");
-        } while (status == QueryPurchasesStatus.InProgress);
+            status = (PurchaseStatus)Plugin.CallInt("getPurchaseStatus");
+        } while (status == PurchaseStatus.InProgress);
         //
-        if (status == QueryPurchasesStatus.Error)
+        if (status == PurchaseStatus.Error)
         {
-            Log.Error(PluginName, "Failed to query purchases");
-            return status;
+            return PurchaseResult.Error;
         }
         //
-        _tokens = Plugin.CallStringArray("getPendingPurchases").ToList();
-        return status;
+        return status switch
+        {
+            PurchaseStatus.None => PurchaseResult.Canceled,
+            PurchaseStatus.Error => PurchaseResult.Error,
+            PurchaseStatus.Completed => PurchaseResult.Success,
+            _ => PurchaseResult.Unknown,
+        };
     }
 
-    public List<string> GetPendingPurchases() => _tokens;
+    public async Task ProcessPendingPurchases()
+    {
+        var pendingPurchasesStatus = await QueryPendingPurchases();
+        if (pendingPurchasesStatus == QueryPendingPurchasesStatus.Error)
+        {
+            return;
+        }
+        //
+        var purchases = GetPendingPurchases();
+        foreach (var purchase in purchases)
+        {
+            await ConsumePurchase(purchase);
+        }
+        //
+        pendingPurchasesStatus = await QueryPendingPurchases();
+        if (pendingPurchasesStatus == QueryPendingPurchasesStatus.Error)
+        {
+            return;
+        }
+        //
+        purchases = GetPendingPurchases();
+        foreach (var purchase in purchases)
+        {
+            await AcknowledgePurchase(purchase);
+        }
+    }
 
     #endregion Purchase
 
+    #region Pending
+
+    async Task<QueryPendingPurchasesStatus> QueryPendingPurchases()
+    {
+        Plugin.CallVoid("queryPurchases");
+        //
+        QueryPendingPurchasesStatus status;
+        do
+        {
+            await Task.Delay(100);
+            status = (QueryPendingPurchasesStatus)Plugin.CallInt("getQueryPurchasesStatus");
+        } while (status == QueryPendingPurchasesStatus.InProgress);
+        //
+        switch (status)
+        {
+            case QueryPendingPurchasesStatus.Error: Log.Error(PluginName, "Failed to query purchases"); break;
+            case QueryPendingPurchasesStatus.Completed: break;
+            default: Log.Warn(PluginName, "Unhandled query pending purchase case"); break;
+        }
+        //
+        return status;
+    }
+
+    List<Purchase> GetPendingPurchases()
+    {
+        var list = new List<Purchase>();
+        var purchases = Plugin.CallStringArray("getPendingPurchases").ToList();
+        foreach (var json in purchases)
+        {
+            var purchase = JsonHelper.Deserialize<Purchase>(json);
+            if (purchase.PurchaseState == PurchaseState.Pending) continue;
+            list.Add(purchase);
+        }
+        return list;
+    }
+
+    #endregion Pending
+
     #region Consume
 
-    public async Task<ConsumePurchaseStatus> ConsumePurchase(string token)
+    async Task ConsumePurchase(Purchase purchase)
     {
-        var arg = Variant.CreateFrom(token);
+        var arg = Variant.CreateFrom(purchase.PurchaseToken);
         Plugin.CallVoid("consumePurchase", arg);
         //
         ConsumePurchaseStatus status;
@@ -176,31 +259,22 @@ sealed class GoogleBillingStoreService : IStoreService
             status = (ConsumePurchaseStatus)Plugin.CallInt("getConsumePurchaseStatus");
         } while (status == ConsumePurchaseStatus.InProgress);
         //
-        if (status == ConsumePurchaseStatus.Error)
+        switch (status)
         {
-            Log.Error(PluginName, $"Failed to consume purchase. Token: {token}");
-            return status;
+            case ConsumePurchaseStatus.Error: Log.Error(PluginName, $"Failed to consume purchase: {purchase.ProductId}"); break;
+            case ConsumePurchaseStatus.Completed:
+                {
+                    Log.Debug(PluginName, $"Purchase consumed: {purchase.ProductId}");
+                    ProductPurchased?.Invoke(purchase);
+                }
+                break;
+            default: Log.Warn(PluginName, "Unhandled consume case"); break;
         }
-        //
-        var products = Plugin.CallStringArray("getPendingConsumables");
-        foreach (var product in products)
-        {
-            // TODO
-            Log.Info(PluginName, $"{product} consume");
-        }
-        //
-        var acknowledged = await AcknowledgePurchase(token);
-        if (!acknowledged)
-        {
-            Log.Error(PluginName, $"Failed to acknowledge purchase. Token: {token}");
-        }
-        //
-        return status;
     }
 
-    async Task<bool> AcknowledgePurchase(string token)
+    async Task AcknowledgePurchase(Purchase purchase)
     {
-        var arg = Variant.CreateFrom(token);
+        var arg = Variant.CreateFrom(purchase.PurchaseToken);
         Plugin.CallVoid("acknowledgePurchase", arg);
         //
         AcknowledgePurchaseStatus status;
@@ -209,15 +283,18 @@ sealed class GoogleBillingStoreService : IStoreService
             await Task.Delay(100);
             status = (AcknowledgePurchaseStatus)Plugin.CallInt("getAcknowledgePurchaseStatus");
         } while (status == AcknowledgePurchaseStatus.InProgress);
-        //        
-        if (status == AcknowledgePurchaseStatus.Error)
-        {
-            Log.Error(PluginName, $"Failed to acknowledge purchase. Token: {token}");
-            return false;
-        }
         //
-        Log.Debug($"Purchase acknowledged. Token: {token}");
-        return true;
+        switch (status)
+        {
+            case AcknowledgePurchaseStatus.Error: Log.Error(PluginName, $"Failed to acknowledge purchase: {purchase.ProductId}"); break;
+            case AcknowledgePurchaseStatus.Completed:
+                {
+                    Log.Debug(PluginName, $"Purchase acknowledged: {purchase.ProductId}");
+                    ProductPurchased?.Invoke(purchase);
+                }
+                break;
+            default: Log.Warn(PluginName, "Unhandled acknowledge case"); break;
+        }
     }
 
     #endregion Consume
