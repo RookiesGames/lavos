@@ -11,7 +11,7 @@ public abstract partial class DataSaver : Resource, IDataSaver
     public bool IsDirty => _isDirty;
 
     public abstract string DataFile { get; }
-    public Dictionary<string, Variant> Data { get; } = new();
+    public Dictionary<string, Variant> Data { get; } = [];
 
     public void LoadData(Dictionary<string, Variant> data)
     {

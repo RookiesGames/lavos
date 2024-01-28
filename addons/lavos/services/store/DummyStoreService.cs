@@ -11,11 +11,11 @@ sealed class DummyStoreService : IStoreService
     public void Initialize() { }
 
     public Task<QueryProductsStatus> QueryProducts(IReadOnlyList<string> ids) => Task.FromResult(QueryProductsStatus.Completed);
-    public List<StoreProduct> GetProducts() => new();
+    public List<StoreProduct> GetProducts() => [];
     public StoreProduct GetProduct(string id) => null;
 
     public Task<QuerySubscriptionsStatus> QuerySubscriptions(IReadOnlyList<string> ids) => Task.FromResult(QuerySubscriptionsStatus.Completed);
-    public List<StoreProduct> GetSubscriptions() => new();
+    public List<StoreProduct> GetSubscriptions() => [];
     public StoreProduct GetSubscription(string id) => null;
 
     public Task<PurchaseResult> PurchaseProduct(string id) => Task.FromResult(PurchaseResult.Success);

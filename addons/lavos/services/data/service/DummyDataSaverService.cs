@@ -6,7 +6,7 @@ sealed class DummyDataSaverService : IDataSaverService
 {
     const string Tag = nameof(DummyDataSaverService);
 
-    readonly HashSet<IDataSaver> _dataSavers = new();
+    readonly HashSet<IDataSaver> _dataSavers = [];
 
     public void Register(IDataSaver saver)
     {

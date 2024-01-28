@@ -7,12 +7,12 @@ sealed partial class GamepadStatusHandler
     : Node
     , IGamepadStatusHandler
 {
-    readonly HashSet<IGamepadStatusListener> _listeners = new();
+    readonly HashSet<IGamepadStatusListener> _listeners = [];
 
     const double WAIT_TIME = 0.25f;
     double _timer = WAIT_TIME;
 
-    readonly HashSet<GamepadDevice> _connectedDevices = new();
+    readonly HashSet<GamepadDevice> _connectedDevices = [];
     readonly Dictionary<GamepadDevice, bool> _devicesState = new()
         {
             { GamepadDevice.Gamepad1, false},

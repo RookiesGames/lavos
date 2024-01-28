@@ -8,9 +8,9 @@ sealed partial class GamepadInputHandler
     : Node
     , IGamepadInputHandler
 {
-    readonly Dictionary<GamepadDevice, GamepadInputNode> _deviceHandlers = new();
-    readonly Dictionary<GamepadDevice, IGamepadInputConfig> _configs = new();
-    readonly HashSet<IGamepadInputEventListener> _listeners = new();
+    readonly Dictionary<GamepadDevice, GamepadInputNode> _deviceHandlers = [];
+    readonly Dictionary<GamepadDevice, IGamepadInputConfig> _configs = [];
+    readonly HashSet<IGamepadInputEventListener> _listeners = [];
 
     #region IGamepadInputHandler
 

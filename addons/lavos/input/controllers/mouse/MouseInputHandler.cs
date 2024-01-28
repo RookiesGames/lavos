@@ -8,8 +8,8 @@ sealed partial class MouseInputHandler : Node, IMouseInputHandler
     #region Members
 
     IMouseInputConfig _config;
-    readonly HashSet<MouseButton> _pressedButtons = new();
-    readonly HashSet<IMouseInputListener> _listeners = new();
+    readonly HashSet<MouseButton> _pressedButtons = [];
+    readonly HashSet<IMouseInputListener> _listeners = [];
 
     #endregion
 

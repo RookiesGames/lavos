@@ -14,7 +14,7 @@ public sealed class MainThreadDispatcher : IThreadDispatcher
     public MainThreadDispatcher()
     {
         _lock = new();
-        _pendingActions = new();
+        _pendingActions = [];
         _threadId = Environment.CurrentManagedThreadId;
     }
 

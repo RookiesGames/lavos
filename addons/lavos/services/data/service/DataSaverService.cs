@@ -12,7 +12,7 @@ sealed partial class DataSaverService
     const float SaveTimer = 0.25f;
 
     double _timer = 0;
-    readonly HashSet<IDataSaver> _dataSavers = new();
+    readonly HashSet<IDataSaver> _dataSavers = [];
 
     #region IDataSaverService
 
