@@ -1,11 +1,12 @@
 using Godot;
+using Godot.Collections;
 
 namespace Lavos.Dependency;
 
 [GlobalClass]
 public sealed partial class ConfigList : Config
 {
-    [Export] Config[] Configs;
+    [Export] Array<Config> Configs;
 
     public override void Configure(IDependencyBinder binder)
     {

@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using Lavos.Dependency;
 using Lavos.Utils;
 
@@ -7,7 +8,7 @@ namespace Lavos.Nodes;
 public sealed partial class OmniNode : NodeSingleton<OmniNode>
 {
     [Export] PackedScene _scene;
-    [Export] Config[] _configs;
+    [Export] Array<Config> _configs;
 
     public override void _EnterTree()
     {
@@ -33,7 +34,7 @@ public sealed partial class OmniNode : NodeSingleton<OmniNode>
 
     void HandleConfigs(DependencyContainer container)
     {
-        if (_configs?.Length > 0)
+        if (_configs?.Count > 0)
         {
             CreateConfigs(container);
             InitializeConfigs(container);

@@ -1,11 +1,12 @@
 using Godot;
+using Godot.Collections;
 using Lavos.Dependency;
 
 namespace Lavos.Services.Data;
 
 public sealed partial class DataSaverConfig : Config
 {
-    [Export] DataSaver[] _dataSavers;
+    [Export] Array<DataSaver> _dataSavers;
 
     public override void Configure(IDependencyBinder binder)
     {
