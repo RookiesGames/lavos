@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace Lavos.Dependency;
@@ -11,9 +12,9 @@ public sealed partial class DependencyContainer
     , IDependencyResolver
 {
     Node _nodes;
-    readonly Dictionary<Type, Type> bindings = [];
-    readonly Dictionary<Type, Type> lookups = [];
-    readonly Dictionary<Type, IService> instances = [];
+    readonly Dictionary<string, Type> bindings = [];
+    readonly Dictionary<string, Type> lookups = [];
+    readonly Dictionary<string, IService> instances = [];
 
     public override void _Ready()
     {
@@ -32,14 +33,14 @@ public sealed partial class DependencyContainer
         Assert.IsTrue(typeof(I).IsInterface, "Only interfaces can be bound from");
         Assert.IsTrue(typeof(C).IsClass, "Only classes can be bound to");
         Assert.IsTrue(typeof(C).IsAssignableTo(typeof(I)), $"Type mismatch - {typeof(C)} does not inherit from {typeof(I)}");
-        Assert.IsFalse(bindings.ContainsKey(typeof(I)), "Binding cannot be duplicated");
+        Assert.IsFalse(bindings.ContainsKey(typeof(I).FullName), "Binding cannot be duplicated");
         //
         DoBind<I, C>();
     }
 
     void DoBind<I, C>()
     {
-        bindings[typeof(I)] = typeof(C);
+        bindings[typeof(I).FullName] = typeof(C);
     }
 
     public void Lookup<I1, I2>() where I2 : I1, IService
@@ -47,13 +48,13 @@ public sealed partial class DependencyContainer
         Assert.IsTrue(typeof(I1).IsInterface, "Only interfaces can be lookup from");
         Assert.IsTrue(typeof(I2).IsInterface, "Only interfaces can be lookup to");
         Assert.IsTrue(typeof(I2).IsAssignableTo(typeof(I1)), $"Type mismatch - {typeof(I2)} does not inherit from {typeof(I1)}");
-        lookups[typeof(I1)] = typeof(I2);
+        lookups[typeof(I1).FullName] = typeof(I2);
     }
 
     public void Instance<I, C>(C instance) where I : IService where C : I
     {
         DoBind<I, C>();
-        AddInstance(typeof(C), (IService)instance);
+        AddInstance(typeof(C), instance);
     }
 
     public void Instance<C>(C instance)
@@ -69,10 +70,9 @@ public sealed partial class DependencyContainer
 
     public IService FindOrCreateType(Type type)
     {
-        if (bindings.ContainsKey(type))
+        if (bindings.TryGetValue(type.FullName, out Type value))
         {
-            var realType = bindings[type];
-            return GetOrCreateInstance(realType);
+            return GetOrCreateInstance(value);
         }
         //
         return LookUpType(type);
@@ -80,19 +80,20 @@ public sealed partial class DependencyContainer
 
     IService GetOrCreateInstance(Type type)
     {
-        if (instances.DoesNotContainKey(type))
+        var key = type.FullName;
+        if (instances.DoesNotContainKey(key))
         {
-            var obj = CreateInstance(type);
-            if (obj is Node node)
+            var service = CreateInstance(type);
+            if (service is Node node)
             {
                 node.Name = type.Name;
                 _nodes.AddChild(node);
             }
             //
-            AddInstance(type, obj);
-            InjectDependencies(obj);
+            AddInstance(type, service);
+            InjectDependencies(service);
         }
-        return instances[type];
+        return instances[key];
     }
 
     static IService CreateInstance(Type type)
@@ -102,7 +103,7 @@ public sealed partial class DependencyContainer
 
     void AddInstance(Type type, IService obj)
     {
-        instances[type] = obj;
+        instances[type.FullName] = obj;
     }
 
     void InjectDependencies(IService obj)
@@ -154,10 +155,9 @@ public sealed partial class DependencyContainer
     {
         Assert.IsTrue(type.IsInterface, "Only interfaces can be looked up for");
         //
-        if (lookups.ContainsKey(type))
+        if (lookups.TryGetValue(type.FullName, out Type value))
         {
-            var lookupType = lookups[type];
-            return FindOrCreateType(lookupType) ?? LookUpType(lookupType);
+            return FindOrCreateType(value) ?? LookUpType(value);
         }
         //
         Assert.Fail($"Failed to lookup type {type}");
