@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Lavos.Utils.Extensions;
@@ -108,7 +109,7 @@ public static class NodeExtensions
         return null;
     }
 
-    public static T AddNode<T>(this Node parent, string name = null) where T : Node
+    public static T AddNode<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] T>(this Node parent, string name = null) where T : Node
     {
         var node = Activator.CreateInstance<T>();
         node.Name = name.IsNotNullOrEmpty() ? name : typeof(T).Name;
@@ -116,7 +117,7 @@ public static class NodeExtensions
         return node;
     }
 
-    public static T AddNode<T>(this Node parent, params object[] args) where T : Node
+    public static T AddNode<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T>(this Node parent, params object[] args) where T : Node
     {
         var node = (T)Activator.CreateInstance(typeof(T), args);
         node.Name = typeof(T).Name;

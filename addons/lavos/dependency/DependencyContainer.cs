@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace Lavos.Dependency;
@@ -77,7 +78,7 @@ public sealed partial class DependencyContainer
         return LookUpType(type);
     }
 
-    IService GetOrCreateInstance(Type type)
+    IService GetOrCreateInstance([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type)
     {
         var key = type.FullName;
         if (instances.DoesNotContainKey(key))
@@ -95,7 +96,7 @@ public sealed partial class DependencyContainer
         return instances[key];
     }
 
-    static IService CreateInstance(Type type)
+    static IService CreateInstance([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type)
     {
         return (IService)Activator.CreateInstance(type);
     }
