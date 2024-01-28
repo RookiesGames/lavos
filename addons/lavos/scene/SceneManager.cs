@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 
 namespace Lavos.Scene;
 
-public sealed partial class SceneManager : Node
+public static class SceneManager
 {
     #region Methods
 
     public static async Task<PackedScene> LoadScene(string path)
     {
-        var scene = await Task.Run<PackedScene>(() => GD.Load<PackedScene>(path));
+        var scene = await Task.Run(() => GD.Load<PackedScene>(path));
         return scene;
     }
 

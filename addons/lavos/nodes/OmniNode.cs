@@ -25,7 +25,6 @@ public sealed partial class OmniNode : NodeSingleton<OmniNode>
         var container = this.AddNode<DependencyContainer>();
         this.AddNode<ServiceLocator>(container);
         this.AddNode<NodeTree>();
-        this.AddNode<SceneManager>();
         //
         HandleConfigs(container);
         //
