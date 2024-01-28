@@ -2,7 +2,7 @@ using System;
 
 namespace Lavos.Core;
 
-public struct LazyBuilder<T> where T : class
+public struct LazyBuilder<T> where T : class, new()
 {
     readonly Func<T> _constructor;
 
