@@ -23,7 +23,6 @@ public sealed partial class OmniNode : NodeSingleton<OmniNode>
     public override void _Ready()
     {
         var container = this.AddNode<DependencyContainer>();
-        this.AddNode<ServiceLocator>(container);
         this.AddNode<NodeTree>();
         //
         HandleConfigs(container);
