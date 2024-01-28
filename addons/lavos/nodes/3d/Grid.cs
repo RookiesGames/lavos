@@ -7,8 +7,7 @@ public sealed partial class Grid : Node3D
 {
     const string KEY_POS = "pos";
 
-    [Export]
-    float _elementSize;
+    [Export] float _elementSize;
 
     int _width;
     int _height;
