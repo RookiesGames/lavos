@@ -6,9 +6,21 @@ public partial class Rotator3D : Node3D
 {
     public enum Axis { X, Y, Z };
     [Export] Axis RotationAxis;
-    [Export(PropertyHint.Range, "0,3,0.1")] double RotationSpeed = 5;
 
-    public int RotationDirection { get; set; } = 1;
+    [Export(PropertyHint.Range, "0,3,0.1")] double RotationSpeed = 2;
+
+    public int RotationDirection { get; set; } = 0;
+
+    public override void _Ready()
+    {
+        if (RotationDirection == 0)
+        {
+            RotationDirection = GD.Randi() % 2 == 0 ? 1 : -1;
+        }
+        //
+        var angle = GD.RandRange(0, 360);
+        RotateY(Mathf.DegToRad(angle));
+    }
 
     public override void _Process(double delta)
     {
