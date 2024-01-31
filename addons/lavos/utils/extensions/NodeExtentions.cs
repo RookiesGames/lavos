@@ -36,6 +36,7 @@ public static class NodeExtensions
     }
 
     public static void GetNodesInChildren<T>(this Node node, HashSet<T> children) where T : Node
+    public static void GetChildrenRecursively<T>(this Node node, HashSet<T> children) where T : Node
     {
         foreach (Node child in node.GetChildren())
         {
@@ -46,7 +47,7 @@ public static class NodeExtensions
             //
             if (child.HasChildren())
             {
-                child.GetNodesInChildren<T>(children);
+                child.GetChildrenRecursively(children);
             }
         }
     }
