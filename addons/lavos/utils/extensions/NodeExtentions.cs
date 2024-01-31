@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Lavos.Utils.Extensions;
@@ -35,7 +34,17 @@ public static class NodeExtensions
         return node.GetChildCount() > 0;
     }
 
-    public static void GetNodesInChildren<T>(this Node node, HashSet<T> children) where T : Node
+    public static void GetChildren<T>(this Node node, HashSet<T> children) where T : Node
+    {
+        foreach (Node child in node.GetChildren())
+        {
+            if (child is T newChild)
+            {
+                children.Add(newChild);
+            }
+        }
+    }
+
     public static void GetChildrenRecursively<T>(this Node node, HashSet<T> children) where T : Node
     {
         foreach (Node child in node.GetChildren())
