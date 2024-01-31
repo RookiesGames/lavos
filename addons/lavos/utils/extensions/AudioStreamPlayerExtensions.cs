@@ -15,7 +15,7 @@ public static class AudioStreamPlayerExtensions
     {
         _volume.Value = value;
         var db = Mathf.Lerp(MinimumDb, MaximimDb, _volume.Value);
-        player.VolumeDb = db <= MinimumDb ? float.MinValue : db;
+        player.VolumeDb = (float)(db <= MinimumDb ? double.MinValue : db);
     }
 
     public static float GetVolume(this AudioStreamPlayer player)
