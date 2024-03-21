@@ -45,6 +45,17 @@ public static class NodeExtensions
         }
     }
 
+    public static void GetChildren<T>(this Node node, List<T> children) where T : Node
+    {
+        for (var idx = 0; idx < node.GetChildCount(); ++idx)
+        {
+            if (node.GetChild(idx) is T newChild)
+            {
+                children.Add(newChild);
+            }
+        }
+    }
+
     public static void GetChildrenRecursively<T>(this Node node, HashSet<T> children) where T : Node
     {
         foreach (Node child in node.GetChildren())
@@ -61,14 +72,14 @@ public static class NodeExtensions
         }
     }
 
-    public static T GetNodeInChildren<T>(this Node node) where T : Node
+    public static T GetNodeInChildrenByType<T>(this Node node) where T : Node
     {
-        var value = node.DoGetNodeInChildren<T>();
+        var value = node.DoGetNodeInChildrenByType<T>();
         Assert.IsTrue(value != null, $"Node of type {typeof(T)} was not found");
         return value;
     }
 
-    static T DoGetNodeInChildren<T>(this Node node) where T : Node
+    static T DoGetNodeInChildrenByType<T>(this Node node) where T : Node
     {
         foreach (Node child in node.GetChildren())
         {
@@ -79,7 +90,7 @@ public static class NodeExtensions
             //
             if (child.HasChildren())
             {
-                var value = child.DoGetNodeInChildren<T>();
+                var value = child.DoGetNodeInChildrenByType<T>();
                 if (value != null)
                 {
                     return value;
@@ -131,6 +142,13 @@ public static class NodeExtensions
     {
         var node = (T)Activator.CreateInstance(typeof(T), args);
         node.Name = typeof(T).Name;
+        parent.AddChild(node);
+        return node;
+    }
+
+    public static T AddNode<T>(this Node parent, PackedScene prefab) where T : Node
+    {
+        var node = prefab.Instantiate<T>();
         parent.AddChild(node);
         return node;
     }
