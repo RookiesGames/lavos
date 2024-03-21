@@ -68,24 +68,38 @@ public sealed partial class MusicManager : Node
     public void ResumeStream() => _source.StreamPaused = false;
     public void PauseStream() => _source.StreamPaused = true;
 
-    public async Task FadeIn(double duration = DefaultFadeDuration)
+    public async Task FadeInAsync(double duration = DefaultFadeDuration)
     {
         var state = new FadeInState(duration);
         _stateMachine.ChangeState(state);
         await Task.Delay((int)(duration * 1000));
     }
 
-    public async Task FadeOut(double duration = DefaultFadeDuration)
+    public Task FadeIn(double duration = DefaultFadeDuration)
+    {
+        var state = new FadeInState(duration);
+        _stateMachine.ChangeState(state);
+        return Task.CompletedTask;
+    }
+
+    public async Task FadeOutAsync(double duration = DefaultFadeDuration)
     {
         var state = new FadeOutState(duration);
         _stateMachine.ChangeState(state);
         await Task.Delay((int)(duration * 1000));
     }
 
+    public Task FadeOut(double duration = DefaultFadeDuration)
+    {
+        var state = new FadeOutState(duration);
+        _stateMachine.ChangeState(state);
+        return Task.CompletedTask;
+    }
+
     public async Task FadeOutAndIn(AudioStream stream, double fadeOutDuration = DefaultFadeDuration, double fadeInDuration = DefaultFadeDuration)
     {
         await FadeOut(fadeOutDuration);
         SetStream(stream);
-        await FadeIn(fadeInDuration);
+        await FadeInAsync(fadeInDuration);
     }
 }

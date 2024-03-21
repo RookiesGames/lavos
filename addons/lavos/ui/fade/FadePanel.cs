@@ -34,15 +34,27 @@ public sealed partial class FadePanel : ColorRect
 
     #endregion
 
-    public async Task FadeIn()
+    public async Task FadeInAsync()
     {
         _stateMachine.ChangeState(_fadeInState);
         await Task.Delay((int)(Config.FadeInDuration * 1000));
     }
 
-    public async Task FadeOut()
+    public Task FadeIn()
+    {
+        _stateMachine.ChangeState(_fadeInState);
+        return Task.CompletedTask;
+    }
+
+    public async Task FadeOutAsync()
     {
         _stateMachine.ChangeState(_fadeOutState);
         await Task.Delay((int)(Config.FadeOutDuration * 1000));
+    }
+
+    public Task FadeOut()
+    {
+        _stateMachine.ChangeState(_fadeOutState);
+        return Task.CompletedTask;
     }
 }
