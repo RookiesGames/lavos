@@ -12,9 +12,9 @@ public sealed partial class DependencyContainer
     , IDependencyResolver
 {
     Node _nodes;
-    readonly Dictionary<string, Type> bindings = [];
-    readonly Dictionary<string, Type> lookups = [];
-    readonly Dictionary<string, IService> instances = [];
+    readonly Dictionary<string, Type> bindings = new();
+    readonly Dictionary<string, Type> lookups = new();
+    readonly Dictionary<string, IService> instances = new();
 
     public override void _Ready()
     {

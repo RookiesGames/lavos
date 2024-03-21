@@ -5,8 +5,8 @@ namespace Lavos.Input;
 
 sealed partial class GamepadInputNode : Node
 {
-    readonly Dictionary<JoyAxis, float> _joystickValues = [];
-    readonly HashSet<JoyButton> _pressedButtons = [];
+    readonly Dictionary<JoyAxis, float> _joystickValues = new();
+    readonly HashSet<JoyButton> _pressedButtons = new();
 
     int DeviceId = -1;
     GamepadDevice _gamepad = GamepadDevice.GamepadNone;

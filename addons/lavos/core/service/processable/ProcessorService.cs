@@ -6,7 +6,7 @@ namespace Lavos.Core;
 
 internal sealed class ProcessorService : IProcessorService
 {
-    HashSet<IProcessable> _processables = [];
+    HashSet<IProcessable> _processables = new();
     public IReadOnlySet<IProcessable> Processables => _processables;
 
     void IProcessorService.Register(IProcessable processable) => _processables.Add(processable);

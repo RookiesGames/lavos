@@ -10,7 +10,7 @@ public sealed partial class NodeTree : NodeSingleton<NodeTree>
 
     const string TAG = nameof(NodeTree);
 
-    readonly static Dictionary<string, Node> _pinnedNodes = [];
+    readonly static Dictionary<string, Node> _pinnedNodes = new();
     static Dictionary<string, Node> PinnedNodes => _pinnedNodes;
 
     #endregion

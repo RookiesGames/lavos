@@ -13,7 +13,7 @@ public sealed partial class SoundManager : Node
 
     public override void _EnterTree()
     {
-        _sources = [];
+        _sources = new();
     }
 
     public override void _Ready()

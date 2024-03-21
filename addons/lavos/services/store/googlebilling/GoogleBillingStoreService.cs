@@ -15,9 +15,9 @@ sealed class GoogleBillingStoreService : IStoreService
     const string PluginName = "GoogleBilling";
     readonly LavosPlugin Plugin;
 
-    List<StoreProduct> _products = [];
-    List<StoreProduct> _subscriptions = [];
-    List<string> _tokens = [];
+    List<StoreProduct> _products = new();
+    List<StoreProduct> _subscriptions = new();
+    List<string> _tokens = new();
 
     public GoogleBillingStoreService()
     {

@@ -12,7 +12,7 @@ sealed partial class DataSaverService
     const float SaveTimer = 0.25f;
 
     double _timer = 0;
-    readonly HashSet<IDataSaver> _dataSavers = [];
+    readonly HashSet<IDataSaver> _dataSavers = new();
 
     #region IDataSaverService
 
@@ -26,7 +26,7 @@ sealed partial class DataSaverService
         _dataSavers.Remove(saver);
     }
 
-    public T GetDataSaver<T>() where T : IDataSaver 
+    public T GetDataSaver<T>() where T : IDataSaver
     {
         foreach (var dataSaver in _dataSavers)
         {

@@ -10,8 +10,8 @@ sealed partial class KeyboardInputHandler
     #region Members
 
     IKeyboardInputConfig _config;
-    readonly HashSet<Key> _pressedKeys = [];
-    readonly HashSet<IKeyboardInputListener> _listeners = [];
+    readonly HashSet<Key> _pressedKeys = new();
+    readonly HashSet<IKeyboardInputListener> _listeners = new();
 
     #endregion
 
