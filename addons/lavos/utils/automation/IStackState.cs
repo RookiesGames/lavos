@@ -1,18 +1,27 @@
-using Lavos.Core;
 using System;
 
 namespace Lavos.Utils.Automation;
 
-public interface IStackState
+public abstract class IStackState
 {
-    StackStatePhase Phase { get; set; }
+    public StackStatePhase Phase { get; set; }
 
-    event Action<IStackState> StatePushed;
-    event Action StatePopped;
+    public event Action<IStackState> StatePushed;
+    public event Action StatePopped;
 
-    void Enter();
-    void Resume();
-    void Update(double delta);
-    void Pause();
-    void Exit();
+    public virtual void Enter() { }
+    public virtual void Resume() { }
+    public virtual void Update(double delta) { }
+    public virtual void Pause() { }
+    public virtual void Exit() { }
+
+    public void PushState(IStackState state)
+    {
+        StatePushed?.Invoke(state);
+    }
+
+    public void PopState()
+    {
+        StatePopped?.Invoke();
+    }
 }
