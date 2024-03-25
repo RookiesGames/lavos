@@ -74,12 +74,19 @@ public static class NodeExtensions
 
     public static T GetNodeInChildrenByType<T>(this Node node) where T : Node
     {
-        var value = node.DoGetNodeInChildrenByType<T>();
+        var value = node.DoGetNodeInChildrenByType<T>(recursive: true);
         Assert.IsTrue(value != null, $"Node of type {typeof(T)} was not found");
         return value;
     }
 
-    static T DoGetNodeInChildrenByType<T>(this Node node) where T : Node
+    public static T GetNodeInDirectChildrenByType<T>(this Node node) where T : Node
+    {
+        var value = node.DoGetNodeInChildrenByType<T>(recursive: false);
+        Assert.IsTrue(value != null, $"Node of type {typeof(T)} was not found");
+        return value;
+    }
+
+    static T DoGetNodeInChildrenByType<T>(this Node node, bool recursive) where T : Node
     {
         foreach (Node child in node.GetChildren())
         {
@@ -88,9 +95,9 @@ public static class NodeExtensions
                 return foundChild;
             }
             //
-            if (child.HasChildren())
+            if (recursive && child.HasChildren())
             {
-                var value = child.DoGetNodeInChildrenByType<T>();
+                var value = child.DoGetNodeInChildrenByType<T>(recursive);
                 if (value != null)
                 {
                     return value;
@@ -103,12 +110,19 @@ public static class NodeExtensions
 
     public static T GetNodeInChildrenByName<T>(this Node node, string name) where T : Node
     {
-        var value = node.DoGetNodeInChildrenByName<T>(name);
+        var value = node.DoGetNodeInChildrenByName<T>(name, recursive: true);
         Assert.IsTrue(value != null, $"Node \"{name}\" was not found");
         return value;
     }
 
-    static T DoGetNodeInChildrenByName<T>(this Node node, string name) where T : Node
+    public static T GetNodeInDirectChildrenByName<T>(this Node node, string name) where T : Node
+    {
+        var value = node.DoGetNodeInChildrenByName<T>(name, recursive: false);
+        Assert.IsTrue(value != null, $"Node \"{name}\" was not found");
+        return value;
+    }
+
+    static T DoGetNodeInChildrenByName<T>(this Node node, string name, bool recursive) where T : Node
     {
         foreach (Node child in node.GetChildren())
         {
@@ -117,9 +131,9 @@ public static class NodeExtensions
                 return (T)child;
             }
             //
-            if (child.HasChildren())
+            if (recursive && child.HasChildren())
             {
-                var value = child.DoGetNodeInChildrenByName<T>(name);
+                var value = child.DoGetNodeInChildrenByName<T>(name, recursive);
                 if (value != null)
                 {
                     return value;
