@@ -29,4 +29,12 @@ public static class DictionaryExtensions
         //
         dic.Add(key, value);
     }
+
+    public static void Merge<T, U>(this Dictionary<T, U> dic, Dictionary<T, U> other)
+    {
+        foreach (var kvp in other)
+        {
+            dic.SetOrAdd(kvp.Key, kvp.Value);
+        }
+    }
 }
