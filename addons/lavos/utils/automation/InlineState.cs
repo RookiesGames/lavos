@@ -17,5 +17,7 @@ public sealed class InlineState : IState
     void IState.Update(double delta) => Process?.Invoke(delta);
     void IState.Exit() => Exit?.Invoke();
 
+    public void ChangeState(IState state) => StateChanged?.Invoke(state);
+
     #endregion
 }
