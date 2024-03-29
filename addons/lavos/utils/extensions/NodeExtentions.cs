@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -32,6 +33,19 @@ public static class NodeExtensions
     public static bool HasChildren(this Node node)
     {
         return node.GetChildCount() > 0;
+    }
+
+    public static Array<T> GetChildren<[MustBeVariant] T>(this Node node) where T : Node
+    {
+        Array<T> array = [];
+        foreach (Node child in node.GetChildren())
+        {
+            if (child is T newChild)
+            {
+                array.Add(newChild);
+            }
+        }
+        return array;
     }
 
     public static void GetChildren<T>(this Node node, HashSet<T> children) where T : Node
