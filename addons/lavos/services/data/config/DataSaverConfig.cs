@@ -6,7 +6,7 @@ namespace Lavos.Services.Data;
 
 public sealed partial class DataSaverConfig : Config
 {
-    [Export] Array<DataSaver> _dataSavers;
+    [Export] DataSaver[] _dataSavers;
 
     public override void Configure(IDependencyBinder binder)
     {

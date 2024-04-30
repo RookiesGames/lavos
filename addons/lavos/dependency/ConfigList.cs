@@ -6,7 +6,7 @@ namespace Lavos.Dependency;
 [GlobalClass]
 public sealed partial class ConfigList : Config
 {
-    [Export] Array<Config> Configs;
+    [Export] Config[] Configs;
 
     public override void Configure(IDependencyBinder binder)
     {

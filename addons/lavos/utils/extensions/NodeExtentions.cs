@@ -35,9 +35,9 @@ public static class NodeExtensions
         return node.GetChildCount() > 0;
     }
 
-    public static Array<T> GetChildren<[MustBeVariant] T>(this Node node) where T : Node
+    public static List<T> GetChildren<[MustBeVariant] T>(this Node node) where T : Node
     {
-        Array<T> array = [];
+        List<T> array = [];
         foreach (Node child in node.GetChildren())
         {
             if (child is T newChild)

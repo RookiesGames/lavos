@@ -8,7 +8,7 @@ namespace Lavos.Nodes;
 public sealed partial class OmniNode : NodeSingleton<OmniNode>
 {
     [Export] PackedScene _scene;
-    [Export] Array<ConfigList> _configs;
+    [Export] ConfigList[] _configs;
 
     public override void _EnterTree()
     {
@@ -32,7 +32,7 @@ public sealed partial class OmniNode : NodeSingleton<OmniNode>
 
     void HandleConfigs(DependencyContainer container)
     {
-        if (_configs?.Count > 0)
+        if (_configs?.Length > 0)
         {
             CreateConfigs(container);
             InitializeConfigs(container);
