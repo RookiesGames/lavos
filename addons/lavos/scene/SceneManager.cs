@@ -33,8 +33,7 @@ public static class SceneManager
     public static Node AddSceneToParent(PackedScene scene, Node parent)
     {
         Assert.IsTrue(scene != null, $"Scene {scene.ResourceName} is nil");
-        var node = scene.Instantiate();
-        parent.AddChild(node);
+        var node = parent.AddNode<Node>(scene);
         return node;
     }
 
