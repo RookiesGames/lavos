@@ -1,7 +1,9 @@
 
+using Lavos.Utils.Automation;
+
 namespace Lavos.UI;
 
-internal abstract class BaseFadeState
+internal abstract class BaseFadeState : State
 {
     #region Members
 

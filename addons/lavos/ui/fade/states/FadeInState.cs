@@ -5,15 +5,13 @@ using System;
 
 namespace Lavos.UI;
 
-internal sealed class FadeInState : BaseFadeState, IState
+internal sealed class FadeInState : BaseFadeState
 {
     public FadeInState(FadePanel panel, double duration) : base(panel, duration) { }
 
-    #region IState
+    #region State
 
-    public event Action<IState> StateChanged;
-
-    void IState.Enter()
+    public override void Enter()
     {
         _timer = 0;
         _panel.SetAlpha(1);
@@ -21,7 +19,7 @@ internal sealed class FadeInState : BaseFadeState, IState
         _panel.Visible = true;
     }
 
-    void IState.Update(double delta)
+    public override void Update(double delta)
     {
         _timer += delta;
         var weight = (float)(_timer / _duration);
@@ -31,11 +29,11 @@ internal sealed class FadeInState : BaseFadeState, IState
         if (alpha <= 0)
         {
             _panel.MouseFilter = Control.MouseFilterEnum.Ignore;
-            StateChanged?.Invoke(null);
+            StateMachine.ChangeState(null);
         }
     }
 
-    void IState.Exit()
+    public override void Exit()
     {
         _panel.Visible = false;
     }

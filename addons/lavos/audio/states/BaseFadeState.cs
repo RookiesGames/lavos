@@ -1,8 +1,9 @@
 using Lavos.Core;
+using Lavos.Utils.Automation;
 
 namespace Lavos.Audio;
 
-internal abstract class BaseFadeState
+internal abstract class BaseFadeState : State
 {
     #region Members
 

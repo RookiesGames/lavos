@@ -5,36 +5,16 @@ using System.Collections.Generic;
 
 namespace Lavos.Utils.Automation;
 
-public sealed class StackStateMachine : IStackStateMachine
+public sealed class StackStateMachine : IProcessable
 {
-    IStackState _pendingState;
-    readonly Stack<IStackState> _stateStack = new();
+    StackState _pendingState;
+    readonly Stack<StackState> _stateStack = new();
 
-    public StackStateMachine(IStackState initialState)
+    public StackState CurrentState => _stateStack.Peek();
+
+    public void Process(double delta)
     {
-        var service = ServiceLocator.Locate<IProcessorService>();
-        service.Register(this);
-        //
-        initialState.Phase = StackStatePhase.Pushing;
-        _stateStack.Push(initialState);
-    }
-
-    void IDisposable.Dispose()
-    {
-        var service = ServiceLocator.Locate<IProcessorService>();
-        service.Unregister(this);
-        //
-        _pendingState = null;
-        _stateStack.Clear();
-    }
-
-    #region IStackStateMachine
-
-    IStackState IStackStateMachine.CurrentState => _stateStack.Peek();
-
-    void IProcessable.Process(double delta)
-    {
-        if (_stateStack.TryPeek(out IStackState peek))
+        if (_stateStack.TryPeek(out StackState peek))
         {
             switch (peek.Phase)
             {
@@ -57,9 +37,6 @@ public sealed class StackStateMachine : IStackStateMachine
                     }
                 case StackStatePhase.Pushing:
                     {
-                        peek.StatePushed += OnStatePushed;
-                        peek.StatePopped += OnStatePopped;
-                        //
                         peek.Phase = StackStatePhase.Resuming;
                         peek.Enter();
                         break;
@@ -100,35 +77,27 @@ public sealed class StackStateMachine : IStackStateMachine
         }
     }
 
-    void IStackStateMachine.PushState(IStackState state)
+    public void PushState(StackState state)
     {
-        OnStatePushed(state);
-    }
-
-    void OnStatePushed(IStackState state)
-    {
-        if (_stateStack.TryPeek(out IStackState peek))
+        _pendingState = state;
+        _pendingState.StateMachine = this;
+        //
+        if (_stateStack.TryPeek(out StackState peek))
         {
             peek.Phase = StackStatePhase.Pausing;
         }
-        //
-        _pendingState = state;
-    }
-
-    void IStackStateMachine.PopState()
-    {
-        OnStatePopped();
-    }
-
-    void OnStatePopped()
-    {
-        if (_stateStack.TryPeek(out IStackState peek))
+        else
         {
-            peek.StatePushed -= OnStatePushed;
-            peek.StatePopped -= OnStatePopped;
-            peek.Phase = StackStatePhase.Popping;
+            _pendingState.Phase = StackStatePhase.Pushing;
+            _stateStack.Push(_pendingState);
         }
     }
 
-    #endregion
+    public void PopState()
+    {
+        if (_stateStack.TryPeek(out StackState peek))
+        {
+            peek.Phase = StackStatePhase.Popping;
+        }
+    }
 }

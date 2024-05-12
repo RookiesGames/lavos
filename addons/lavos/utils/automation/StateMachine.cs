@@ -1,80 +1,28 @@
 using Lavos.Core;
-using Lavos.Dependency;
 using System;
 
 namespace Lavos.Utils.Automation;
 
-public sealed class StateMachine : IStateMachine
+public sealed class StateMachine : IProcessable
 {
-    IState _pendingState;
+    public event Action<State> StateChanged;
 
-    bool _pendingTransition = false;
-    bool HasPendingState => _pendingTransition;
+    public State CurrentState { get; private set; }
 
-    #region IStateMachine
-
-    public event Action<IState> StateChanged;
-
-    IState _state;
-    public IState CurrentState => _state;
-
-    public StateMachine(IState initialState)
+    public void ChangeState(State state)
     {
-        var service = ServiceLocator.Locate<IProcessorService>();
-        service.Register(this);
-        //
-        OnStateChanged(initialState);
-    }
-
-    void IDisposable.Dispose()
-    {
-        var service = ServiceLocator.Locate<IProcessorService>();
-        service.Unregister(this);
-        //
-        StateChanged = null;
-        _state = null;
-    }
-
-    void IStateMachine.ChangeState(IState state)
-    {
-        OnStateChanged(state);
-    }
-
-    void OnStateChanged(IState state)
-    {
-        _pendingState = state;
-        _pendingTransition = true;
-    }
-
-    void IProcessable.Process(double delta)
-    {
-        if (HasPendingState)
+        CurrentState?.Exit();
+        CurrentState = state;
+        if (CurrentState != null)
         {
-            SwitchState();
+            CurrentState.StateMachine = this;
         }
-        _state?.Update(delta);
+        CurrentState?.Enter();
+        StateChanged?.Invoke(CurrentState);
     }
 
-    void SwitchState()
+    public void Process(double delta)
     {
-        if (_state != null)
-        {
-            _state.Exit();
-            _state.StateChanged -= OnStateChanged;
-        }
-        //
-        _state = _pendingState;
-        _pendingState = null;
-        _pendingTransition = false;
-        //
-        if (_state != null)
-        {
-            _state.StateChanged += OnStateChanged;
-            _state.Enter();
-        }
-        //
-        StateChanged?.Invoke(_state);
+        CurrentState?.Update(delta);
     }
-
-    #endregion
 }

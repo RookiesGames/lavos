@@ -5,18 +5,16 @@ using System;
 
 namespace Lavos.Audio;
 
-internal sealed class FadeInState : BaseFadeState, IState
+internal sealed class FadeInState : BaseFadeState
 {
     public FadeInState(double duration) : base()
     {
         Duration = duration;
     }
 
-    #region IState
+    #region State
 
-    public event Action<IState> StateChanged;
-
-    void IState.Enter()
+    public override void Enter()
     {
         _musicManager.Pin.Source.SetVolume(0);
         _musicManager.Pin.Source.Play();
@@ -25,18 +23,18 @@ internal sealed class FadeInState : BaseFadeState, IState
         _timer = 0;
     }
 
-    void IState.Update(double delta)
+    public override void Update(double delta)
     {
         _timer += (delta * _musicManager.Pin.FadeInSpeed);
         var weight = (float)(_timer / Duration);
         _musicManager.Pin.Source.SetVolume(Mathf.Lerp(0, _target, weight));
         if (_musicManager.Pin.Source.GetVolume() >= _target)
         {
-            StateChanged?.Invoke(null);
+            StateMachine.ChangeState(null);
         }
     }
 
-    void IState.Exit()
+    public override void Exit()
     {
         _musicManager.Pin.Source.SetVolume(_target);
     }

@@ -18,7 +18,7 @@ public sealed partial class MusicManager : Node
 
     MasterAudio _masterAudio;
 
-    readonly IStateMachine _stateMachine = new StateMachine(null);
+    readonly StateMachine _stateMachine = new();
     public double FadeInSpeed = 1;
     public double FadeOutSpeed = 1;
     const double DefaultFadeDuration = 1;
@@ -33,8 +33,11 @@ public sealed partial class MusicManager : Node
     {
         MasterAudio.VolumeChanged -= OnVolumeChanged;
         NodeTree.UnpinNodeByType<MusicManager>();
-        //
-        _stateMachine.Dispose();
+    }
+
+    public override void _Process(double delta)
+    {
+        _stateMachine.Process(delta);
     }
 
     void OnVolumeChanged()

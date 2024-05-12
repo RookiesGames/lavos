@@ -9,9 +9,9 @@ public sealed partial class FadePanel : ColorRect
 {
     [Export] FadePanelResource Config;
 
-    readonly IStateMachine _stateMachine = new StateMachine(null);
-    IState _fadeInState;
-    IState _fadeOutState;
+    readonly StateMachine _stateMachine = new();
+    State _fadeInState;
+    State _fadeOutState;
 
     #region Node
 
@@ -29,7 +29,11 @@ public sealed partial class FadePanel : ColorRect
     public override void _ExitTree()
     {
         NodeTree.UnpinNodeByType<FadePanel>();
-        _stateMachine.Dispose();
+    }
+
+    public override void _Process(double delta)
+    {
+        _stateMachine.Process(delta);
     }
 
     #endregion
