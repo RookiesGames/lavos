@@ -7,7 +7,8 @@ namespace Lavos.UI;
 [GlobalClass]
 public sealed partial class FadePanel : ColorRect
 {
-    [Export] FadePanelResource Config;
+    [Export]
+    FadePanelConfig Config;
 
     readonly StateMachine _stateMachine = new();
     State _fadeInState;
@@ -15,14 +16,15 @@ public sealed partial class FadePanel : ColorRect
 
     #region Node
 
-    public override void _Ready()
+    public override void _EnterTree()
     {
-        this.SetAlpha(Config.Faded ? 1f : 0f);
-        Visible = Config.Faded;
-        MouseFilter = Config.Faded ? MouseFilterEnum.Stop : MouseFilterEnum.Ignore;
+        MouseFilter = MouseFilterEnum.Ignore;
+        //
         _fadeInState = new FadeInState(this, Config.FadeInDuration);
         _fadeOutState = new FadeOutState(this, Config.FadeOutDuration);
-        //
+    }
+    public override void _Ready()
+    {
         NodeTree.PinNodeByType<FadePanel>(this);
     }
 
@@ -44,10 +46,9 @@ public sealed partial class FadePanel : ColorRect
         await Task.Delay((int)(Config.FadeInDuration * 1000));
     }
 
-    public Task FadeIn()
+    public void FadeIn()
     {
         _stateMachine.ChangeState(_fadeInState);
-        return Task.CompletedTask;
     }
 
     public async Task FadeOutAsync()
@@ -56,9 +57,8 @@ public sealed partial class FadePanel : ColorRect
         await Task.Delay((int)(Config.FadeOutDuration * 1000));
     }
 
-    public Task FadeOut()
+    public void FadeOut()
     {
         _stateMachine.ChangeState(_fadeOutState);
-        return Task.CompletedTask;
     }
 }

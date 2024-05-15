@@ -1,7 +1,6 @@
+
 using Godot;
-using Lavos.Core;
 using Lavos.Utils.Automation;
-using System;
 
 namespace Lavos.UI;
 
@@ -22,8 +21,8 @@ internal sealed class FadeInState : BaseFadeState
     public override void Update(double delta)
     {
         _timer += delta;
-        var weight = (float)(_timer / _duration);
-        var alpha = Mathf.Lerp(1, 0, weight);
+        //
+        var alpha = (float)Mathf.Lerp(1.0, 0.0, _timer / _duration);
         _panel.SetAlpha(alpha);
         //
         if (alpha <= 0)
