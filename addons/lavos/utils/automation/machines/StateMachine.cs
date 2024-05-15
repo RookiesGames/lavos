@@ -1,13 +1,15 @@
 using Lavos.Core;
-using System;
 
 namespace Lavos.Utils.Automation;
 
 public sealed class StateMachine : IProcessable
 {
-    public event Action<State> StateChanged;
-
     public State CurrentState { get; private set; }
+
+    public void ChangeState<T>() where T : State, new()
+    {
+        ChangeState(new T());
+    }
 
     public void ChangeState(State state)
     {
@@ -18,7 +20,6 @@ public sealed class StateMachine : IProcessable
             CurrentState.StateMachine = this;
         }
         CurrentState?.Enter();
-        StateChanged?.Invoke(CurrentState);
     }
 
     public void Process(double delta)

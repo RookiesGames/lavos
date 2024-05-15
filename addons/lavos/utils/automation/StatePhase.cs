@@ -1,7 +1,7 @@
 
 namespace Lavos.Utils.Automation;
 
-public enum StackStatePhase
+public enum StatePhase
 {
     Popped,
     Exiting,

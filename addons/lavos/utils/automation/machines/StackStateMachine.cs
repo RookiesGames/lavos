@@ -1,6 +1,4 @@
 using Lavos.Core;
-using Lavos.Dependency;
-using System;
 using System.Collections.Generic;
 
 namespace Lavos.Utils.Automation;
@@ -18,63 +16,68 @@ public sealed class StackStateMachine : IProcessable
         {
             switch (peek.Phase)
             {
-                case StackStatePhase.Popped:
+                case StatePhase.Popped:
                     {
                         _stateStack.Pop();
                         break;
                     }
-                case StackStatePhase.Exiting:
+                case StatePhase.Exiting:
                     {
-                        peek.Phase = StackStatePhase.Popped;
+                        peek.Phase = StatePhase.Popped;
                         peek.Exit();
                         break;
                     }
-                case StackStatePhase.Popping:
+                case StatePhase.Popping:
                     {
-                        peek.Phase = StackStatePhase.Exiting;
+                        peek.Phase = StatePhase.Exiting;
                         peek.Pause();
                         break;
                     }
-                case StackStatePhase.Pushing:
+                case StatePhase.Pushing:
                     {
-                        peek.Phase = StackStatePhase.Resuming;
+                        peek.Phase = StatePhase.Resuming;
                         peek.Enter();
                         break;
                     }
-                case StackStatePhase.Resuming:
+                case StatePhase.Resuming:
                     {
-                        peek.Phase = StackStatePhase.Running;
+                        peek.Phase = StatePhase.Running;
                         peek.Resume();
                         break;
                     }
-                case StackStatePhase.Running:
+                case StatePhase.Running:
                     {
                         peek.Update(delta);
                         break;
                     }
-                case StackStatePhase.Pausing:
+                case StatePhase.Pausing:
                     {
-                        peek.Phase = StackStatePhase.Paused;
+                        peek.Phase = StatePhase.Paused;
                         peek.Pause();
                         break;
                     }
-                case StackStatePhase.Paused:
+                case StatePhase.Paused:
                     {
                         if (_pendingState != null)
                         {
-                            _pendingState.Phase = StackStatePhase.Pushing;
+                            _pendingState.Phase = StatePhase.Pushing;
                             _stateStack.Push(_pendingState);
                             //
                             _pendingState = null;
                         }
                         else
                         {
-                            peek.Phase = StackStatePhase.Resuming;
+                            peek.Phase = StatePhase.Resuming;
                         }
                         break;
                     }
             }
         }
+    }
+
+    public void PushState<T>() where T : StackState, new()
+    {
+        PushState(new T());
     }
 
     public void PushState(StackState state)
@@ -84,11 +87,11 @@ public sealed class StackStateMachine : IProcessable
         //
         if (_stateStack.TryPeek(out StackState peek))
         {
-            peek.Phase = StackStatePhase.Pausing;
+            peek.Phase = StatePhase.Pausing;
         }
         else
         {
-            _pendingState.Phase = StackStatePhase.Pushing;
+            _pendingState.Phase = StatePhase.Pushing;
             _stateStack.Push(_pendingState);
         }
     }
@@ -97,7 +100,7 @@ public sealed class StackStateMachine : IProcessable
     {
         if (_stateStack.TryPeek(out StackState peek))
         {
-            peek.Phase = StackStatePhase.Popping;
+            peek.Phase = StatePhase.Popping;
         }
     }
 }
