@@ -1,24 +1,21 @@
+
 using Godot;
+using System.Threading.Tasks;
+using Lavos.Input;
 
 namespace Lavos.Scene;
 
 public sealed partial class SceneLoader : Node
 {
-    [Export] PackedScene _nextScene;
-    [Export] double _delay = 0;
+    [Export]
+    PackedScene _nextScene;
 
-    double _currentTime;
+    [Export]
+    double _delay = 0;
 
-    #region Node
-
-    public override void _Process(double delta)
+    public async Task ChangeScene()
     {
-        _currentTime += delta;
-        if (_currentTime >= _delay)
-        {
-            SceneManager.ChangeScene(_nextScene);
-        }
+        await Task.Delay((int)(_delay * 1000));
+        SceneManager.ChangeScene(_nextScene);
     }
-
-    #endregion
 }
