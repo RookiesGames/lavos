@@ -5,15 +5,15 @@ namespace Lavos.Input;
 [Flags]
 public enum GamepadDevice : uint
 {
-    GamepadNone = 0,
-    Gamepad1 = 1 << 0,
-    Gamepad2 = 1 << 1,
-    Gamepad3 = 1 << 2,
-    Gamepad4 = 1 << 3,
-    Gamepad5 = 1 << 4,
-    Gamepad6 = 1 << 5,
-    Gamepad7 = 1 << 6,
-    Gamepad8 = 1 << 7,
+    GamepadNone = 1 << 0,
+    Gamepad1 = 1 << 1,
+    Gamepad2 = 1 << 2,
+    Gamepad3 = 1 << 3,
+    Gamepad4 = 1 << 4,
+    Gamepad5 = 1 << 5,
+    Gamepad6 = 1 << 6,
+    Gamepad7 = 1 << 7,
+    Gamepad8 = 1 << 8,
     GamepadAll = Gamepad1 | Gamepad2 | Gamepad3 | Gamepad4 | Gamepad5 | Gamepad6 | Gamepad7 | Gamepad8,
 }
 

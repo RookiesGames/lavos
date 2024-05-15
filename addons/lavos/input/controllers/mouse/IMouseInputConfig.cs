@@ -5,6 +5,5 @@ namespace Lavos.Input;
 
 public interface IMouseInputConfig : IInputConfig
 {
-    IReadOnlyCollection<Godot.MouseButton> Buttons { get; }
-    InputAction GetAction(Godot.MouseButton button);
+    InputAction GetAction(MouseButton button);
 }
