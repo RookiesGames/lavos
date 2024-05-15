@@ -1,16 +1,18 @@
 using Godot;
+using System;
 using System.Diagnostics;
 
 namespace Lavos.Console;
 
 public static class Log
 {
+    static String Time => DateTime.Now.ToString("HH:mm:ss");
     #region Debug
 
     [Conditional("DEBUG")]
     public static void Debug<T>(string tag, T message)
     {
-        GD.Print($"[Lavos] | [DEBUG] {tag} | {message}");
+        GD.Print($"{Time} - [Lavos] | [DEBUG] {tag} | {message}");
     }
 
     [Conditional("DEBUG")]
@@ -25,7 +27,7 @@ public static class Log
 
     public static void Info<T>(string tag, T message)
     {
-        GD.Print($"[Lavos] | [INFO] {tag} | {message}");
+        GD.Print($"{Time} - [Lavos] | [INFO] {tag} | {message}");
     }
 
     public static void Info<T>(T message)
@@ -39,7 +41,7 @@ public static class Log
 
     public static void Warn<T>(string tag, T message)
     {
-        GD.PushWarning($"[Lavos] | [WARNING] {tag} | {message}");
+        GD.PushWarning($"{Time} - [Lavos] | [WARNING] {tag} | {message}");
     }
 
     public static void Warn<T>(T message)
@@ -53,7 +55,7 @@ public static class Log
 
     public static void Error<T>(string tag, T message)
     {
-        GD.Print($"[Lavos] | [ERROR] {tag} | {message}");
+        GD.Print($"{Time} - [Lavos] | [ERROR] {tag} | {message}");
     }
 
     public static void Error<T>(T message)
