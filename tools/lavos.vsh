@@ -77,7 +77,6 @@ fn cmd_clean(cmd cli.Command) ! {
 	println('~> Cleaning project...')
 	remove_symlink('${path}/${symlink_script_templates}')!
 	remove_symlink('${path}/addons/${symlink_rookies}')!
-	remove_symlink('${path}/android/plugins')!
 	// remove_symlink('$path/ios/plugins')!
 	println('~> Cleaning complete!')
 }
@@ -116,11 +115,6 @@ fn cmd_link(cmd cli.Command) ! {
 	create_symlink('${lavoswd}/lavos/addons', '${path}/addons/${symlink_rookies}')!
 	// script templates (BROKEN as of Godot 4.1.1)
 	// create_symlink('${lavoswd}/lavos/${symlink_script_templates}', '${path}/${symlink_script_templates}')!
-	// plugins
-	create_path('${path}/android')!
-	create_symlink('${lavoswd}/lavos/plugins/android/godot', '${path}/android/plugins')!
-	// create_path('$path/ios')!
-	// create_symlink('$lavoswd/lavos/plugins/ios/godot', '$path/ios/plugins')!
 	//
 	println('~> Links created!')
 }
