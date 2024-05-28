@@ -48,10 +48,10 @@ public sealed partial class GenericPopup
 
     public override void _EnterTree()
     {
-        _titleLabel = this.GetNodeInChildrenByName<Label>("TitleLabel");
-        _descriptionLabel = this.GetNodeInChildrenByName<Label>("DescriptionLabel");
-        _acceptBtn = this.GetNodeInChildrenByName<Button>("AcceptButton");
-        _declineBtn = this.GetNodeInChildrenByName<Button>("DeclineButton");
+        _titleLabel = this.GetNodeInTreeByName<Label>("TitleLabel");
+        _descriptionLabel = this.GetNodeInTreeByName<Label>("DescriptionLabel");
+        _acceptBtn = this.GetNodeInTreeByName<Button>("AcceptButton");
+        _declineBtn = this.GetNodeInTreeByName<Button>("DeclineButton");
     }
 
     public override void _Ready()

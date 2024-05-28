@@ -10,5 +10,5 @@ public struct LazyNode<T> where T : Node
 
     Node _parent = null;
     T _instance;
-    public T Node => _instance ??= _parent.GetNodeInChildrenByType<T>();
+    public T Node => _instance ??= _parent.GetNodeInTreeByType<T>();
 }

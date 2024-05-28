@@ -34,20 +34,16 @@ public static class NodeExtensions
         return node.GetChildCount() > 0;
     }
 
-    public static List<T> GetChildren<[MustBeVariant] T>(this Node node) where T : Node
+    #region GetChildren
+
+    public static List<T> GetChildren<T>(this Node node) where T : Node
     {
         List<T> array = [];
-        foreach (Node child in node.GetChildren())
-        {
-            if (child is T newChild)
-            {
-                array.Add(newChild);
-            }
-        }
+        node.GetChildren(array);
         return array;
     }
 
-    public static void GetChildren<T>(this Node node, HashSet<T> children) where T : Node
+    public static void GetChildren<T>(this Node node, ICollection<T> children) where T : Node
     {
         foreach (Node child in node.GetChildren())
         {
@@ -58,48 +54,41 @@ public static class NodeExtensions
         }
     }
 
-    public static void GetChildren<T>(this Node node, List<T> children) where T : Node
+    #endregion GetChildren
+
+    #region GetChildrenInTree
+
+    public static void GetChildrenInTreeByType<T>(this Node node, ICollection<T> children) where T : Node
     {
-        for (var idx = 0; idx < node.GetChildCount(); ++idx)
-        {
-            if (node.GetChild(idx) is T newChild)
-            {
-                children.Add(newChild);
-            }
-        }
+        node.DoGetChildrenInTree((child) => child is T, children);
     }
 
-    public static void GetChildrenRecursively<T>(this Node node, HashSet<T> children) where T : Node
+    public static void GetChildrenInTreeByName<T>(this Node node, string name, ICollection<T> children) where T : Node
+    {
+        node.DoGetChildrenInTree((child) => child.Name == name && child is T, children);
+    }
+
+    static void DoGetChildrenInTree<T>(this Node node, Func<Node, bool> predicate, ICollection<T> children) where T : Node
     {
         foreach (Node child in node.GetChildren())
         {
-            if (child is T newChild)
+            if (predicate(child))
             {
-                children.Add(newChild);
+                children.Add(child as T);
             }
             //
             if (child.HasChildren())
             {
-                child.GetChildrenRecursively(children);
+                child.DoGetChildrenInTree(predicate, children);
             }
         }
     }
 
-    public static T GetNodeInChildrenByType<T>(this Node node) where T : Node
-    {
-        var value = node.DoGetNodeInChildrenByType<T>(recursive: true);
-        Assert.IsTrue(value != null, $"Node of type {typeof(T)} was not found");
-        return value;
-    }
+    #endregion GetChildrenInTree
 
-    public static T GetNodeInDirectChildrenByType<T>(this Node node) where T : Node
-    {
-        var value = node.DoGetNodeInChildrenByType<T>(recursive: false);
-        Assert.IsTrue(value != null, $"Node of type {typeof(T)} was not found");
-        return value;
-    }
+    #region GetNodeInTree
 
-    static T DoGetNodeInChildrenByType<T>(this Node node, bool recursive) where T : Node
+    public static T GetNodeInTreeByType<T>(this Node node) where T : Node
     {
         foreach (Node child in node.GetChildren())
         {
@@ -108,34 +97,20 @@ public static class NodeExtensions
                 return foundChild;
             }
             //
-            if (recursive && child.HasChildren())
+            if (child.HasChildren())
             {
-                var value = child.DoGetNodeInChildrenByType<T>(recursive);
+                var value = child.GetNodeInTreeByType<T>();
                 if (value != null)
                 {
                     return value;
                 }
             }
         }
-
+        //
         return null;
     }
 
-    public static T GetNodeInChildrenByName<T>(this Node node, string name) where T : Node
-    {
-        var value = node.DoGetNodeInChildrenByName<T>(name, recursive: true);
-        Assert.IsTrue(value != null, $"Node \"{name}\" was not found");
-        return value;
-    }
-
-    public static T GetNodeInDirectChildrenByName<T>(this Node node, string name) where T : Node
-    {
-        var value = node.DoGetNodeInChildrenByName<T>(name, recursive: false);
-        Assert.IsTrue(value != null, $"Node \"{name}\" was not found");
-        return value;
-    }
-
-    static T DoGetNodeInChildrenByName<T>(this Node node, string name, bool recursive) where T : Node
+    public static T GetNodeInTreeByName<T>(this Node node, string name) where T : Node
     {
         foreach (Node child in node.GetChildren())
         {
@@ -144,18 +119,54 @@ public static class NodeExtensions
                 return (T)child;
             }
             //
-            if (recursive && child.HasChildren())
+            if (child.HasChildren())
             {
-                var value = child.DoGetNodeInChildrenByName<T>(name, recursive);
+                var value = child.GetNodeInTreeByName<T>(name);
                 if (value != null)
                 {
                     return value;
                 }
             }
         }
-
+        //
         return null;
     }
+
+    #endregion GetNodeInTree
+
+    #region GetNodeInChildren
+
+    public static T GetNodeInChildrenByType<T>(this Node node) where T : Node
+    {
+        foreach (Node child in node.GetChildren())
+        {
+            if (child is T foundChild)
+            {
+                return foundChild;
+            }
+        }
+
+        Assert.Fail($"Node of type {typeof(T)} was not found");
+        return null;
+    }
+
+    public static T GetNodeInChildrenByName<T>(this Node node, string name) where T : Node
+    {
+        foreach (Node child in node.GetChildren())
+        {
+            if (child.Name == name && child is T foundChild)
+            {
+                return foundChild;
+            }
+        }
+
+        Assert.Fail($"Node \"{name}\" was not found");
+        return null;
+    }
+
+    #endregion GetNodeInChildren
+
+    #region AddNode
 
     public static T AddNode<T>(this Node parent, string name = null) where T : Node
     {
@@ -179,6 +190,10 @@ public static class NodeExtensions
         parent.AddChild(node);
         return node;
     }
+
+    #endregion AddNode
+
+    #region Remove
 
     public static void RemoveSelf(this Node node)
     {
@@ -220,4 +235,6 @@ public static class NodeExtensions
             child.RemoveSelf();
         }
     }
+
+    #endregion Remove
 }
