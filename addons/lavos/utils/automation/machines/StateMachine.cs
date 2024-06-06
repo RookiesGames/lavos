@@ -20,6 +20,7 @@ public sealed class StateMachine : IProcessable
             CurrentState.StateMachine = this;
         }
         CurrentState?.Enter();
+
     }
 
     public void Process(double delta)

@@ -1,5 +1,6 @@
 using Godot;
 using Lavos.Utils.Automation;
+using System;
 using System.Threading.Tasks;
 
 namespace Lavos.UI;
@@ -11,8 +12,8 @@ public sealed partial class FadePanel : ColorRect
     FadePanelConfig Config;
 
     readonly StateMachine _stateMachine = new();
-    State _fadeInState;
-    State _fadeOutState;
+    FadeInState _fadeInState;
+    FadeOutState _fadeOutState;
 
     #region Node
 
@@ -46,8 +47,10 @@ public sealed partial class FadePanel : ColorRect
         await Task.Delay((int)(Config.FadeInDuration * 1000));
     }
 
-    public void FadeIn()
+    public void FadeIn(Action onCompleted = null)
     {
+        _fadeInState.FadeInCompleted += onCompleted;
+        Log.Debug(_stateMachine.CurrentState);
         _stateMachine.ChangeState(_fadeInState);
     }
 
@@ -57,8 +60,10 @@ public sealed partial class FadePanel : ColorRect
         await Task.Delay((int)(Config.FadeOutDuration * 1000));
     }
 
-    public void FadeOut()
+    public void FadeOut(Action onCompleted = null)
     {
+        _fadeOutState.FadeOutCompleted += onCompleted;
+        Log.Debug(_stateMachine.CurrentState);
         _stateMachine.ChangeState(_fadeOutState);
     }
 }

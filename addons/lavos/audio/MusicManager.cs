@@ -52,16 +52,16 @@ public sealed partial class MusicManager : Node
         OnVolumeChanged();
     }
 
-    public Task PlayStream(AudioStream stream, Effect effect = Effect.Instant)
+    public void PlayStream(AudioStream stream, Effect effect = Effect.Instant)
     {
         _source.Stream = stream;
         //
         switch (effect)
         {
-            case Effect.Instant: PlayStream(); return Task.CompletedTask;
-            case Effect.FadeIn: return FadeIn();
-            case Effect.FadeOut: return FadeOut();
-            default: return Task.CompletedTask;
+            case Effect.Instant: PlayStream(); break;
+            case Effect.FadeIn: FadeIn(); break;
+            case Effect.FadeOut: FadeOut(); break;
+            default: break;
         }
     }
 
@@ -78,11 +78,10 @@ public sealed partial class MusicManager : Node
         await Task.Delay((int)(duration * 1000));
     }
 
-    public Task FadeIn(double duration = DefaultFadeDuration)
+    public void FadeIn(double duration = DefaultFadeDuration)
     {
         var state = new FadeInState(duration);
         _stateMachine.ChangeState(state);
-        return Task.CompletedTask;
     }
 
     public async Task FadeOutAsync(double duration = DefaultFadeDuration)
@@ -92,16 +91,15 @@ public sealed partial class MusicManager : Node
         await Task.Delay((int)(duration * 1000));
     }
 
-    public Task FadeOut(double duration = DefaultFadeDuration)
+    public void FadeOut(double duration = DefaultFadeDuration)
     {
         var state = new FadeOutState(duration);
         _stateMachine.ChangeState(state);
-        return Task.CompletedTask;
     }
 
     public async Task FadeOutAndIn(AudioStream stream, double fadeOutDuration = DefaultFadeDuration, double fadeInDuration = DefaultFadeDuration)
     {
-        await FadeOut(fadeOutDuration);
+        await FadeOutAsync(fadeOutDuration);
         SetStream(stream);
         await FadeInAsync(fadeInDuration);
     }

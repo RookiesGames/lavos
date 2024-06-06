@@ -7,15 +7,27 @@ public static class SceneManager
 {
     #region Methods
 
-    public static async Task<PackedScene> LoadScene(string path)
+    public static async Task<PackedScene> LoadSceneAsync(string path)
     {
         var scene = await Task.Run(() => GD.Load<PackedScene>(path));
         return scene;
     }
 
+    public static PackedScene LoadScene(string path)
+    {
+        var scene = GD.Load<PackedScene>(path);
+        return scene;
+    }
+
     public static async Task ChangeSceneAsync(string path)
     {
-        var scene = await LoadScene(path);
+        var scene = await LoadSceneAsync(path);
+        ChangeScene(scene);
+    }
+
+    public static void ChangeScene(string path)
+    {
+        var scene = LoadScene(path);
         ChangeScene(scene);
     }
 

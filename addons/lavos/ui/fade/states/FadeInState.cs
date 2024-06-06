@@ -1,11 +1,14 @@
 
 using Godot;
+using System;
 using Lavos.Utils.Automation;
 
 namespace Lavos.UI;
 
 internal sealed class FadeInState : BaseFadeState
 {
+    public event Action FadeInCompleted;
+
     public FadeInState(FadePanel panel, double duration) : base(panel, duration) { }
 
     #region State
@@ -34,6 +37,11 @@ internal sealed class FadeInState : BaseFadeState
 
     public override void Exit()
     {
+        Log.Debug("1");
+        FadeInCompleted?.Invoke();
+        Log.Debug("2");
+        FadeInCompleted = null;
+        //
         _panel.Visible = false;
     }
 
