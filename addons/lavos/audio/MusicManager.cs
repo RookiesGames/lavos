@@ -18,13 +18,18 @@ public sealed partial class MusicManager : Node
 
     MasterAudio _masterAudio;
 
-    readonly StateMachine _stateMachine = new();
+    readonly PersistentStateMachine _stateMachine = new();
     public double FadeInSpeed = 1;
     public double FadeOutSpeed = 1;
     const double DefaultFadeDuration = 1;
 
     public override void _EnterTree()
     {
+        _stateMachine.AddState<FadeIdleState>();
+        _stateMachine.AddState<FadeInState>();
+        _stateMachine.AddState<FadeOutState>();
+        _stateMachine.GoToState<FadeIdleState>();
+        //
         NodeTree.PinNodeByType<MusicManager>(this);
         MasterAudio.VolumeChanged += OnVolumeChanged;
     }
@@ -73,28 +78,28 @@ public sealed partial class MusicManager : Node
 
     public async Task FadeInAsync(double duration = DefaultFadeDuration)
     {
-        var state = new FadeInState(duration);
-        _stateMachine.ChangeState(state);
+        _stateMachine.GetState<FadeInState>().Duration = duration;
+        _stateMachine.GoToState<FadeInState>();
         await Task.Delay((int)(duration * 1000));
     }
 
     public void FadeIn(double duration = DefaultFadeDuration)
     {
-        var state = new FadeInState(duration);
-        _stateMachine.ChangeState(state);
+        _stateMachine.GetState<FadeInState>().Duration = duration;
+        _stateMachine.GoToState<FadeInState>();
     }
 
     public async Task FadeOutAsync(double duration = DefaultFadeDuration)
     {
-        var state = new FadeOutState(duration);
-        _stateMachine.ChangeState(state);
+        _stateMachine.GetState<FadeOutState>().Duration = duration;
+        _stateMachine.GoToState<FadeOutState>();
         await Task.Delay((int)(duration * 1000));
     }
 
     public void FadeOut(double duration = DefaultFadeDuration)
     {
-        var state = new FadeOutState(duration);
-        _stateMachine.ChangeState(state);
+        _stateMachine.GetState<FadeOutState>().Duration = duration;
+        _stateMachine.GoToState<FadeOutState>();
     }
 
     public async Task FadeOutAndIn(AudioStream stream, double fadeOutDuration = DefaultFadeDuration, double fadeInDuration = DefaultFadeDuration)

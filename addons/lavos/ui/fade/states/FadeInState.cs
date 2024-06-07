@@ -31,15 +31,13 @@ internal sealed class FadeInState : BaseFadeState
         if (alpha <= 0)
         {
             _panel.MouseFilter = Control.MouseFilterEnum.Ignore;
-            StateMachine.ChangeState(null);
+            StateMachine.GoToState<FadeIdleState>();
         }
     }
 
     public override void Exit()
     {
-        Log.Debug("1");
         FadeInCompleted?.Invoke();
-        Log.Debug("2");
         FadeInCompleted = null;
         //
         _panel.Visible = false;

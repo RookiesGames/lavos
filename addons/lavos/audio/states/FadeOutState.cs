@@ -1,17 +1,9 @@
 using Godot;
-using Lavos.Core;
-using Lavos.Utils.Automation;
-using System;
 
 namespace Lavos.Audio;
 
 internal sealed class FadeOutState : BaseFadeState
 {
-    public FadeOutState(double duration) : base()
-    {
-        Duration = duration;
-    }
-
     #region State
 
     public override void Enter()
@@ -27,7 +19,7 @@ internal sealed class FadeOutState : BaseFadeState
         _musicManager.Pin.Source.SetVolume(Mathf.Lerp(0, _target, weight));
         if (_musicManager.Pin.Source.GetVolume() == 0)
         {
-            StateMachine.ChangeState(null);
+            StateMachine.GoToState<FadeIdleState>();
         }
     }
 

@@ -11,9 +11,7 @@ public sealed partial class FadePanel : ColorRect
     [Export]
     FadePanelConfig Config;
 
-    readonly StateMachine _stateMachine = new();
-    FadeInState _fadeInState;
-    FadeOutState _fadeOutState;
+    readonly PersistentStateMachine _stateMachine = new();
 
     #region Node
 
@@ -21,8 +19,10 @@ public sealed partial class FadePanel : ColorRect
     {
         MouseFilter = MouseFilterEnum.Ignore;
         //
-        _fadeInState = new FadeInState(this, Config.FadeInDuration);
-        _fadeOutState = new FadeOutState(this, Config.FadeOutDuration);
+        _stateMachine.AddState(new FadeIdleState());
+        _stateMachine.AddState(new FadeInState(this, Config.FadeInDuration));
+        _stateMachine.AddState(new FadeOutState(this, Config.FadeOutDuration));
+        _stateMachine.GoToState<FadeIdleState>();
     }
     public override void _Ready()
     {
@@ -43,27 +43,25 @@ public sealed partial class FadePanel : ColorRect
 
     public async Task FadeInAsync()
     {
-        _stateMachine.ChangeState(_fadeInState);
+        _stateMachine.GoToState<FadeInState>();
         await Task.Delay((int)(Config.FadeInDuration * 1000));
     }
 
     public void FadeIn(Action onCompleted = null)
     {
-        _fadeInState.FadeInCompleted += onCompleted;
-        Log.Debug(_stateMachine.CurrentState);
-        _stateMachine.ChangeState(_fadeInState);
+        _stateMachine.GetState<FadeInState>().FadeInCompleted += onCompleted;
+        _stateMachine.GoToState<FadeInState>();
     }
 
     public async Task FadeOutAsync()
     {
-        _stateMachine.ChangeState(_fadeOutState);
+        _stateMachine.GoToState<FadeOutState>();
         await Task.Delay((int)(Config.FadeOutDuration * 1000));
     }
 
     public void FadeOut(Action onCompleted = null)
     {
-        _fadeOutState.FadeOutCompleted += onCompleted;
-        Log.Debug(_stateMachine.CurrentState);
-        _stateMachine.ChangeState(_fadeOutState);
+        _stateMachine.GetState<FadeOutState>().FadeOutCompleted += onCompleted;
+        _stateMachine.GoToState<FadeOutState>();
     }
 }

@@ -1,6 +1,5 @@
 
 using Godot;
-using Lavos.Utils.Automation;
 using System;
 
 namespace Lavos.UI;
@@ -28,19 +27,16 @@ internal sealed class FadeOutState : BaseFadeState
         var alpha = (float)Mathf.Lerp(0.0, 1.0, _timer / _duration);
         _panel.SetAlpha(alpha);
         //
-        Log.Debug(alpha);
         if (alpha >= 1)
         {
             _panel.MouseFilter = Control.MouseFilterEnum.Stop;
-            StateMachine.ChangeState(null);
+            StateMachine.GoToState<FadeIdleState>();
         }
     }
 
     public override void Exit()
     {
-        Log.Debug("3");
         FadeOutCompleted?.Invoke();
-        Log.Debug("4");
         FadeOutCompleted = null;
         //
         _panel.Visible = true;

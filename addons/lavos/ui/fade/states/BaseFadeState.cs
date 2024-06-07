@@ -3,7 +3,7 @@ using Lavos.Utils.Automation;
 
 namespace Lavos.UI;
 
-internal abstract class BaseFadeState : State
+internal abstract class BaseFadeState : PersistentState
 {
     protected double _timer = 0;
     protected readonly double _duration = 0;

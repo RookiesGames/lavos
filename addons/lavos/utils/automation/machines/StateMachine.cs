@@ -5,6 +5,7 @@ namespace Lavos.Utils.Automation;
 public sealed class StateMachine : IProcessable
 {
     public State CurrentState { get; private set; }
+    public State PendingState { get; private set; }
 
     public void ChangeState<T>() where T : State, new()
     {
@@ -13,18 +14,29 @@ public sealed class StateMachine : IProcessable
 
     public void ChangeState(State state)
     {
+        PendingState = state;
+    }
+
+    public void Process(double delta)
+    {
+        if (PendingState != null)
+        {
+            SwitchState();
+        }
+        CurrentState?.Update(delta);
+    }
+
+    void SwitchState()
+    {
         CurrentState?.Exit();
-        CurrentState = state;
+        //
+        CurrentState = PendingState;
+        PendingState = null;
+        //
         if (CurrentState != null)
         {
             CurrentState.StateMachine = this;
         }
         CurrentState?.Enter();
-
-    }
-
-    public void Process(double delta)
-    {
-        CurrentState?.Update(delta);
     }
 }

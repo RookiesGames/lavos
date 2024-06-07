@@ -11,6 +11,20 @@ public sealed class PersistentStateMachine : IProcessable
     List<PersistentState> _states = new();
 
     public PersistentState CurrentState { get; private set; }
+    public PersistentState PendingState { get; private set; }
+
+    public T GetState<T>() where T : PersistentState
+    {
+        foreach (var state in _states)
+        {
+            if (state is T foundState)
+            {
+                return foundState;
+            }
+        }
+
+        return null;
+    }
 
     public void AddState<T>() where T : PersistentState, new()
     {
@@ -59,18 +73,23 @@ public sealed class PersistentStateMachine : IProcessable
             return;
         }
         //
-        SwitchState(state);
+        PendingState = state;
     }
 
-    void SwitchState(PersistentState state)
+    void SwitchState()
     {
         CurrentState?.Exit();
-        CurrentState = state;
+        CurrentState = PendingState;
+        PendingState = null;
         CurrentState?.Enter();
     }
 
     public void Process(double delta)
     {
+        if (PendingState != null)
+        {
+            SwitchState();
+        }
         CurrentState?.Update(delta);
     }
 }

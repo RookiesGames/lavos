@@ -3,7 +3,7 @@ using Lavos.Utils.Automation;
 
 namespace Lavos.Audio;
 
-internal abstract class BaseFadeState : State
+internal abstract class BaseFadeState : PersistentState
 {
     #region Members
 
