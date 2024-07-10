@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Lavos.Nodes.Camera;
+namespace Lavos.Nodes.Nodes3D;
 
 [GlobalClass]
 public partial class CameraConfig : Resource
