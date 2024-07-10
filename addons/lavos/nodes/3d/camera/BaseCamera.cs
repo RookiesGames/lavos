@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Lavos.Nodes.Camera;
+namespace Lavos.Nodes.Nodes3D;
 
 public abstract partial class BaseCamera : Camera3D
 {
