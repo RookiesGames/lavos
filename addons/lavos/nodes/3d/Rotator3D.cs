@@ -18,7 +18,7 @@ public partial class Rotator3D : Node3D
             RotationDirection = GD.Randi() % 2 == 0 ? 1 : -1;
         }
         //
-        var angle = GD.RandRange(0, 360);
+        var angle = GD.RandfRange(0, 360);
         RotateY(Mathf.DegToRad(angle));
     }
 
