@@ -89,6 +89,7 @@ public sealed partial class GenericPopup
         PopupResult?.Invoke(UI.PopupResult.Accepted);
     }
 
+    public void Decline() => OnDeclined();
     void OnDeclined()
     {
         PopupResult?.Invoke(UI.PopupResult.Declined);
