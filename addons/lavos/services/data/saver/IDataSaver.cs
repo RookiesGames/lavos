@@ -11,7 +11,6 @@ public interface IDataSaver
 
     void LoadData(Dictionary<string, Variant> data);
     void SaveData(string key, Variant data);
-    Variant GetData(string key);
 
     void CleanData();
     void ClearFlag();

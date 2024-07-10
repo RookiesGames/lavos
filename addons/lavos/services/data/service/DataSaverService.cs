@@ -41,14 +41,14 @@ sealed partial class DataSaverService
 
     public void CleanData()
     {
-        var dir = Godot.DirAccess.Open(SavePath);
-        if (Godot.DirAccess.GetOpenError() != Error.Ok)
+        var dir = DirAccess.Open(SavePath);
+        if (DirAccess.GetOpenError() != Error.Ok)
         {
             Log.Error(Tag, $"Failed to open directory {SavePath}");
             return;
         }
 
-        Godot.DirAccess.RemoveAbsolute(dir.GetCurrentDir());
+        DirAccess.RemoveAbsolute(dir.GetCurrentDir());
     }
 
     public void Load(IDataSaver saver)
@@ -93,12 +93,12 @@ sealed partial class DataSaverService
 
     public override void _Ready()
     {
-        if (Godot.DirAccess.DirExistsAbsolute(SavePath))
+        if (DirAccess.DirExistsAbsolute(SavePath))
         {
             return;
         }
 
-        var ok = Godot.DirAccess.MakeDirRecursiveAbsolute(SavePath);
+        var ok = DirAccess.MakeDirRecursiveAbsolute(SavePath);
         if (ok != Error.Ok)
         {
             Log.Error(Tag, $"Failed to create folder {SavePath}");
