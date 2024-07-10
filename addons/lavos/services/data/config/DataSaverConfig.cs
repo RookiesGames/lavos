@@ -19,7 +19,7 @@ public sealed partial class DataSaverConfig : Config
         foreach (var saver in _dataSavers)
         {
             service.Register(saver);
-            service.Load(saver);
+            service.ReadData(saver);
         }
     }
 }

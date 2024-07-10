@@ -11,6 +11,6 @@ public interface IDataSaverService : IService
 
     void CleanData();
 
-    void Load(IDataSaver saver);
-    void Save(IDataSaver saver);
+    void ReadData(IDataSaver saver);
+    void WriteData(IDataSaver saver);
 }

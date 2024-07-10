@@ -51,7 +51,7 @@ sealed partial class DataSaverService
         DirAccess.RemoveAbsolute(dir.GetCurrentDir());
     }
 
-    public void Load(IDataSaver saver)
+    public void ReadData(IDataSaver saver)
     {
         var path = System.IO.Path.Combine(SavePath, saver.DataFile);
         var flag = FileAccess.FileExists(path)
@@ -75,7 +75,7 @@ sealed partial class DataSaverService
         }
     }
 
-    public void Save(IDataSaver saver)
+    public void WriteData(IDataSaver saver)
     {
         var path = System.IO.Path.Combine(SavePath, saver.DataFile);
         using var file = FileAccess.Open(path, FileAccess.ModeFlags.Write);
@@ -123,7 +123,7 @@ sealed partial class DataSaverService
         {
             if (dataSaver.IsDirty)
             {
-                Save(dataSaver);
+                WriteData(dataSaver);
                 dataSaver.ClearFlag();
             }
         }

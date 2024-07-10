@@ -27,12 +27,12 @@ sealed class DummyDataSaverService : IDataSaverService
         Log.Debug(Tag, "Data removed");
     }
 
-    public void Load(IDataSaver saver)
+    public void ReadData(IDataSaver saver)
     {
         Log.Debug(Tag, $"File {saver.DataFile} loaded");
     }
 
-    public void Save(IDataSaver saver)
+    public void WriteData(IDataSaver saver)
     {
         Log.Debug(Tag, $"File {saver.DataFile} saved");
     }
