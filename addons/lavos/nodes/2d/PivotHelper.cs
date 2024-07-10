@@ -1,5 +1,7 @@
 using Godot;
 
+namespace Lavos.Nodes.Nodes2D;
+
 [Tool]
 public partial class PivotHelper : Control
 {
