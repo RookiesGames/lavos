@@ -1,42 +1,62 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://bjvrwc5dxdetp"]
 
-[ext_resource path="res://addons/rookies/lavos/ui/popup/GenericPopup.cs" type="Script" id=1]
+[ext_resource type="Script" path="res://addons/rookies/lavos/ui/popup/GenericPopup.cs" id="1"]
 
-[node name="GenericPopupSmall" type="Panel"]
+[node name="GenericPopupSmall" type="Control" node_paths=PackedStringArray("_titleLabel", "_descriptionLabel", "_acceptBtn", "_declineBtn")]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 792.0
-offset_top = 450.0
-offset_right = -791.0
-offset_bottom = -464.0
-script = ExtResource( 1 )
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+_titleLabel = NodePath("background/Title/TitleLabel")
+_descriptionLabel = NodePath("background/Body/DescriptionLabel")
+_acceptBtn = NodePath("background/Buttons/HBoxContainer/AcceptButton")
+_declineBtn = NodePath("background/Buttons/HBoxContainer/DeclineButton")
 
-[node name="Title" type="Control" parent="."]
+[node name="background" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -170.0
+offset_top = -85.0
+offset_right = 170.0
+offset_bottom = 85.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Control" parent="background"]
+anchors_preset = 0
 anchor_right = 1.0
 offset_top = 6.0
 offset_right = 1.0
 offset_bottom = 30.0
 
-[node name="TitleLabel" type="Label" parent="Title"]
+[node name="TitleLabel" type="Label" parent="background/Title"]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 8.0
 offset_right = -9.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Popup Title"
-align = 1
-valign = 1
-autowrap = true
+horizontal_alignment = 1
+vertical_alignment = 1
 clip_text = true
 
-[node name="HSeparator" type="HSeparator" parent="."]
+[node name="HSeparator" type="HSeparator" parent="background"]
+layout_mode = 0
 anchor_right = 1.0
 offset_left = 8.0
 offset_top = 30.0
 offset_right = -9.0
 offset_bottom = 38.0
 
-[node name="Body" type="Control" parent="."]
+[node name="Body" type="Control" parent="background"]
+anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 8.0
@@ -44,18 +64,19 @@ offset_top = 38.0
 offset_right = -9.0
 offset_bottom = -56.0
 
-[node name="DescriptionLabel" type="Label" parent="Body"]
+[node name="DescriptionLabel" type="Label" parent="background/Body"]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 1.0
 offset_right = 1.0
 text = "This is a description of the popup."
-align = 1
-valign = 1
-autowrap = true
+horizontal_alignment = 1
+vertical_alignment = 1
 clip_text = true
 
-[node name="HSeparator2" type="HSeparator" parent="."]
+[node name="HSeparator2" type="HSeparator" parent="background"]
+layout_mode = 0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -64,7 +85,8 @@ offset_top = -56.0
 offset_right = -9.0
 offset_bottom = -44.0
 
-[node name="Buttons" type="Control" parent="."]
+[node name="Buttons" type="Control" parent="background"]
+anchors_preset = 0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -73,28 +95,22 @@ offset_top = -44.0
 offset_right = -25.0
 offset_bottom = -8.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Buttons"]
+[node name="HBoxContainer" type="HBoxContainer" parent="background/Buttons"]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="AcceptButton" type="Button" parent="Buttons/HBoxContainer"]
-offset_right = 138.0
-offset_bottom = 36.0
+[node name="AcceptButton" type="Button" parent="background/Buttons/HBoxContainer"]
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Accept"
-ButtonType = 1
 
-[node name="VSeparator" type="VSeparator" parent="Buttons/HBoxContainer"]
-offset_left = 142.0
-offset_right = 146.0
-offset_bottom = 36.0
+[node name="VSeparator" type="VSeparator" parent="background/Buttons/HBoxContainer"]
+layout_mode = 2
 
-[node name="DeclineButton" type="Button" parent="Buttons/HBoxContainer"]
-offset_left = 150.0
-offset_right = 288.0
-offset_bottom = 36.0
+[node name="DeclineButton" type="Button" parent="background/Buttons/HBoxContainer"]
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Decline"
-ButtonType = 2

@@ -3,18 +3,15 @@ using System;
 
 namespace Lavos.UI;
 
-[Obsolete("Broken. Needs rework")]
 public sealed partial class GenericPopup
     : Control
     , IPopup
 {
-    Label _titleLabel;
-    Label _descriptionLabel;
+    [Export] Label _titleLabel;
+    [Export] Label _descriptionLabel;
 
-    Button _acceptBtn;
-    public Button AcceptButton => _acceptBtn;
-    Button _declineBtn;
-    public Button DeclineButton => _declineBtn;
+    [Export] Button _acceptBtn;
+    [Export] Button _declineBtn;
 
     #region IPopup
 
@@ -46,24 +43,16 @@ public sealed partial class GenericPopup
 
     #endregion
 
-    public override void _EnterTree()
-    {
-        _titleLabel = this.GetNodeInTreeByName<Label>("TitleLabel");
-        _descriptionLabel = this.GetNodeInTreeByName<Label>("DescriptionLabel");
-        _acceptBtn = this.GetNodeInTreeByName<Button>("AcceptButton");
-        _declineBtn = this.GetNodeInTreeByName<Button>("DeclineButton");
-    }
-
     public override void _Ready()
     {
-        //_acceptBtn.ButtonPressed += OnAccepted;
-        //_declineBtn.ButtonPressed += OnDeclined;
+        _acceptBtn.Pressed += OnAccepted;
+        _declineBtn.Pressed += OnDeclined;
     }
 
     public override void _ExitTree()
     {
-        //_acceptBtn.ButtonPressed -= OnAccepted;
-        //_declineBtn.ButtonPressed -= OnDeclined;
+        _acceptBtn.Pressed -= OnAccepted;
+        _declineBtn.Pressed -= OnDeclined;
         //
         PopupResult = null;
     }
@@ -72,14 +61,14 @@ public sealed partial class GenericPopup
 
     public void ShowPopup()
     {
-        this.MouseFilter = MouseFilterEnum.Stop;
+        MouseFilter = MouseFilterEnum.Stop;
         Show();
     }
 
     public void HidePopup()
     {
         Hide();
-        this.MouseFilter = MouseFilterEnum.Ignore;
+        MouseFilter = MouseFilterEnum.Ignore;
     }
 
     #endregion IPopup
