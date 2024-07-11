@@ -1,8 +1,8 @@
 using Godot;
 
-namespace Lavos.Nodes;
+namespace Lavos.Nodes.Nodes3D;
 
-public partial class Rotator3D : Node3D
+public partial class Rotator : Node3D
 {
     public enum Axis { X, Y, Z };
     [Export] Axis RotationAxis;

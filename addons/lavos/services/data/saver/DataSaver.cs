@@ -13,13 +13,13 @@ public abstract partial class DataSaver : Resource, IDataSaver
     public abstract string DataFile { get; }
     public Dictionary<string, Variant> Data { get; } = new();
 
-    public void LoadData(Dictionary<string, Variant> data)
+    public virtual void LoadData(Dictionary<string, Variant> data)
     {
         Data.Clear();
         Data.Merge(data);
     }
 
-    public void SaveData(string key, Variant data)
+    public virtual void SaveData(string key, Variant data)
     {
         Data.SetOrAdd<string, Variant>(key, data);
         _isDirty = true;

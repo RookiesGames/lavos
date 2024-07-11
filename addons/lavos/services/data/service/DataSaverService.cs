@@ -54,23 +54,33 @@ sealed partial class DataSaverService
     public void ReadData(IDataSaver saver)
     {
         var path = System.IO.Path.Combine(SavePath, saver.DataFile);
-        var flag = FileAccess.FileExists(path)
-                            ? FileAccess.ModeFlags.Read
-                            : FileAccess.ModeFlags.WriteRead;
+        var flag = FileAccess.ModeFlags.WriteRead;
         using var file = FileAccess.Open(path, flag);
-        if (FileAccess.GetOpenError() != Error.Ok)
         {
-            Log.Error(Tag, $"Failed to open file {path}");
-            return;
-        }
-        Log.Debug(Tag, $"Loading data saver: {file.GetPathAbsolute()}");
-        //
-        var content = file.GetAsText();
-        using var json = new Json();
-        var parseResult = json.Parse(content);
-        if (parseResult == Error.Ok)
-        {
-            var data = new Godot.Collections.Dictionary<string, Variant>((Godot.Collections.Dictionary)json.Data);
+            var error = FileAccess.GetOpenError();
+            if (error != Error.Ok)
+            {
+                Log.Error(Tag, $"Failed to open file {path}. {error}");
+                return;
+            }
+            //
+            Log.Debug(Tag, $"Loading data saver: {file.GetPathAbsolute()}");
+            //
+            var data = new Godot.Collections.Dictionary<string, Variant>();
+            var content = file.GetAsText();
+            if (content.IsNotNullOrEmpty())
+            {
+                using var json = new Json();
+                var parseResult = json.Parse(content);
+                if (parseResult == Error.Ok)
+                {
+                    data.Merge(json.Data.AsGodotDictionary<string, Variant>());
+                }
+                else
+                {
+                    Log.Warn(Tag, $"Failed to parse content. {parseResult}");
+                }
+            }
             saver.LoadData(data);
         }
     }

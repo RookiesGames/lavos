@@ -10,7 +10,7 @@ public sealed partial class AudioDataSaver : DataSaver
     const string MusicVolumeKey = "music_volume_key";
     const string SoundVolumeKey = "sound_volume_key";
 
-    public override string DataFile => "audio_data";
+    public override string DataFile => "audio_data.dat";
 
     public float MasterVolume
     {

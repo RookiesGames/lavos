@@ -55,7 +55,7 @@ public static class Log
 
     public static void Error<T>(string tag, T message)
     {
-        GD.Print($"{Time} - [Lavos] | [ERROR] {tag} | {message}");
+        GD.PrintErr($"{Time} - [Lavos] | [ERROR] {tag} | {message}");
     }
 
     public static void Error<T>(T message)

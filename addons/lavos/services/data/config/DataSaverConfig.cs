@@ -5,7 +5,7 @@ namespace Lavos.Services.Data;
 
 public partial class DataSaverConfig : Config
 {
-    [Export] DataSaver[] _dataSavers;
+    [Export] public DataSaver[] _dataSavers;
 
     public override void Initialize(IDependencyResolver resolver)
     {
