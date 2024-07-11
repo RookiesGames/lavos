@@ -1,6 +1,8 @@
-[gd_resource type="Resource" load_steps=2 format=2]
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bbp0qvcb5ssg0"]
 
-[ext_resource path="res://addons/rookies/lavos/audio/config/AudioConfig.cs" type="Script" id=1]
+[ext_resource type="Script" path="res://addons/rookies/lavos/audio/config/AudioConfig.cs" id="1"]
+[ext_resource type="Resource" uid="uid://cxwyi4jwh3ls4" path="res://addons/rookies/lavos/audio/resource/lavos_audio_data_saver.tres" id="1_k205q"]
 
 [resource]
-script = ExtResource( 1 )
+script = ExtResource("1")
+_dataSavers = Array[Resource]([ExtResource("1_k205q")])
