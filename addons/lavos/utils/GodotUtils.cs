@@ -3,7 +3,11 @@ namespace Lavos.Utils;
 public static class GodotUtils
 {
         public static string Version =>
-#if GODOT4_3_OR_GREATER
+#if GODOT4_4_OR_GREATER
+#       if GODOT4_4_0
+                "4.4.0";
+#       endif
+#elif GODOT4_3_OR_GREATER
 #       if GODOT4_3_0
                 "4.3.0";
 #       endif
