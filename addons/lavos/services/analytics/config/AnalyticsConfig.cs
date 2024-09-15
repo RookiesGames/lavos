@@ -20,16 +20,17 @@ public partial class AnalyticsConfig : Config
 
     public override void Configure(IDependencyBinder binder)
     {
-        if (!PlatformUtils.IsMobile)
-        {
-            analyticsProvider = Provider.None;
-        }
         //
         switch (analyticsProvider)
         {
             case Provider.Firebase:
                 {
-                    if (FirebaseAnalyticsService.IsPluginEnabled())
+                    if (!PlatformUtils.IsMobile)
+                    {
+                        Log.Warn(Tag, "Firebase provider not available");
+                        binder.Bind<IAnalyticsService, DummyAnalyticsService>();
+                    }
+                    else if (FirebaseAnalyticsService.IsPluginEnabled())
                     {
                         Log.Info(Tag, "Firebase Analytics plugin enabled");
                         binder.Bind<IAnalyticsService, FirebaseAnalyticsService>();
