@@ -19,7 +19,7 @@ public partial class StoreConfig : Config
         }
         else
         {
-            Log.Warn(Tag, "No binding provided");
+            Log.Info(Tag, "No binding provided");
             binder.Bind<IStoreService, DummyStoreService>();
         }
     }
