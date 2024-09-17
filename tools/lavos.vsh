@@ -3,11 +3,8 @@
 import cli
 import os
 
-const (
-	godot_project            = 'project.godot'
-	symlink_rookies          = 'rookies'
-	symlink_script_templates = 'script_templates'
-)
+const godot_project = 'project.godot'
+const symlink_rookies = 'rookies'
 
 //////////
 // Check
@@ -58,8 +55,6 @@ fn cmd_setup(cmd cli.Command) ! {
 	check_path(path)!
 	//
 	println('~> Setting up project...')
-	execute_command('\t~> Initialise submodules', 'git submodule init')!
-	execute_command('\t~> Updating submodules', 'git submodule update --recursive')!
 	//
 	cmd_clean(cmd)!
 	cmd_link(cmd)!
@@ -75,30 +70,25 @@ fn cmd_clean(cmd cli.Command) ! {
 	check_path(path)!
 	//
 	println('~> Cleaning project...')
-	remove_symlink('${path}/${symlink_script_templates}')!
 	remove_symlink('${path}/addons/${symlink_rookies}')!
-	// remove_symlink('$path/ios/plugins')!
 	println('~> Cleaning complete!')
 }
 
 fn remove_symlink(link string) ! {
+	print('\t~> Removing symlink ${link}')
 	if is_file(link) || is_link(link) {
-		print('\t~> Removing symlink ${link}')
 		rm(link) or {
 			println(' ❌')
 			return err
 		}
-		//
-		println(' ✅')
 	} else if is_dir(link) {
-		print('\t~> Removing symlink ${link}')
 		rmdir(link) or {
 			println(' ❌')
 			return err
 		}
-		//
-		println(' ✅')
 	}
+	//
+	println(' ✅')
 }
 
 /////////
@@ -113,8 +103,6 @@ fn cmd_link(cmd cli.Command) ! {
 	// lavos source/addons
 	create_path('${path}/addons')!
 	create_symlink('${lavoswd}/lavos/addons', '${path}/addons/${symlink_rookies}')!
-	// script templates (BROKEN as of Godot 4.1.1)
-	// create_symlink('${lavoswd}/lavos/${symlink_script_templates}', '${path}/${symlink_script_templates}')!
 	//
 	println('~> Links created!')
 }
