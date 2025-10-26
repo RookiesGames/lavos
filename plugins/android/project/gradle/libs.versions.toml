@@ -1,0 +1,46 @@
+[versions]
+android_appCombat = "1.7.1"
+android_billing = "8.0.0"
+
+ironsource = "9.0.0"
+
+gradle = "8.12.3"
+
+play_services_ads = "24.7.0"
+play_services_ads_identifier = "18.2.0"
+play_services_appset = "16.1.0"
+play_services_basement = "18.9.0"
+play_services_games = "21.0.0"
+play_services_auth = "21.4.0"
+
+firebase_analytics = "22.5.0"
+firebase_crashlytics = "19.4.4"
+firebase_crashlytics_ndk = "20.0.3"
+
+kotlin = "2.2.20"
+kotlin_json = "1.9.0"
+
+[libraries]
+android_appCompat = { module = "androidx.appcompat:appcompat", version.ref = "android_appCombat" }
+android_billing = { module = "com.android.billingclient:billing-ktx", version.ref = "android_billing" }
+
+ironsource = { module = "com.ironsource.sdk:mediationsdk", version.ref = "ironsource" }
+
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
+
+play_services_ads = { module = "com.google.android.gms:play-services-ads", version.ref = "play_services_ads" }
+play_services_ads_identifier = { module = "com.google.android.gms:play-services-ads-identifier", version.ref = "play_services_ads_identifier" }
+play_services_appset = { module = "com.google.android.gms:play-services-appset", version.ref = "play_services_appset" }
+play_services_basement = { module = "com.google.android.gms:play-services-basement", version.ref = "play_services_basement" }
+play_services_games = { module = "com.google.android.gms:play-services-games-v2", version.ref = "play_services_games" }
+play_services_auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play_services_auth" }
+
+firebase_analytics = { module = "com.google.firebase:firebase-analytics-ktx", version.ref = "firebase_analytics" }
+firebase_crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx", version.ref = "firebase_crashlytics" }
+firebase_crashlytics_ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase_crashlytics_ndk" }
+
+kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm", version.ref = "kotlin_json" }
+
+[plugins]

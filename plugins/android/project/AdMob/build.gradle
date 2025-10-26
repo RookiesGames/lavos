@@ -39,17 +39,17 @@ android {
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${paths.lavosRoot}/addons/google/admob/.bin/android/AdMob.${variant.buildType.name}.aar"
+            outputFileName = "${paths.lavosRoot}/addons/google/admob/${paths.output}/android/AdMob.${variant.buildType.name}.aar"
         }
     }
 }
 
 dependencies {
     compileOnly files(godot.templateAAR)
-    implementation playServices.ads
+    implementation libs.play.services.ads
 
-    implementation extra.kotlinxJson
+    implementation libs.kotlin.json
 
-    implementation common.kotlinStd
-    implementation common.appCompat
+    implementation libs.kotlin
+    implementation libs.android.appCompat
 }

@@ -39,17 +39,16 @@ android {
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${paths.lavosRoot}/addons/google/billing/.bin/android/GoogleBilling.${variant.buildType.name}.aar"
+            outputFileName = "${paths.lavosRoot}/addons/google/billing/${paths.output}/android/GoogleBilling.${variant.buildType.name}.aar"
         }
     }
 }
 
 dependencies {
     compileOnly files(godot.templateAAR)
-    implementation billing.billingKtx
+    implementation libs.android.billing
+    implementation libs.kotlin.json
 
-    implementation extra.kotlinxJson
-
-    implementation common.kotlinStd
-    implementation common.appCompat
+    implementation libs.kotlin
+    implementation libs.android.appCompat
 }

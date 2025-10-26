@@ -39,17 +39,18 @@ android {
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${paths.lavosRoot}/addons/google/playgames/.bin/android/GooglePlayGames.${variant.buildType.name}.aar"
+            outputFileName = "${paths.lavosRoot}/addons/google/playgames/${paths.output}/android/GooglePlayGames.${variant.buildType.name}.aar"
         }
     }
 }
 
 dependencies {
     compileOnly files(godot.templateAAR)
-    implementation playServices.games
-    implementation playServices.auth
+    implementation libs.play.services.games
+    implementation libs.play.services.auth
 
-    implementation extra.kotlinxJson
-    implementation common.kotlinStd
-    implementation common.appCompat
+    implementation libs.kotlin.json
+
+    implementation libs.kotlin
+    implementation libs.android.appCompat
 }

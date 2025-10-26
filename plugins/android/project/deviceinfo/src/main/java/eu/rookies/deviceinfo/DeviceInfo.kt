@@ -25,13 +25,12 @@ class DeviceInfo(godot: Godot) : GodotPlugin(godot) {
 
     @UsedByGodot
     fun getVersionName(): String {
-        return try {
-            val pInfo: PackageInfo =
-                activity!!.packageManager.getPackageInfo(activity!!.packageName, 0)
-            pInfo.versionName
+        var versionName = try {
+            activity!!.packageManager.getPackageInfo(activity!!.packageName, 0).versionName ?: ""
         } catch (e: PackageManager.NameNotFoundException) {
-            ""
+            "NameNotFound"
         }
+        return versionName
     }
 
     @UsedByGodot

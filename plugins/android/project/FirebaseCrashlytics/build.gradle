@@ -39,17 +39,17 @@ android {
     }
     libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${paths.lavosRoot}/addons/google/firebase/crashlytics/.bin/android/FirebaseCrashlytics.${variant.buildType.name}.aar"
+            outputFileName = "${paths.lavosRoot}/addons/google/firebase/crashlytics/${paths.output}/android/FirebaseCrashlytics.${variant.buildType.name}.aar"
         }
     }
 }
 
 dependencies {
     compileOnly files(godot.templateAAR)
-    implementation firebase.crashlyticsKtx
-    implementation firebase.crashlyticsNdk
-    implementation firebase.analyticsKtx
+    implementation libs.firebase.analytics
+    implementation libs.firebase.crashlytics
+    implementation libs.firebase.crashlytics.ndk
 
-    implementation common.kotlinStd
-    implementation common.appCompat
+    implementation libs.kotlin
+    implementation libs.android.appCompat
 }
