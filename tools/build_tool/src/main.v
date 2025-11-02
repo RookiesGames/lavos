@@ -2,8 +2,9 @@ module main
 
 import cli
 import os
-import actions
+import godot
 import helper
+import plugins
 
 fn main() {
 	mut app := cli.Command{
@@ -14,24 +15,91 @@ fn main() {
 		}
 		commands:    [
 			cli.Command{
-				name:          'setup'
-				usage:         '<target>'
-				description:   'Setup a Godot project with Lavos'
-				execute:       fn (cmd cli.Command) ! {
-					path := helper.validate_path(cmd.args[0])!
-					actions.setup(path)!
+				name:        'godot'
+				description: 'Setup a Godot project with Lavos'
+				execute:     fn (cmd cli.Command) ! {
+					cmd.execute_help()
 				}
-				required_args: 1
+				commands:    [
+					cli.Command{
+						name:          'setup'
+						description:   'Setup a Godot project with Lavos'
+						execute:       fn (cmd cli.Command) ! {
+							path := cmd.args[0]
+							godot.setup(path)!
+						}
+						required_args: 1
+						pre_execute:   fn (cmd cli.Command) ! {
+							helper.validate_path(cmd.args[0])!
+						}
+					},
+					cli.Command{
+						name:          'clean'
+						description:   'Clean Godot project from Lavos'
+						execute:       fn (cmd cli.Command) ! {
+							path := cmd.args[0]
+							godot.clean(path)!
+						}
+						required_args: 1
+						pre_execute:   fn (cmd cli.Command) ! {
+							helper.validate_path(cmd.args[0])!
+						}
+					},
+				]
 			},
 			cli.Command{
-				name:          'clean'
-				usage:         '<target>'
-				description:   'Clean previous setup'
-				execute:       fn (cmd cli.Command) ! {
-					path := helper.validate_path(cmd.args[0])!
-					actions.clean(path)!
+				name:     'plugins'
+				commands: [
+					cli.Command{
+						name:        'android'
+						description: 'Manage Android binaries'
+						execute:     fn (cmd cli.Command) ! {
+							cmd.execute_help()
+						}
+						commands:    [
+							cli.Command{
+								name:        'build'
+								description: 'Build binaries'
+								execute:     fn (cmd cli.Command) ! {
+									plugins.Android.build()!
+								}
+							},
+							cli.Command{
+								name:        'clean'
+								description: 'Clean binaries'
+								execute:     fn (cmd cli.Command) ! {
+									plugins.Android.clean()!
+								}
+							},
+						]
+					},
+					cli.Command{
+						name:        'ios'
+						description: 'Manage iOS binaries'
+						execute:     fn (cmd cli.Command) ! {
+							cmd.execute_help()
+						}
+						commands:    [
+							cli.Command{
+								name:        'build'
+								description: 'Build binaries'
+								execute:     fn (cmd cli.Command) ! {
+									plugins.IOS.build()!
+								}
+							},
+							cli.Command{
+								name:        'clean'
+								description: 'Clean binaries'
+								execute:     fn (cmd cli.Command) ! {
+									plugins.IOS.clean()!
+								}
+							},
+						]
+					},
+				]
+				execute:  fn (cmd cli.Command) ! {
+					cmd.execute_help()
 				}
-				required_args: 1
 			},
 		]
 	}

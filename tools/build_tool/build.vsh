@@ -1,8 +1,14 @@
 #!/usr/bin/env -S v run
 
-const output_name = "lbt"
+import os
+
+const wd = os.dir(@FILE)
+const output_name = 'lbt'
 const binary_path = './bin/'
 const src_path = './src'
-const cmd = 'v -prod -o ${binary_path}/${output_name} ${src_path}'
+const cmd = 'v -prod -o ${wd}/${binary_path}/${output_name} ${wd}/${src_path}'
 
-execute(cmd)
+res := execute(cmd)
+if res.exit_code != 0 {
+	println(res.output)
+}

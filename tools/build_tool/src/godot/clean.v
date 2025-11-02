@@ -1,4 +1,4 @@
-module actions
+module godot
 
 import os
 

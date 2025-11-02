@@ -1,4 +1,4 @@
-module actions
+module godot
 
 import os
 
@@ -16,7 +16,7 @@ fn create_path(path string) ! {
 		return
 	}
 	//
-	print('\tCreating folder: ${path}')
+	print('Creating folder: ${path}')
 	os.mkdir_all(path) or {
 		println(' error')
 		return err
@@ -25,7 +25,9 @@ fn create_path(path string) ! {
 }
 
 fn create_symlink(symlink_source string, symlink_target string) ! {
-	print('\tCreating ${symlink_target} symlink')
+	println('Creating symlink')
+	println('\t source: ${symlink_source}')
+	println('\t target: ${symlink_target}')
 	os.symlink(symlink_source, symlink_target) or {
 		println(' error')
 		return err

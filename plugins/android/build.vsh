@@ -51,30 +51,6 @@ fn check_arg(cmd cli.Command) !string {
 	return arg
 }
 
-//
-fn cmd_clean(cmd cli.Command) ! {
-	job := fn () ! {
-		clean_builds()!
-	}
-	do_job(job)
-}
-
-fn clean_builds() ! {
-	println('~> Cleaning previous builds')
-	//
-	wd := os.dir(@FILE)
-	chdir('${wd}/project')!
-	//
-	cmd := './gradlew clean'
-	print('\t~> Running command ${cmd}...')
-	mut res := execute(cmd)
-	if res.exit_code != 0 {
-		println(' ❌')
-		return error('${res.output}')
-	}
-	//
-	println(' ✅')
-}
 
 fn cmd_build(cmd cli.Command) ! {
 	arg := check_arg(cmd)!
